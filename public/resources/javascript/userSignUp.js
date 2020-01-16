@@ -3,11 +3,8 @@ submit.addEventListener('click', getData);
 
 async function getData(){
 
-    let name = document.getElementById('name').value;
-    let phone = document.getElementById('phone').value;
     let pass = document.getElementById('pass').value;
     let cnp = document.getElementById('cnfPass').value;
-    let address = document.getElementById('ta').value;
     let form = document.getElementById('formId');
 
     if(pass !== cnp){
@@ -17,11 +14,13 @@ async function getData(){
     }
     else{
 
+        let saltedString = "jhingalala";
+        let saltedPass = pass + saltedString;
         let userObj = {
             name : document.getElementById('name').value,
             phone : document.getElementById('phone').value,
-            pass : document.getElementById('pass').value,
-            address : document.getElementById('ta').value
+            pass : saltedPass,
+            address : document.getElementById('userAddress').value
         };
 
         let options = {

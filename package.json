@@ -8,10 +8,18 @@
   "author": "",
   "license": "MIT",
   "devDependencies": {
+    "alert-node": "^2.1.1",
+    "dont-sniff-mimetype": "^1.1.0",
     "express": "^4.17.1",
+    "firebase": "^7.6.1",
+    "helmet": "^3.21.2",
+    "js-md5": "^0.7.3",
     "multer": "^1.4.2",
     "nodemon": "^2.0.2",
     "sqlite3": "^4.1.1"
   },
-  "description": ""
+  "description": "",
+  "dependencies": {
+    "firebase": "^7.6.1"
+  }
 }

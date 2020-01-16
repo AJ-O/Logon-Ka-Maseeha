@@ -1,0 +1,46 @@
+<html>
+    <head>
+        <meta charset='utf-8' />
+        <link rel="stylesheet" type='text/css' href="../css/mainPage.css" />
+        <script src="https://apis.google.com/js/platform.js?onload=onLoad" async defer></script>
+        <meta name="google-signin-client_id" content="721444271113-jkrgq78cj42e2i8d5jq8lte1b7etnkv8.apps.googleusercontent.com">
+    </head>
+
+    <body>
+        <script>
+            function onLoad(){
+                gapi.load('auth2', function(){
+                    gapi.auth2.init();
+                    console.log("Loaded!");
+                })
+            }
+        </script>
+        <button id="gSignOut">Sign Out</button>
+        <div id="dashboard">
+
+        </div>
+
+        <div id="uploadData">
+            
+        </div>
+
+        <div id="statusBoard">
+            <button id="donateItem">Donate Item</button>
+            <form id="donationForm">
+                <label>Product Type: </label>
+                <input id="product" type="text"/>
+                <br>
+                <br>
+                <label>Upload Image</label>
+                <input type="file" accept="image/*"/>
+                <br>
+                <br>
+                <label>Address to Pick up</label>
+                <textarea id="address" rows="5" cols="50"></textarea>
+            </form>
+            <button id="finalDonate">Donate</button>
+        </div>
+        <script src="../javascript/signOut.js"></script>
+        <script src="../javascript/mainPage.js"></script>
+    </body>
+</html>

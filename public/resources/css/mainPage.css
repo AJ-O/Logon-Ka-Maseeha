@@ -1,0 +1,28 @@
+#dashboard{
+    width: 100%;
+    height: 30%;
+    background-color: red;
+}
+
+#uploadData{
+    left: 50%;
+    width: 50%;
+    height: 70%;
+    background-color: aqua;
+    position: absolute;
+}
+
+#statusBoard{
+    width: 50%;
+    height: 70%;
+    background-color: blueviolet;
+    position: absolute;
+}
+
+#donationForm{
+    display: none;
+}
+
+#finalDonate{
+    display: none;
+}

@@ -4,72 +4,99 @@ const bodyParser = require('body-parser');
 const multer = require('multer');
 const fs = require('fs');
 const path = require('path');
+const md5 = require('js-md5');
+const alert = require('alert-node');
+
+require('firebase/auth');
+require('firebase/firestore');
+require('firebase/database');
+
+let firebase = require('firebase/app');
+
 const app = express();
 
 app.use(bodyParser.urlencoded({extended: true}))
-app.use(express.static("./public/"))
-app.use(express.static("./public/resources/"));
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(express.static("./public/"));
+app.use(express.static('./public/resources/'));
 app.use(express.json({limit : '1mb'}));
 
 const port = 8181;
 
-const handleError = (err, res) => {
-  res
-    .status(500)
-    .contentType("text/plain")
-    .end("Oops! Something went wrong!");
+let firebaseConfig = {
+  apiKey: "AIzaSyCFdFiuXfwk3jpIYUd44XKh0Hp14l63ZJE",
+  authDomain: "logon-ka-maseeha.firebaseapp.com",
+  databaseURL: "https://logon-ka-maseeha.firebaseio.com",
+  projectId: "logon-ka-maseeha",
+  storageBucket: "logon-ka-maseeha.appspot.com",
+  messagingSenderId: "721444271113",
+  appId: "1:721444271113:web:0d0f0921effab091a9f4d8",
+  measurementId: "G-ZNVVTNE8YC"
 };
+firebase.initializeApp(firebaseConfig);
+const db = firebase.database();
+// firebase.analytics();
+app.post('/googleSignIn', (req, res)=>{
+  console.log("called post!");
+  let token = req.body["token"];
+  let userName = req.body["username"];
+  let email = req.body["userEmail"];
 
-const upload = multer({
-  dest: "Downloads"
-});
-
-const db = new sqlite3.Database('db/Credentials.db');
-
-app.post("/submit", (req, res) => {
-
-    console.log("Request received");
-    let name = req.body["name"];
-    let add = req.body["address"];
-    let pass = req.body["pass"];
-    let phone = req.body["phone"];
-    phone = parseInt(phone);
-    let query = `Insert into Credentials(Name, Address, Phone, Password) values (?), (?), (?), (?);`
-    let values = [name, add, phone, pass];
-    db.run(query, values[0], values[1], values[2], values[3], (err)=>{
-        if(err){
-            throw err;
-        }
-        console.log("Row inserted");
-        res.status(200);
-        return res.send("Row inserted");
-    })
-});
-
-app.post("/upload", upload.single("Downloads"), (req, res) => {
-    const tempPath = req.file.path;
-    const targetPath = path.join(__dirname, "./Downloads/image.jpeg");
-
-    if (path.extname(req.file.originalname).toLowerCase() === ".jpeg") {
-      fs.rename(tempPath, targetPath, err => {
-        if (err) return handleError(err, res);
-
-        res
-          .status(200)
-          .contentType("text/plain")
-          .end("File uploaded!");
-      });
-    } else {
-      fs.unlink(tempPath, err => {
-        if (err) return handleError(err, res);
-        res
-          .status(403)
-          .contentType("text/plain")
-          .end("Only .png files are allowed!");
-      });
-    }
+  let data = {
+      password: "stud",
+      email: email,
+      token: token
   }
-);
+
+  let returnObj = {
+    status: "Success",
+    code: "200",
+    message: "Works"
+  };
+
+  let credential = firebase.auth.GoogleAuthProvider.credential(token);
+  firebase.auth().signInWithCredential(credential).catch(function(error){
+    returnObj[status] = "Failure"
+    returnObj[code] = error.code;
+    returnObj[message] = error.message;
+  });
+  //res.send(returnObj);
+  let users = db.ref('users');
+  users.once('value', function(snapshot){
+    if(!snapshot.child(userName).exists()){
+      console.log("User does not exist!");
+      db.ref('users/' + userName).set(
+        data
+      );
+    }
+  });
+  returnObj['userName'] = userName;
+  res.send(returnObj);
+});
+
+app.get('/:user', (req, res) => {
+  console.log("called get!");
+  console.log('Username: ' + req.params.user);
+  
+  let userName = req.params.user;
+  if(userName.includes(':')){
+    userName = userName.replace(':', '');
+    console.log(userName);
+  }
+  let retObj = {
+    status: "Success",
+    userName: userName
+  };
+
+  let userData = db.ref('users/');
+  userData.on('value', function(snapshot){
+    let userRef = snapshot.child(`/${userName}`).val();
+    retObj['email'] = userRef.email;
+    retObj['pass'] = userRef.password;
+    res.send(retObj);
+  }); 
+})
 
 app.listen(port, ()=>{
     console.log(`Listening to ${port}`);
