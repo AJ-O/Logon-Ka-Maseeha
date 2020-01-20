@@ -90,13 +90,31 @@ app.get('/:user', (req, res) => {
   };
 
   let userData = db.ref('users/');
-  userData.on('value', function(snapshot){
+  userData.once('value', function(snapshot){
     let userRef = snapshot.child(`/${userName}`).val();
     retObj['email'] = userRef.email;
     retObj['pass'] = userRef.password;
     res.send(retObj);
   }); 
 })
+
+app.post('/donateItem', (req, res)=> {
+  let retObj = {};
+  let data = req.body;
+  console.log(data.userName);
+  let newItemRef = db.ref('users/' + data.userName + '/DonatedItemList').push();
+  newItemRef.set({data}, (someParameter) => {
+    console.log("sp1: ", someParameter);
+    console.log("Works");
+    retObj.status = "success";
+    res.send(retObj);
+  });
+  // let updates = {};
+  // updates['/newData'] = data;
+  // db.ref('users/' + data.userName).update(updates, (someParameter) => {
+  //   console.log("sp: ", someParameter);
+  // });
+});
 
 app.listen(port, ()=>{
     console.log(`Listening to ${port}`);
