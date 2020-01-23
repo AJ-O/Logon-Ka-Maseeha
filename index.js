@@ -1,11 +1,5 @@
 const express = require('express');
-const sqlite3 = require('sqlite3').verbose();
 const bodyParser = require('body-parser');
-const multer = require('multer');
-const fs = require('fs');
-const path = require('path');
-const md5 = require('js-md5');
-const alert = require('alert-node');
 
 require('firebase/auth');
 require('firebase/firestore');

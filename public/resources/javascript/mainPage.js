@@ -1,16 +1,26 @@
+window.onload = displayItems();
+
 let url = new URL(window.location);
 let username = url.searchParams.get('username');
 userSignedIn(username);
 
-let firebaseConfig = {
-    apiKey: "AIzaSyCFdFiuXfwk3jpIYUd44XKh0Hp14l63ZJE",
-    authDomain: "logon-ka-maseeha.firebaseapp.com",
-    databaseURL: "https://logon-ka-maseeha.firebaseio.com",
-    storageBucket: "logon-ka-maseeha.appspot.com"
-};
-firebase.initializeApp(firebaseConfig);
+function intializeBaseStuff(){
+    return new Promise((resolve, reject)=>{
+    let firebaseConfig = {
+        apiKey: "AIzaSyCFdFiuXfwk3jpIYUd44XKh0Hp14l63ZJE",
+        authDomain: "logon-ka-maseeha.firebaseapp.com",
+        databaseURL: "https://logon-ka-maseeha.firebaseio.com",
+        storageBucket: "logon-ka-maseeha.appspot.com"
+        };
+        firebase.initializeApp(firebaseConfig);
+        resolve("success");
+    });
+}
+
 const db = firebase.database();
+
 async function userSignedIn(username){
+
     let response = await fetch(`/:${username}`);
     let json = await response.json();
     
@@ -49,23 +59,12 @@ async function getData(){
     let productType = document.getElementById('product').value;
     let pickupAddress = document.getElementById('address').value;
     let fileObj = document.getElementById('filename').files[0];
-    //let file = document.getElementById('filename');
-    console.log(fileObj);
     let reader = new FileReader();
     reader.onload = async function(){
         blobDataResult = reader.result;
         console.log(blobDataResult);
         let storageRef = firebase.storage().ref();
         let imageRef = storageRef.child(fileObj.name);
-        // let uesrImageRef = await imageRef.put(blobDataResult).then((snapshot)=>{
-        //     snapshot.ref.getDownloadURL().then((downloadUrl) => {
-        //         console.log(downloadUrl)
-        //     }).catch((err)=> {
-        //         console.log(err);
-        //     })
-        // }).catch((err)=>{
-        //     console.log(err);
-        // });
 
         let userImageRef = await imageRef.put(blobDataResult);
         console.log(userImageRef);
@@ -89,15 +88,9 @@ async function getData(){
             let donatedItemList = {}
             let response = await fetch('/donateItem', option);
             let json = await response.json();
+            
             if(json.status == "success"){
                 alert("Data uploaded");
-                let dataRef = db.ref('users/' + username);
-                dataRef.once('value', async function(snapshot){
-                    donatedItemList = await snapshot.child('DonatedItemList').val();
-                    for(item in donatedItemList){
-                        console.log(donatedItemList[item]['data']['productType']);//Replace with the required field
-                    }
-                });
             }
         }
         else{
@@ -108,4 +101,47 @@ async function getData(){
         console.log(reader.error);
     }
     reader.readAsArrayBuffer(fileObj);
+}
+
+async function displayItems(){
+    let status = await intializeBaseStuff();
+    console.log(status);
+    if(status == "success"){
+        console.log("called!");
+        let statusBoard = document.getElementById('statusBoard');
+        let unorderedList = document.createElement('ul');
+        unorderedList.style.listStyleType = "none";
+        let dbRef = db.ref('users/' + username);
+        dbRef.on('value', async function(snapshot){
+            donatedItemList = await snapshot.child('DonatedItemList').val();
+                for(item in donatedItemList){
+                            //Replace with the required field
+                    let ptype = donatedItemList[item]['data']['productType'];
+                    let imageUrl = donatedItemList[item]['data']['imageUrl'];
+                    let pickupadd = donatedItemList[item]['data']['pickupAddress'];
+
+                    let imageEle = document.createElement('img');
+                    imageEle.src = imageUrl;
+                    imageEle.width = 100;
+                    imageEle.height = 100;
+
+                    let paraAddEle = document.createElement('p');
+                    paraAddEle.innerText = pickupadd;
+                    
+                    let paraProEle = document.createElement('p');
+                    paraProEle.innerText = ptype;
+
+                    let listItem = document.createElement('li');
+                    listItem.appendChild(imageEle);
+                    listItem.appendChild(paraProEle);
+                    listItem.appendChild(paraAddEle);
+
+                    unorderedList.appendChild(listItem);
+                }
+            statusBoard.appendChild(unorderedList);
+        })
+    }
+    else{
+        alert("Error loading firebase data!");
+    }
 }
