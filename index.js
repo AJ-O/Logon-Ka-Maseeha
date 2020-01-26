@@ -54,6 +54,8 @@ app.post('/googleSignIn', (req, res)=>{
     returnObj[status] = "Failure"
     returnObj[code] = error.code;
     returnObj[message] = error.message;
+    console.log("Error");
+    res.send(returnObj);
   });
   //res.send(returnObj);
   let users = db.ref('users');
@@ -63,10 +65,14 @@ app.post('/googleSignIn', (req, res)=>{
       db.ref('users/' + userName).set(
         data
       );
+      returnObj['userName'] = userName;
+      res.send(returnObj);
+    }
+    else{
+      returnObj['userName'] = userName;
+      res.send(returnObj);
     }
   });
-  returnObj['userName'] = userName;
-  res.send(returnObj);
 });
 
 app.get('/:user', (req, res) => {
@@ -97,10 +103,12 @@ app.post('/donateItem', (req, res)=> {
   let data = req.body;
   console.log(data.userName);
   let newItemRef = db.ref('users/' + data.userName + '/DonatedItemList').push();
+  console.log(newItemRef.key); //Getting the auto generated id!
   newItemRef.set({data}, (someParameter) => {
     console.log("sp1: ", someParameter);
     console.log("Works");
     retObj.status = "success";
+    retObj.autoKey = newItemRef.key;
     res.send(retObj);
   });
   // let updates = {};
