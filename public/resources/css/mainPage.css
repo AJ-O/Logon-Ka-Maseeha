@@ -1,21 +1,32 @@
+li {
+    list-style: none;
+    justify-content: center;
+    align-items: center;
+    padding: 10px;
+    display: flex;
+}
+
 #dashboard{
     width: 100%;
     height: 30%;
-    background-color: red;
+    background-color: rgba(48, 91, 172, 0.863);
 }
 
 #uploadData{
+    float: left;
     width: 50%;
-    height: 70%;
-    background-color: blueviolet;
+    height: 80vh;
+    background-color: rgba(36, 192, 36, 0.87);
 }
 
 #statusBoard{
-    left: 50%;
     width: 50%;
-    height: 70%;
-    background-color: aqua;
-    position: absolute;
+    height: 80vh;
+    float: right;
+    background-color: purple;
+    display: flex;
+    justify-content: left;
+    align-items: center;
     overflow: scroll;
 }
 
@@ -25,4 +36,9 @@
 
 #finalDonate{
     display: none;
+}
+
+#gSignOut {
+    position: absolute;
+    right: 10px;
 }

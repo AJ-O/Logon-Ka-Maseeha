@@ -82,7 +82,7 @@ async function getData(){
         blobDataResult = reader.result;
         console.log(blobDataResult);
         uploadStatusBoard(productType, pickupAddress, blobDataResult);
-        
+        alert("Wait till item is donated!");
         let storageRef = firebase.storage().ref();
         let imageRef = storageRef.child(fileObj.name);
         
@@ -105,7 +105,6 @@ async function getData(){
                 body: JSON.stringify(retObj)
             }
             let response = await fetch('/donateItem', option);
-            alert("Wait till item is donated!");
             let json = await response.json();
             
             if(json.status == "success"){
@@ -140,14 +139,19 @@ function createListItem(ptype, pickupadd, imageUrl){
     imageEle.height = 100;
 
     let paraAddEle = document.createElement('p');
-    paraAddEle.innerText = pickupadd;
+    paraAddEle.textContent = pickupadd;
     
     let paraProEle = document.createElement('p');
-    paraProEle.innerText = ptype;
+    paraProEle.textContent = ptype;
 
     let listItem = document.createElement('li');
+    // let divEle = document.createElement("div");
+    let brItem = document.createElement("br");
     listItem.appendChild(imageEle);
+    paraProEle.style.display = "flex";
+    paraProEle.style.flexDirection = "column";
     listItem.appendChild(paraProEle);
+    // listItem.appendChild(brItem);
     listItem.appendChild(paraAddEle);
     return listItem;
 }
