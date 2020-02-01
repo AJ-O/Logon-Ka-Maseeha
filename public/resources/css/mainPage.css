@@ -1,44 +1,51 @@
 li {
-    list-style: none;
-    justify-content: center;
-    align-items: center;
-    padding: 10px;
-    display: flex;
+  list-style: none;
+  justify-content: center;
+  align-items: center;
+  padding: 10px;
+  display: flex;
 }
 
-#dashboard{
-    width: 100%;
-    height: 30%;
-    background-color: rgba(48, 91, 172, 0.863);
+#dashboard {
+  width: 100%;
+  height: 30%;
+  background-color: rgba(48, 91, 172, 0.863);
 }
 
-#uploadData{
-    float: left;
-    width: 50%;
-    height: 80vh;
-    background-color: rgba(36, 192, 36, 0.87);
+#uploadData {
+  float: left;
+  width: 50%;
+  height: 80vh;
+  background-color: rgba(36, 192, 36, 0.87);
 }
 
-#statusBoard{
-    width: 50%;
-    height: 80vh;
-    float: right;
-    background-color: purple;
-    display: flex;
-    justify-content: left;
-    align-items: center;
-    overflow: scroll;
+#statusBoard {
+  width: 50%;
+  height: 80vh;
+  float: right;
+  background-color: purple;
+  display: flex;
+  justify-content: left;
+  align-items: center;
+  overflow: scroll;
 }
 
-#donationForm{
-    display: none;
+#donationForm {
+  display: none;
 }
 
-#finalDonate{
-    display: none;
+#finalDonate {
+  display: none;
 }
 
 #gSignOut {
-    position: absolute;
-    right: 10px;
+  position: absolute;
+  right: 10px;
+}
+
+#myBar {
+  display: none;
+  width: 0%;
+  height: 30px;
+  background-color: deepskyblue;
 }
