@@ -98,6 +98,44 @@ app.get("/:user", (req, res) => {
   });
 });
 
+function testDistances(lat, long) {
+  let ngoRef = db.ref("NGO Coordinates_List");
+  ngoRef.once("value", function(snapshot) {
+    let ngo_list = snapshot.val();
+    for (ngo in ngo_list) {
+      //console.log(ngo_list[ngo].Latitude);
+      //console.log(ngo_list[ngo].Longitude);
+      ngo_lat = ngo_list[ngo].Latitude;
+      ngo_long = ngo_list[ngo].Longitude;
+      let distance = calcDistance(lat, long, ngo_lat, ngo_long);
+      console.log(distance);
+    }
+  });
+}
+
+testDistances(12.976128000000001, 77.5503872);
+
+function calcDistance(lat1, lon1, lat2, lon2) {
+  const R = 6731; //Earth's radius
+  let dLat = deg2rad(lat2 - lat1);
+  let dLon = deg2rad(lon2 - lon1);
+  let a =
+    Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+    Math.cos(deg2rad(lat1)) *
+      Math.cos(deg2rad(lat2)) *
+      Math.sin(dLon / 2) *
+      Math.sin(dLon / 2);
+
+  let c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+  let d = R * c;
+  console.log(d);
+  return d;
+}
+
+function deg2rad(deg) {
+  return deg * (Math.PI / 180);
+}
+
 app.post("/donateItem", (req, res) => {
   let retObj = {};
   let data = req.body;
@@ -111,6 +149,7 @@ app.post("/donateItem", (req, res) => {
     retObj.autoKey = newItemRef.key;
     res.send(retObj);
   });
+
   // let updates = {};
   // updates['/newData'] = data;
   // db.ref('users/' + data.userName).update(updates, (someParameter) => {

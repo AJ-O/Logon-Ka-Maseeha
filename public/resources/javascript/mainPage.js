@@ -64,7 +64,11 @@ let statusBoard = document.getElementById("statusBoard");
 let unorderedList = document.createElement("ul");
 let statusBarDiv = document.getElementById("statusBar");
 let myBar = document.getElementById("myBar");
+let coordButton = document.getElementById("getCoords");
+coordButton.addEventListener("click", getCoordinates);
 let uploadStatusBar = 0;
+let userCoordinates = {};
+let allowedLocationAccess = false;
 
 unorderedList.style.listStyleType = "none";
 donateButton.addEventListener("click", showForm);
@@ -76,62 +80,96 @@ function showForm() {
   myBar.style.display = "block";
 }
 
+function getCoordinates() {
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(onSuccess, error);
+    allowedLocationAccess = true;
+  } else {
+    alert("Can't get position");
+  }
+}
+
+function onSuccess(position) {
+  console.log(position.coords.latitude);
+  console.log(position.coords.longitude);
+  let lat = position.coords.latitude;
+  let long = position.coords.longitude;
+  userCoordinates.lat = lat;
+  userCoordinates.long = long;
+}
+
+function error(err) {
+  console.log(err);
+}
+
 async function getData() {
   let blobDataResult;
-  let productType = document.getElementById("product").value;
-  let pickupAddress = document.getElementById("address").value;
-  let fileObj = document.getElementById("filename").files[0];
-
   let reader = new FileReader();
+  let fileObj = document.getElementById("filename").files[0];
+  if (!allowedLocationAccess) {
+    alert("Please allow location access to continue donation");
+  } else {
+    console.log(userCoordinates);
+    let productType = document.getElementById("product").value;
+    //let pickupAddress = document.getElementById("address").value;
+    // let pickupAddressLat = userCoordinates.lat;
+    // let pickupAddressLong = userCoordinates.lat;
 
-  reader.onload = async function() {
-    blobDataResult = reader.result;
-    console.log(blobDataResult);
-    uploadStatusBar = 20;
-    uploadStatusBoard(productType, pickupAddress, blobDataResult);
-    uploadStatusBarFunc();
-
-    alert("Wait till item is donated!");
-    let storageRef = firebase.storage().ref();
-    let imageRef = storageRef.child(fileObj.name);
-
-    let userImageRef = await imageRef.putString(blobDataResult, "data_url");
-    uploadStatusBar = 45;
-    uploadStatusBarFunc();
-
-    if (userImageRef.state == "success") {
-      let imageUrl = await userImageRef.ref.getDownloadURL();
-      uploadStatusBar = 75;
+    reader.onload = async function() {
+      blobDataResult = reader.result;
+      console.log(blobDataResult);
+      uploadStatusBar = 20;
+      uploadStatusBoard(
+        productType,
+        //pickupAddress,
+        blobDataResult,
+        userCoordinates
+      );
       uploadStatusBarFunc();
 
-      let retObj = {
-        productType: productType,
-        pickupAddress: pickupAddress,
-        userName: username,
-        imageUrl: imageUrl
-      };
+      alert("Wait till item is donated!");
+      let storageRef = firebase.storage().ref();
+      let imageRef = storageRef.child(fileObj.name);
 
-      let option = {
-        method: "POST",
-        headers: {
-          "Content-type": "application/json"
-        },
-        body: JSON.stringify(retObj)
-      };
-      let response = await fetch("/donateItem", option);
-      let json = await response.json();
+      let userImageRef = await imageRef.putString(blobDataResult, "data_url");
+      uploadStatusBar = 45;
+      uploadStatusBarFunc();
 
-      if (json.status == "success") {
-        uploadStatusBar = 100;
+      if (userImageRef.state == "success") {
+        let imageUrl = await userImageRef.ref.getDownloadURL();
+        uploadStatusBar = 75;
         uploadStatusBarFunc();
-        console.log(json["autoKey"]);
-        alert("Data uploaded");
+
+        let retObj = {
+          productType: productType,
+          //pickupAddress: pickupAddress,
+          userCoordinates: userCoordinates,
+          userName: username,
+          imageUrl: imageUrl
+        };
+
+        let option = {
+          method: "POST",
+          headers: {
+            "Content-type": "application/json"
+          },
+          body: JSON.stringify(retObj)
+        };
+        let response = await fetch("/donateItem", option);
+        let json = await response.json();
+
+        if (json.status == "success") {
+          uploadStatusBar = 100;
+          uploadStatusBarFunc();
+          console.log(json["autoKey"]);
+          alert("Data uploaded");
+        }
+      } else {
+        console.log("Try again");
+        alert("Error uploading image, please try again!");
       }
-    } else {
-      console.log("Try again");
-      alert("Error uploading image, please try again!");
-    }
-  };
+    };
+  }
   reader.onerror = function() {
     console.log(reader.error);
   };
@@ -139,23 +177,30 @@ async function getData() {
   reader.readAsDataURL(fileObj);
 }
 
-async function uploadStatusBoard(p1, p2, iu) {
-  let item = createListItem(p1, p2, iu);
+async function uploadStatusBoard(p1, p2, iu, co) {
+  let item = createListItem(p1, p2, iu, co);
   unorderedList.prepend(item);
   statusBoard.appendChild(unorderedList);
 }
 
-function createListItem(ptype, pickupadd, imageUrl) {
+function createListItem(ptype, imageUrl, coo) {
+  //pickupadd, imageUrl, coo) {
   let imageEle = document.createElement("img");
   imageEle.src = imageUrl;
   imageEle.width = 100;
   imageEle.height = 100;
 
-  let paraAddEle = document.createElement("p");
-  paraAddEle.textContent = pickupadd;
+  // let paraAddEle = document.createElement("p");
+  // paraAddEle.textContent = pickupadd;
 
   let paraProEle = document.createElement("p");
   paraProEle.textContent = ptype;
+
+  let latElement = document.createElement("p");
+  latElement.textContent = coo.lat;
+
+  let longElement = document.createElement("p");
+  longElement.textContent = coo.long;
 
   let listItem = document.createElement("li");
   // let divEle = document.createElement("div");
@@ -165,7 +210,9 @@ function createListItem(ptype, pickupadd, imageUrl) {
   paraProEle.style.flexDirection = "column";
   listItem.appendChild(paraProEle);
   // listItem.appendChild(brItem);
-  listItem.appendChild(paraAddEle);
+  //listItem.appendChild(paraAddEle);
+  listItem.appendChild(latElement);
+  listItem.appendChild(longElement);
   return listItem;
 }
 
@@ -182,9 +229,15 @@ async function displayItems() {
         //Replace with the required field
         let ptype = donatedItemList[item]["data"]["productType"];
         let imageUrl = donatedItemList[item]["data"]["imageUrl"];
-        let pickupadd = donatedItemList[item]["data"]["pickupAddress"];
+        //let pickupadd = donatedItemList[item]["data"]["pickupAddress"];
+        let userLocation = donatedItemList[item]["data"]["userCoordinates"];
         latestDonatedItemId = item;
-        let documentItem = createListItem(ptype, pickupadd, imageUrl);
+        let documentItem = createListItem(
+          ptype,
+          //pickupadd,
+          imageUrl,
+          userLocation
+        );
         unorderedList.prepend(documentItem);
       }
       statusBoard.appendChild(unorderedList);
