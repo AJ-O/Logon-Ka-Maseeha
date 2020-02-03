@@ -111,7 +111,7 @@ async function getData() {
   } else {
     console.log(userCoordinates);
     let productType = document.getElementById("product").value;
-    //let pickupAddress = document.getElementById("address").value;
+    let pickupAddress = document.getElementById("address").value;
     // let pickupAddressLat = userCoordinates.lat;
     // let pickupAddressLong = userCoordinates.lat;
 
@@ -121,7 +121,7 @@ async function getData() {
       uploadStatusBar = 20;
       uploadStatusBoard(
         productType,
-        //pickupAddress,
+        pickupAddress,
         blobDataResult,
         userCoordinates
       );
@@ -142,7 +142,7 @@ async function getData() {
 
         let retObj = {
           productType: productType,
-          //pickupAddress: pickupAddress,
+          pickupAddress: pickupAddress,
           userCoordinates: userCoordinates,
           userName: username,
           imageUrl: imageUrl
@@ -183,15 +183,15 @@ async function uploadStatusBoard(p1, p2, iu, co) {
   statusBoard.appendChild(unorderedList);
 }
 
-function createListItem(ptype, imageUrl, coo) {
+function createListItem(ptype, pickupadd, imageUrl, coo) {
   //pickupadd, imageUrl, coo) {
   let imageEle = document.createElement("img");
   imageEle.src = imageUrl;
   imageEle.width = 100;
   imageEle.height = 100;
 
-  // let paraAddEle = document.createElement("p");
-  // paraAddEle.textContent = pickupadd;
+  let paraAddEle = document.createElement("p");
+  paraAddEle.textContent = pickupadd;
 
   let paraProEle = document.createElement("p");
   paraProEle.textContent = ptype;
@@ -210,7 +210,7 @@ function createListItem(ptype, imageUrl, coo) {
   paraProEle.style.flexDirection = "column";
   listItem.appendChild(paraProEle);
   // listItem.appendChild(brItem);
-  //listItem.appendChild(paraAddEle);
+  listItem.appendChild(paraAddEle);
   listItem.appendChild(latElement);
   listItem.appendChild(longElement);
   return listItem;
@@ -229,12 +229,12 @@ async function displayItems() {
         //Replace with the required field
         let ptype = donatedItemList[item]["data"]["productType"];
         let imageUrl = donatedItemList[item]["data"]["imageUrl"];
-        //let pickupadd = donatedItemList[item]["data"]["pickupAddress"];
+        let pickupadd = donatedItemList[item]["data"]["pickupAddress"];
         let userLocation = donatedItemList[item]["data"]["userCoordinates"];
         latestDonatedItemId = item;
         let documentItem = createListItem(
           ptype,
-          //pickupadd,
+          pickupadd,
           imageUrl,
           userLocation
         );

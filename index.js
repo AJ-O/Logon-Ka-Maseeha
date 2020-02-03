@@ -113,7 +113,7 @@ function testDistances(lat, long) {
   });
 }
 
-testDistances(12.976128000000001, 77.5503872);
+//testDistances(12.976128000000001, 77.5503872);
 
 function calcDistance(lat1, lon1, lat2, lon2) {
   const R = 6731; //Earth's radius
