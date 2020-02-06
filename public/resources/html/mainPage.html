@@ -30,31 +30,33 @@
     <button id="gSignOut">Sign Out</button>
     <div id="dashboard"></div>
 
-    <div id="statusBoard"></div>
+    <div class="collection">
+      <div id="statusBoard"></div>
 
-    <div id="uploadData">
-      <button id="donateItem">Donate Item</button>
-      <div id="donationForm">
-        <label>Product Type: </label>
-        <input id="product" type="text" required />
+      <div id="uploadData">
+        <button id="donateItem">Donate Item</button>
+        <div id="donationForm">
+          <label>Product Type: </label>
+          <input id="product" type="text" required />
+          <br />
+          <br />
+          <label>Upload Image: </label>
+          <input id="filename" type="file" accept="image/*" required />
+          <br />
+          <br />
+          <label>Address: </label>
+          <textarea id="address" rows="5" cols="50"></textarea>
+          <button id="getCoords">Get Coordinates</button>
+        </div>
+        <button id="finalDonate">Donate</button>
         <br />
         <br />
-        <label>Upload Image</label>
-        <input id="filename" type="file" accept="image/*" required />
-        <br />
-        <br />
-        <label>Address to Pick up</label>
-        <textarea id="address" rows="5" cols="50"></textarea>
-        <button id="getCoords">Get coordinates</button>
-      </div>
-      <button id="finalDonate">Donate</button>
-      <br />
-      <br />
-      <div id="statusBar">
+        <!-- <div id="statusBar"> -->
         <div id="myBar"></div>
+        <!-- </div> -->
       </div>
     </div>
-    <script src="../javascript/signOut.js"></script>
-    <script src="../javascript/mainPage.js"></script>
+    <script type="text/javascript" src="../js/signOut.js"></script>
+    <script type="text/javascript" src="../js/mainPage.js"></script>
   </body>
 </html>

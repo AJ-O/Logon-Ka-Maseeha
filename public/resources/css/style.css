@@ -1,3 +1,84 @@
-.designForm{
-    text-align: center;
+* {
+  padding: 0;
+  margin: 0;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
 }
+
+body {
+  background-color: white;
+  color: green;
+  font-family: "Courier Prime", Courier, monospace;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+}
+
+.name {
+  width: 40%;
+  font-size: 20px;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  padding: 5px;
+}
+
+.counter {
+  -webkit-box-pack: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  text-align: center;
+  margin-top: 20%;
+  width: 100%;
+}
+
+.number {
+  font-size: 80px;
+}
+
+.counter h3 {
+  margin: 10px;
+}
+
+div {
+  margin: 3px;
+}
+
+a {
+  color: red;
+}
+
+.login a {
+  color: green;
+}
+
+.login {
+  cursor: pointer;
+  width: 130px;
+  height: 46px;
+  background-color: #004d00;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  position: fixed;
+  top: 0;
+  right: 0;
+  -webkit-transition: 0.2s;
+  transition: 0.2s;
+}
+
+.login:hover {
+  background-color: green;
+}
+
+.Q {
+  font-size: 26px;
+}
+/*# sourceMappingURL=style.css.map */

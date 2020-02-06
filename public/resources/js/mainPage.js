@@ -10,7 +10,7 @@
 // --  Give user prompt that data is being uploaded to the database -- Done
 // -- Have a statusbar that will display that item is being loaded! -- Done
 // -- Styling statusBar
-// -- Use maps to get user location
+// -- Use maps to get user location -- Done
 // -- Send NGO's data that item is donated according to their location
 // -- Lock  the item selected by NGO
 // -- Sharing details between user and NGO
@@ -75,9 +75,11 @@ donateButton.addEventListener("click", showForm);
 donate.addEventListener("click", getData);
 
 function showForm() {
-  form.style.display = "block";
+  form.style.display = "flex";
+  form.style.flexDirection = "column";
   donate.style.display = "block";
-  myBar.style.display = "block";
+  myBar.style.display = "inline-block";
+  donateButton.style.display = "none";
 }
 
 function getCoordinates() {
@@ -96,6 +98,9 @@ function onSuccess(position) {
   let long = position.coords.longitude;
   userCoordinates.lat = lat;
   userCoordinates.long = long;
+
+  coordButton.textContent = "Received Co-Ordinates";
+  coordButton.disabled = true;
 }
 
 function error(err) {
@@ -203,20 +208,25 @@ function createListItem(ptype, pickupadd, imageUrl, coo) {
   longElement.textContent = coo.long;
 
   let listItem = document.createElement("li");
-  // let divEle = document.createElement("div");
-  let brItem = document.createElement("br");
   listItem.appendChild(imageEle);
-  paraProEle.style.display = "flex";
-  paraProEle.style.flexDirection = "column";
-  listItem.appendChild(paraProEle);
-  // listItem.appendChild(brItem);
-  listItem.appendChild(paraAddEle);
-  listItem.appendChild(latElement);
-  listItem.appendChild(longElement);
+
+  let myDiv = document.createElement("div");
+  myDiv.append(paraProEle, paraAddEle, latElement, longElement);
+  myDiv.setAttribute("id", "myDiv");
+  listItem.append(myDiv);
+
   return listItem;
 }
 
 async function displayItems() {
+  let loading = document.createElement("img");
+  loading.src = "../gifs/loading.gif";
+  loading.style.width = "400px";
+  loading.style.height = "400px";
+  loading.style.display = "block";
+  loading.setAttribute("class", "loading");
+  document.querySelector("#statusBoard").appendChild(loading);
+
   let status = await intializeBaseStuff();
   console.log(status);
   if (status == "success") {
@@ -224,6 +234,8 @@ async function displayItems() {
     let dbRef = db.ref("users/" + username);
     dbRef.once("value", async function(snapshot) {
       let donatedItemList = await snapshot.child("DonatedItemList").val(); //Get the values under donated item list
+
+      loading.style.display = "none";
 
       for (item in donatedItemList) {
         //Replace with the required field

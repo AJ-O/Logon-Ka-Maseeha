@@ -11,12 +11,12 @@ const app = express();
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static("./public/"));
 app.use(express.static("./public/resources/"));
+app.use(express.static("./public/resources/html"));
+app.use(express.static("./public/resources/js"));
 app.use(express.json({ limit: "1mb" }));
-
-const port = 8181;
+const port = process.env.PORT || 8181;
 
 let firebaseConfig = {
   apiKey: "AIzaSyCFdFiuXfwk3jpIYUd44XKh0Hp14l63ZJE",
@@ -113,9 +113,16 @@ function testDistances(lat, long) {
   });
 }
 
-//testDistances(12.976128000000001, 77.5503872);
+//testDistances(12.962842, 77.585933);
 
 function calcDistance(lat1, lon1, lat2, lon2) {
+  // const p = 0.017453292519943295;
+  // let c = Math.cos;
+  // let a =
+  //   0.5 -
+  //   c((lat2 - lat1) * p) / 2 +
+  //   (c(lat1 * p) * c(lat2 * p) * (1 - c((lon2 - lon1) * p))) / 2;
+  // return 12742 * Math.asin(Math.sqrt(a));
   const R = 6731; //Earth's radius
   let dLat = deg2rad(lat2 - lat1);
   let dLon = deg2rad(lon2 - lon1);
@@ -128,7 +135,6 @@ function calcDistance(lat1, lon1, lat2, lon2) {
 
   let c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
   let d = R * c;
-  console.log(d);
   return d;
 }
 
