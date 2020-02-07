@@ -16,6 +16,7 @@
 // -- Sharing details between user and NGO
 // -- Assign key in realtime [on client side] -- Done but using id, try if another way possible!
 // -- Show item is deleted in realtime [on client side] -- done but using reloading!
+// -- Change status when ngo accepts
 
 window.onload = displayItems();
 let url = new URL(window.location);
@@ -119,6 +120,7 @@ async function getData() {
     console.log(userCoordinates);
     let productType = document.getElementById("product").value;
     let pickupAddress = document.getElementById("address").value;
+    let defaultProductStatus = "In queue";
     let tempKey = "tempKey";
     // let pickupAddressLat = userCoordinates.lat;
     // let pickupAddressLong = userCoordinates.lat;
@@ -132,7 +134,8 @@ async function getData() {
         pickupAddress,
         blobDataResult,
         userCoordinates,
-        tempKey
+        tempKey,
+        defaultProductStatus
       );
       uploadStatusBarFunc();
 
@@ -187,13 +190,13 @@ async function getData() {
   reader.readAsDataURL(fileObj);
 }
 
-async function uploadStatusBoard(p1, p2, iu, co, key) {
-  let item = createListItem(p1, p2, iu, co, key);
+async function uploadStatusBoard(p1, p2, iu, co, key, productStatus) {
+  let item = createListItem(p1, p2, iu, co, key, productStatus);
   unorderedList.prepend(item);
   statusBoard.appendChild(unorderedList);
 }
 
-function createListItem(ptype, pickupadd, imageUrl, coo, key) {
+function createListItem(ptype, pickupadd, imageUrl, coo, key, productStatus) {
   //pickupadd, imageUrl, coo) {
   let imageEle = document.createElement("img");
   imageEle.src = imageUrl;
@@ -212,6 +215,9 @@ function createListItem(ptype, pickupadd, imageUrl, coo, key) {
   let longElement = document.createElement("p");
   longElement.textContent = coo.long;
 
+  let statusEle = document.createElement("p");
+  statusEle.textContent = productStatus;
+
   let listItem = document.createElement("li");
   listItem.appendChild(imageEle);
 
@@ -222,7 +228,14 @@ function createListItem(ptype, pickupadd, imageUrl, coo, key) {
   removeButton.addEventListener("click", removeItem);
 
   let myDiv = document.createElement("div");
-  myDiv.append(paraProEle, paraAddEle, latElement, longElement, removeButton);
+  myDiv.append(
+    paraProEle,
+    paraAddEle,
+    latElement,
+    longElement,
+    statusEle,
+    removeButton
+  );
   myDiv.setAttribute("id", "myDiv");
   listItem.append(myDiv);
 
@@ -253,13 +266,16 @@ async function displayItems() {
         let imageUrl = donatedItemList[item]["data"]["imageUrl"];
         let pickupadd = donatedItemList[item]["data"]["pickupAddress"];
         let userLocation = donatedItemList[item]["data"]["userCoordinates"];
+        let proStatus = donatedItemList[item]["data"]["status"];
         let itemKey = item;
+
         let documentItem = createListItem(
           ptype,
           pickupadd,
           imageUrl,
           userLocation,
-          itemKey
+          itemKey,
+          proStatus
         );
         unorderedList.prepend(documentItem);
       }
@@ -275,15 +291,14 @@ function uploadStatusBarFunc() {
   myBar.textContent = uploadStatusBar + "%";
 }
 
-function removeItem(sp) {
+function removeItem(evt) {
   console.log("Called");
-  // console.log(sp.target.thisItemId);
-  // let key = sp.target.thisItemId;
-  console.log(sp.target.id);
-  let key = sp.target.id;
+  // console.log(evt.target.thisItemId);
+  // let key = evt.target.thisItemId;
+  console.log(evt.target.id);
+  let key = evt.target.id;
   let deletionRef = db.ref("users/" + username + "/DonatedItemList/" + key);
-  deletionRef.remove(err => {
-    console.log(err);
+  deletionRef.remove(() => {
     location.reload();
   });
 }
@@ -291,6 +306,6 @@ function removeItem(sp) {
 function updateButtonKey(key) {
   console.log(key);
   let ele = document.getElementById("tempKey");
-  console.log(ele);
   ele.id = key;
+  console.log("Key updated!");
 }
