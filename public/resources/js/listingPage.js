@@ -26,31 +26,35 @@ async function initializeStuff() {
 }
 
 function listingItems() {
-  const db = firebase.database().ref("users/");
+  const db = firebase.database().ref("Donated_Items_List/");
   db.once("value", async snapshot => {
-    let dbRef = snapshot.val();
-    let users = Object.keys(dbRef);
-    for (user in users) {
-      let donatedItemsRef = await snapshot
-        .child(users[user] + "/DonatedItemList")
-        .val();
-      //console.log(donatedItemsRef);
-      for (donatedItems in donatedItemsRef) {
-        let imageSrc = donatedItemsRef[donatedItems]["data"]["imageUrl"];
-        let pickupAddress =
-          donatedItemsRef[donatedItems]["data"]["pickupAddress"];
-        let productType = donatedItemsRef[donatedItems]["data"]["productType"];
-        let status = donatedItemsRef[donatedItems]["data"]["status"];
-        let date = donatedItemsRef[donatedItems]["data"]["date"];
+    let donatedItemsRef = snapshot.val();
+    //console.log(dbRef);
+    // for (item in dbRef) {
+    //   console.log(dbRef[item]);
+    // }
+    // let users = Object.keys(dbRef);
+    // for (user in users) {
+    //   let donatedItemsRef = await snapshot
+    //     .child(users[user] + "/DonatedItemList")
+    //     .val();
+    //   //console.log(donatedItemsRef);
+    for (donatedItems in donatedItemsRef) {
+      let imageSrc = donatedItemsRef[donatedItems]["data"]["imageUrl"];
+      let pickupAddress =
+        donatedItemsRef[donatedItems]["data"]["pickupAddress"];
+      let productType = donatedItemsRef[donatedItems]["data"]["productType"];
+      let status = donatedItemsRef[donatedItems]["data"]["status"];
+      let date = donatedItemsRef[donatedItems]["data"]["date"];
 
-        if (status == undefined) {
-          status = "In queue";
-        }
-        createLiItem(imageSrc, pickupAddress, productType, status, date);
-        count++;
-        console.log(count);
+      if (status == undefined) {
+        status = "In queue";
       }
+      createLiItem(imageSrc, pickupAddress, productType, status, date);
+      count++;
+      console.log(count);
     }
+    // }
   });
 }
 function createLiItem(src, add, type, status, date) {
@@ -78,5 +82,5 @@ function createLiItem(src, add, type, status, date) {
   divEle.setAttribute("id", "listItems");
   divEle.append(pickupAddressEle, productTypeEle, statusEle);
   liElement.append(imageEle, divEle);
-  unorderedListEle.appendChild(liElement);
+  unorderedListEle.prepend(liElement);
 }

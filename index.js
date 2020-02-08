@@ -150,6 +150,10 @@ app.post("/donateItem", (req, res) => {
   let data = req.body;
   console.log(data.userName);
 
+  let donatedItemsListRef = db.ref("Donated_Items_List").push();
+  donatedItemsListRef.set({ data }, sp => {
+    console.log("data set!");
+  });
   let newItemRef = db.ref("users/" + data.userName + "/DonatedItemList").push();
   console.log(newItemRef.key); //Getting the auto generated id!
   newItemRef.set({ data }, someParameter => {
@@ -174,14 +178,21 @@ app.listen(port, () => {
 function setDonatedItems() {
   //let dbRef = db.ref("Donated_Items")
   let users = db.ref("users/");
-  users.once("value", snapshot => {
+  //let newDonatedItemsRef = db.ref("Donated_Items_List");
+  users.once("value", async snapshot => {
     let usersRef = snapshot.val();
     let users = Object.keys(usersRef);
     console.log(users);
-    // for (user in users) {
-    //   let donatedRef = snapshot.child(user + "/DonatedItemsList").val();
-    //   console.log(donatedRef);
-    // }
+    for (user in users) {
+      let donatedRef = await snapshot
+        .child(users[user] + "/DonatedItemList")
+        .val();
+      for (donatedItems in donatedRef) {
+        let donateRef = db
+          .ref("Donated_Items_List/" + donatedItems)
+          .set(donatedRef[donatedItems]);
+      }
+    }
   });
 }
 
