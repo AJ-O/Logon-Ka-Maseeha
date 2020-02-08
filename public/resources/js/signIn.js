@@ -30,5 +30,6 @@ async function onSignIn(googleUser) {
     window.location = "../html/mainPage.html?username=" + json.userName;
   } else {
     console.log("Hell No!");
+    console.log(json);
   }
 }

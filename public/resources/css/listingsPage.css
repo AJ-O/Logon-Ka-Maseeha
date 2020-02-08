@@ -6,7 +6,6 @@
 img:hover {
   height: 250px;
   width: 300px;
-  transition-delay: 0.35s;
 }
 
 li {
@@ -48,4 +47,8 @@ p {
   justify-content: space-between;
   padding-left: 15px;
   overflow: auto;
+}
+
+img {
+  transition: 0.3s;
 }

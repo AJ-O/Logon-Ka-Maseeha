@@ -1,5 +1,7 @@
 const express = require("express");
 const bodyParser = require("body-parser");
+const dotenv = require("dotenv");
+dotenv.config();
 
 require("firebase/auth");
 require("firebase/firestore");
@@ -17,17 +19,19 @@ app.use(express.static("./public/resources/html"));
 app.use(express.static("./public/resources/js"));
 app.use(express.json({ limit: "1mb" }));
 const port = process.env.PORT || 8181;
+let ak = process.env.apiKey;
 
 let firebaseConfig = {
-  apiKey: "AIzaSyCFdFiuXfwk3jpIYUd44XKh0Hp14l63ZJE",
-  authDomain: "logon-ka-maseeha.firebaseapp.com",
-  databaseURL: "https://logon-ka-maseeha.firebaseio.com",
-  projectId: "logon-ka-maseeha",
-  storageBucket: "logon-ka-maseeha.appspot.com",
-  messagingSenderId: "721444271113",
-  appId: "1:721444271113:web:0d0f0921effab091a9f4d8",
-  measurementId: "G-ZNVVTNE8YC"
+  apiKey: process.env.apiKey,
+  authDomain: process.env.authDomain,
+  databaseURL: process.env.databaseURL,
+  projectId: process.env.projectId,
+  storageBucket: process.env.storageBucket,
+  messagingSenderId: process.env.messagingSenderId,
+  appId: process.env.appId,
+  measurementId: process.env.measurementId
 };
+
 firebase.initializeApp(firebaseConfig);
 const db = firebase.database();
 // firebase.analytics();
@@ -38,7 +42,6 @@ app.post("/googleSignIn", (req, res) => {
   let email = req.body["userEmail"];
 
   let data = {
-    password: "stud",
     email: email,
     token: token
   };
@@ -57,7 +60,7 @@ app.post("/googleSignIn", (req, res) => {
       returnObj[status] = "Failure";
       returnObj[code] = error.code;
       returnObj[message] = error.message;
-      console.log("Error");
+      console.log("Some sort of an error");
       res.send(returnObj);
     });
   //res.send(returnObj);
@@ -146,6 +149,7 @@ app.post("/donateItem", (req, res) => {
   let retObj = {};
   let data = req.body;
   console.log(data.userName);
+
   let newItemRef = db.ref("users/" + data.userName + "/DonatedItemList").push();
   console.log(newItemRef.key); //Getting the auto generated id!
   newItemRef.set({ data }, someParameter => {
@@ -165,4 +169,34 @@ app.post("/donateItem", (req, res) => {
 
 app.listen(port, () => {
   console.log(`Listening to ${port}`);
+});
+
+function setDonatedItems() {
+  //let dbRef = db.ref("Donated_Items")
+  let users = db.ref("users/");
+  users.once("value", snapshot => {
+    let usersRef = snapshot.val();
+    let users = Object.keys(usersRef);
+    console.log(users);
+    // for (user in users) {
+    //   let donatedRef = snapshot.child(user + "/DonatedItemsList").val();
+    //   console.log(donatedRef);
+    // }
+  });
+}
+
+//setDonatedItems();
+app.post("/request_fb_initialization", (req, res) => {
+  let firebaseConfig = {
+    apiKey: process.env.apiKey,
+    authDomain: process.env.authDomain,
+    databaseURL: process.env.databaseURL,
+    storageBucket: process.env.storageBucket
+  };
+  let retObj = {
+    status: "success",
+    firebaseConfig: firebaseConfig
+  };
+  console.log("called fb_config!");
+  res.send(retObj);
 });

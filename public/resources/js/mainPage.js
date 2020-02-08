@@ -23,20 +23,29 @@ let url = new URL(window.location);
 let username = url.searchParams.get("username");
 userSignedIn(username);
 
-function intializeBaseStuff() {
-  return new Promise((resolve, reject) => {
-    let firebaseConfig = {
-      apiKey: "AIzaSyCFdFiuXfwk3jpIYUd44XKh0Hp14l63ZJE",
-      authDomain: "logon-ka-maseeha.firebaseapp.com",
-      databaseURL: "https://logon-ka-maseeha.firebaseio.com",
-      storageBucket: "logon-ka-maseeha.appspot.com"
+async function intializeBaseStuff() {
+  return new Promise(async (resolve, reject) => {
+    let options = {
+      method: "POST",
+      headers: {
+        "Content-type": "application/json"
+      }
     };
-    firebase.initializeApp(firebaseConfig);
-    resolve("success");
+
+    let response = await fetch("/request_fb_initialization", options);
+    let json = await response.json();
+
+    if (json.status == "success") {
+      firebase.initializeApp(json.firebaseConfig);
+      db = firebase.database();
+      resolve("success");
+    } else {
+      console.log("Error");
+    }
   });
 }
-
-const db = firebase.database();
+let db;
+//const db = firebase.database();
 let latestDonatedItemId = "";
 
 async function userSignedIn(username) {
@@ -126,6 +135,7 @@ async function getData() {
     // let pickupAddressLong = userCoordinates.lat;
 
     reader.onload = async function() {
+      let date = Date.now();
       blobDataResult = reader.result;
       console.log(blobDataResult);
       uploadStatusBar = 20;
@@ -157,7 +167,8 @@ async function getData() {
           pickupAddress: pickupAddress,
           userCoordinates: userCoordinates,
           userName: username,
-          imageUrl: imageUrl
+          imageUrl: imageUrl,
+          date: date
         };
 
         let option = {
