@@ -101,58 +101,18 @@ app.get("/:user", (req, res) => {
   });
 });
 
-function testDistances(lat, long) {
-  let ngoRef = db.ref("NGO Coordinates_List");
-  ngoRef.once("value", function(snapshot) {
-    let ngo_list = snapshot.val();
-    for (ngo in ngo_list) {
-      //console.log(ngo_list[ngo].Latitude);
-      //console.log(ngo_list[ngo].Longitude);
-      ngo_lat = ngo_list[ngo].Latitude;
-      ngo_long = ngo_list[ngo].Longitude;
-      let distance = calcDistance(lat, long, ngo_lat, ngo_long);
-      console.log(distance);
-    }
-  });
-}
-
-//testDistances(12.962842, 77.585933);
-
-function calcDistance(lat1, lon1, lat2, lon2) {
-  // const p = 0.017453292519943295;
-  // let c = Math.cos;
-  // let a =
-  //   0.5 -
-  //   c((lat2 - lat1) * p) / 2 +
-  //   (c(lat1 * p) * c(lat2 * p) * (1 - c((lon2 - lon1) * p))) / 2;
-  // return 12742 * Math.asin(Math.sqrt(a));
-  const R = 6731; //Earth's radius
-  let dLat = deg2rad(lat2 - lat1);
-  let dLon = deg2rad(lon2 - lon1);
-  let a =
-    Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-    Math.cos(deg2rad(lat1)) *
-      Math.cos(deg2rad(lat2)) *
-      Math.sin(dLon / 2) *
-      Math.sin(dLon / 2);
-
-  let c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-  let d = R * c;
-  return d;
-}
-
-function deg2rad(deg) {
-  return deg * (Math.PI / 180);
-}
-
 app.post("/donateItem", (req, res) => {
   let retObj = {};
   let data = req.body;
+  let userCoordinates = data.userCoordinates;
+
   console.log(data.userName);
+  console.log(userCoordinates);
 
   let donatedItemsListRef = db.ref("Donated_Items_List").push();
   donatedItemsListRef.set({ data }, sp => {
     console.log("data set!");
+    findOutDistance(userCoordinates.lat, userCoordinates.long);
   });
   let newItemRef = db.ref("users/" + data.userName + "/DonatedItemList").push();
   console.log(newItemRef.key); //Getting the auto generated id!
@@ -211,3 +171,72 @@ app.post("/request_fb_initialization", (req, res) => {
   console.log("called fb_config!");
   res.send(retObj);
 });
+
+///////////////////////////////////////////////////////////////////////
+// NGO Part?
+function findOutDistance(lat, long) {
+  // to be called everytime a user uploads something
+  const NGOs = require("./NGOs.json");
+
+  function sendMail(ngoName) {
+    console.log("ngo is: " + ngoName);
+    console.log("ngo email is: " + ngoName.email);
+    const nodemailer = require("nodemailer");
+    const transporter = nodemailer.createTransport({
+      service: "gmail",
+      auth: {
+        user: "logonkamaseeha@gmail.com",
+        pass: "yoloswagbunn"
+      }
+    });
+
+    const mailOptions = {
+      from: "logonkamaseeha@gmail.com",
+      to: ngoName.email,
+      subject: "New item uploaded near you!",
+      text: `Hello, a new item has been uploaded near you! Please visit the listings page as soon as possible.`
+    };
+
+    transporter.sendMail(mailOptions, (err, info) => {
+      if (err) {
+        console.error(err);
+      }
+      console.log("E-Mail sent");
+    });
+  }
+
+  function calcDistance(lat1, lon1, lat2, lon2) {
+    const R = 6731; //Earth's radius
+    let dLat = deg2rad(lat2 - lat1);
+    let dLon = deg2rad(lon2 - lon1);
+    let a =
+      Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+      Math.cos(deg2rad(lat1)) *
+        Math.cos(deg2rad(lat2)) *
+        Math.sin(dLon / 2) *
+        Math.sin(dLon / 2);
+
+    let c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    let d = R * c;
+    return d;
+  }
+
+  function deg2rad(deg) {
+    return deg * (Math.PI / 180);
+  }
+
+  for (let ngo in NGOs) {
+    let d = calcDistance(
+      lat,
+      long,
+      NGOs[ngo]["latitude"],
+      NGOs[ngo]["longitude"]
+    );
+
+    console.log("distance between is: " + d);
+
+    if (d < 5.5) {
+      sendMail(NGOs[ngo]);
+    }
+  }
+}
