@@ -23,9 +23,6 @@
   "description": "",
   "dependencies": {
     "firebase": "^7.6.1",
-<<<<<<< HEAD
-=======
     "nodemailer": "^6.4.2"
->>>>>>> 6a73d0f02b8cf9e0ab601a1bb5aac868dd63d851
   }
 }

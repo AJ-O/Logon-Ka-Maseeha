@@ -187,7 +187,7 @@ function findOutDistance(lat, long) {
       service: "gmail",
       auth: {
         user: "logonkamaseeha@gmail.com",
-        pass: "yoloswagbunn"
+        pass: process.env.gPass
       }
     });
 

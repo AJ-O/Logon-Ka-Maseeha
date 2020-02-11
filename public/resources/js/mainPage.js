@@ -257,13 +257,15 @@ function createListItem(ptype, pickupadd, imageUrl, coo, key, productStatus) {
 }
 
 async function displayItems() {
-  let loading = document.createElement("img");
-  loading.src = "../gifs/loading.gif";
-  loading.style.width = "400px";
-  loading.style.height = "400px";
-  loading.style.display = "block";
-  loading.setAttribute("class", "loading");
-  document.querySelector("#statusBoard").appendChild(loading);
+  let loading = document.querySelector("#loading");
+  loading.style.display = "flex";
+  // let loading = document.createElement("img");
+  // loading.src = "../gifs/loading.gif";
+  // loading.style.width = "400px";
+  // loading.style.height = "400px";
+  // loading.style.display = "block";
+  // loading.setAttribute("class", "loading");
+  // document.querySelector("#statusBoard").appendChild(loading);
 
   let status = await intializeBaseStuff();
   console.log(status);
