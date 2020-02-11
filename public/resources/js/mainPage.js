@@ -53,7 +53,7 @@ async function userSignedIn(username) {
   let json = await response.json();
 
   if (json.status === "Success") {
-    let divDB = document.getElementById("dashboard");
+    //let divDB = document.getElementById("dashboard");
     if (divDB) {
       console.log("Got db");
     } else {
@@ -77,6 +77,8 @@ let unorderedList = document.createElement("ul");
 let statusBarDiv = document.getElementById("statusBar");
 let myBar = document.getElementById("myBar");
 let coordButton = document.getElementById("getCoords");
+let divDB = document.getElementById("dashboard");
+
 coordButton.addEventListener("click", getCoordinates);
 let uploadStatusBar = 0;
 let userCoordinates = {};
@@ -168,7 +170,8 @@ async function getData() {
           userCoordinates: userCoordinates,
           userName: username,
           imageUrl: imageUrl,
-          date: date
+          date: date,
+          status: defaultProductStatus
         };
 
         let option = {
@@ -266,6 +269,28 @@ async function displayItems() {
   console.log(status);
   if (status == "success") {
     console.log("called!");
+    let totalItems = db.ref("Donated_Items_List");
+    totalItems.once("value", async snapshot => {
+      let totalItemsList = await snapshot.val();
+      console.log(Object.keys(totalItemsList).length);
+      let undefinedCount = 0;
+      let inQueueCount = 0;
+      let acceptedCount = 0;
+
+      for (item in totalItemsList) {
+        let itemStatus = totalItemsList[item]["data"]["status"];
+        //console.log(itemStatus);
+        if (itemStatus == undefined) {
+          undefinedCount++;
+        } else if (itemStatus == "In queue") {
+          inQueueCount++;
+        } else {
+          acceptedCount++;
+        }
+      }
+      console.log(undefinedCount, inQueueCount, acceptedCount);
+    });
+
     let dbRef = db.ref("users/" + username);
     dbRef.once("value", async function(snapshot) {
       let donatedItemList = await snapshot.child("DonatedItemList").val(); //Get the values under donated item list
@@ -291,6 +316,8 @@ async function displayItems() {
         unorderedList.prepend(documentItem);
       }
       statusBoard.appendChild(unorderedList);
+      console.log(Object.keys(donatedItemList).length);
+      //console.log(Object.keys(totalItems).length);
     });
   } else {
     alert("Error loading firebase data!");
