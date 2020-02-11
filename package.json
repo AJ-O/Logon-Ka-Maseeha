@@ -1,5 +1,5 @@
 {
-  "name": "gareebo_ka_maseeha",
+  "name": "logon_ka_maseeha",
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
@@ -22,6 +22,7 @@
   },
   "description": "",
   "dependencies": {
-    "firebase": "^7.6.1"
+    "firebase": "^7.6.1",
+    "node-sass": "^4.13.1"
   }
 }
