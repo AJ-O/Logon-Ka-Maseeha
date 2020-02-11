@@ -18,7 +18,6 @@
 // -- Show item is deleted in realtime [on client side] -- done but using reloading!
 // -- Change status when ngo accepts
 
-window.onload = displayItems();
 let url = new URL(window.location);
 let username = url.searchParams.get("username");
 userSignedIn(username);
@@ -59,6 +58,7 @@ async function userSignedIn(username) {
     } else {
       console.log("Nope, didn't get db!");
     }
+    displayItems();
     let userElement = document.createElement("p");
     userElement.textContent = username;
     divDB.appendChild(userElement);
@@ -131,7 +131,7 @@ async function getData() {
     console.log(userCoordinates);
     let productType = document.getElementById("product").value;
     let pickupAddress = document.getElementById("address").value;
-    let defaultProductStatus = "In queue";
+    let defaultProductStatus = "Awaiting response";
     let tempKey = "tempKey";
     // let pickupAddressLat = userCoordinates.lat;
     // let pickupAddressLong = userCoordinates.lat;
@@ -284,7 +284,7 @@ async function displayItems() {
         //console.log(itemStatus);
         if (itemStatus == undefined) {
           undefinedCount++;
-        } else if (itemStatus == "In queue") {
+        } else if (itemStatus == "Awaiting response") {
           inQueueCount++;
         } else {
           acceptedCount++;
