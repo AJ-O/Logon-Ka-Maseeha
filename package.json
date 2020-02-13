@@ -23,6 +23,7 @@
   "description": "",
   "dependencies": {
     "firebase": "^7.6.1",
+    "google-auth-library": "^5.9.2",
     "nodemailer": "^6.4.2"
   }
 }

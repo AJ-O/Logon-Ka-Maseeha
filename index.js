@@ -2,7 +2,7 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const dotenv = require("dotenv");
-dotenv.config();
+const { OAuth2Client } = require("google-auth-library");
 
 require("firebase/auth");
 require("firebase/firestore");
@@ -19,8 +19,12 @@ app.use(express.static("./public/resources/"));
 app.use(express.static("./public/resources/html"));
 app.use(express.static("./public/resources/js"));
 app.use(express.json({ limit: "1mb" }));
+dotenv.config();
+
 const port = process.env.PORT || 8181;
-let ak = process.env.apiKey;
+const client = new OAuth2Client(
+  "721444271113-jkrgq78cj42e2i8d5jq8lte1b7etnkv8.apps.googleusercontent.com"
+);
 
 let firebaseConfig = {
   apiKey: process.env.apiKey,
@@ -96,6 +100,28 @@ app.get("/:user/:token", (req, res) => {
     userName: userName
   };
 
+  if (token.includes(":")) {
+    token = token.replace(":", "");
+  }
+
+  verify(token)
+    .then(() => {
+      let userData = db.ref("users/");
+      userData.once("value", function(snapshot) {
+        let userRef = snapshot.child(`/${userName}`).val();
+        retObj["email"] = userRef.email;
+        retObj["pass"] = userRef.password;
+        res.send(retObj);
+      });
+    })
+    .catch(error => {
+      retObj.status = "Failure";
+      retObj.code = error.code;
+      retObj.message = error.message;
+      console.log("Some sort of an error");
+      console.log("error is: " + error);
+      res.send(retObj);
+    });
   // let credential = firebase.auth.GoogleAuthProvider.credential(token);
   // firebase
   //   .auth()
@@ -109,13 +135,13 @@ app.get("/:user/:token", (req, res) => {
   //     //res.send(returnObj);
   //   });
 
-  let userData = db.ref("users/");
-  userData.once("value", function(snapshot) {
-    let userRef = snapshot.child(`/${userName}`).val();
-    retObj["email"] = userRef.email;
-    retObj["pass"] = userRef.password;
-    res.send(retObj);
-  });
+  // let userData = db.ref("users/");
+  // userData.once("value", function(snapshot) {
+  //   let userRef = snapshot.child(`/${userName}`).val();
+  //   retObj["email"] = userRef.email;
+  //   retObj["pass"] = userRef.password;
+  //   res.send(retObj);
+  // });
 });
 
 app.post("/donateItem", (req, res) => {
@@ -186,6 +212,17 @@ app.post("/request_fb_initialization", (req, res) => {
   console.log("called fb_config!");
   res.send(retObj);
 });
+
+async function verify(token) {
+  const ticket = await client.verifyIdToken({
+    idToken: token,
+    audience:
+      "721444271113-jkrgq78cj42e2i8d5jq8lte1b7etnkv8.apps.googleusercontent.com"
+  });
+
+  const payload = ticket.getPayload();
+  const userid = payload["sub"];
+}
 
 ///////////////////////////////////////////////////////////////////////
 // NGO Part?

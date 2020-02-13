@@ -70,8 +70,9 @@ async function userSignedIn(username, token) {
     divDB.appendChild(userElement);
   } else {
     console.log("Error");
-    alert("Error occured try again in some time");
-    window.location = "localhost:8181";
+    alert("Wrong Credentials!");
+    //handleAuthError();
+    window.location = "../../index.html";
   }
 }
 
@@ -354,4 +355,12 @@ function updateButtonKey(key) {
   let ele = document.getElementById("tempKey");
   ele.id = key;
   console.log("Key updated!");
+}
+
+function handleAuthError() {
+  let errorEle = document.createElement("p");
+  errorEle.textContent = "error";
+  divDB.appendChild(errorEle);
+  statusBoard.appendChild(errorEle);
+  form.appendChild(errorEle);
 }
