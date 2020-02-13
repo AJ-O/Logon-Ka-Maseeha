@@ -22,9 +22,7 @@ app.use(express.json({ limit: "1mb" }));
 dotenv.config();
 
 const port = process.env.PORT || 8181;
-const client = new OAuth2Client(
-  "721444271113-jkrgq78cj42e2i8d5jq8lte1b7etnkv8.apps.googleusercontent.com"
-);
+const client = new OAuth2Client(process.env.CLIENT_ID);
 
 let firebaseConfig = {
   apiKey: process.env.apiKey,
@@ -216,8 +214,7 @@ app.post("/request_fb_initialization", (req, res) => {
 async function verify(token) {
   const ticket = await client.verifyIdToken({
     idToken: token,
-    audience:
-      "721444271113-jkrgq78cj42e2i8d5jq8lte1b7etnkv8.apps.googleusercontent.com"
+    audience: process.env.CLIENT_ID
   });
 
   const payload = ticket.getPayload();
