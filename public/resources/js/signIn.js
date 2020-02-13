@@ -27,7 +27,14 @@ async function onSignIn(googleUser) {
 
   if (json.status === "Success") {
     console.log(json.userName);
-    window.location = "../html/mainPage.html?username=" + json.userName;
+    //console.log(json.token);
+    let username = json.userName;
+    if (username.includes(" ")) {
+      username = username.split(" ").join("%20");
+      console.log(username);
+      window.location =
+        "../html/mainPage.html?username=" + username + "&token=" + json.token;
+    }
   } else {
     console.log("Hell No!");
     console.log(json);

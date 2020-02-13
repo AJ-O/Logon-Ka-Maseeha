@@ -20,7 +20,8 @@
 
 let url = new URL(window.location);
 let username = url.searchParams.get("username");
-userSignedIn(username);
+let token = url.searchParams.get("token");
+userSignedIn(username, token);
 
 async function intializeBaseStuff() {
   return new Promise(async (resolve, reject) => {
@@ -47,8 +48,9 @@ let db;
 //const db = firebase.database();
 let latestDonatedItemId = "";
 
-async function userSignedIn(username) {
-  let response = await fetch(`/:${username}`);
+async function userSignedIn(username, token) {
+  username = username.split("%20").join(" ");
+  let response = await fetch(`/:${username}/:${token}`);
   let json = await response.json();
 
   if (json.status === "Success") {

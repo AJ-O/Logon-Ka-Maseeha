@@ -35,16 +35,15 @@ let firebaseConfig = {
 
 firebase.initializeApp(firebaseConfig);
 const db = firebase.database();
-// firebase.analytics();
+
 app.post("/googleSignIn", (req, res) => {
   console.log("called post!");
   let token = req.body["token"];
   let userName = req.body["username"];
   let email = req.body["userEmail"];
-
+  //console.log(token);
   let data = {
-    email: email,
-    token: token
+    email: email
   };
 
   let returnObj = {
@@ -71,19 +70,23 @@ app.post("/googleSignIn", (req, res) => {
       console.log("User does not exist!");
       db.ref("users/" + userName).set(data);
       returnObj["userName"] = userName;
+      returnObj["token"] = token;
       res.send(returnObj);
     } else {
       returnObj["userName"] = userName;
+      returnObj["token"] = token;
       res.send(returnObj);
     }
   });
 });
 
-app.get("/:user", (req, res) => {
+app.get("/:user/:token", (req, res) => {
   console.log("called get!");
   console.log("Username: " + req.params.user);
-
+  //console.log("token: " + req.params.token);
   let userName = req.params.user;
+  let token = req.params.token;
+  //console.log(token);
   if (userName.includes(":")) {
     userName = userName.replace(":", "");
     console.log(userName);
