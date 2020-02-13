@@ -96,6 +96,19 @@ app.get("/:user/:token", (req, res) => {
     userName: userName
   };
 
+  // let credential = firebase.auth.GoogleAuthProvider.credential(token);
+  // firebase
+  //   .auth()
+  //   .signInWithCredential(credential)
+  //   .catch(function(error) {
+  //     // returnObj[status] = "Failure";
+  //     // returnObj[code] = error.code;
+  //     // returnObj[message] = error.message;
+  //     console.log("Some sort of an error");
+  //     console.log("error is: " + error);
+  //     //res.send(returnObj);
+  //   });
+
   let userData = db.ref("users/");
   userData.once("value", function(snapshot) {
     let userRef = snapshot.child(`/${userName}`).val();
@@ -140,9 +153,7 @@ app.listen(port, () => {
 });
 
 function setDonatedItems() {
-  //let dbRef = db.ref("Donated_Items")
   let users = db.ref("users/");
-  //let newDonatedItemsRef = db.ref("Donated_Items_List");
   users.once("value", async snapshot => {
     let usersRef = snapshot.val();
     let users = Object.keys(usersRef);
@@ -159,8 +170,8 @@ function setDonatedItems() {
     }
   });
 }
-
 //setDonatedItems();
+
 app.post("/request_fb_initialization", (req, res) => {
   let firebaseConfig = {
     apiKey: process.env.apiKey,

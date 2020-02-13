@@ -30,8 +30,22 @@ async function onSignIn(googleUser) {
     //console.log(json.token);
     let username = json.userName;
     if (username.includes(" ")) {
-      username = username.split(" ").join("%20");
-      console.log(username);
+      // let modifiedname = await addingPercentage(username);
+      // console.log(modifiedname);
+      // window.location =
+      //   "../html/mainPage.html?username=" +
+      //   modifiedname +
+      //   "&token=" +
+      //   json.token;
+      addingPercentage(username).then(modifiedName => {
+        console.log(modifiedName);
+        window.location =
+          "../html/mainPage.html?username=" +
+          modifiedName +
+          "&token=" +
+          json.token;
+      });
+    } else {
       window.location =
         "../html/mainPage.html?username=" + username + "&token=" + json.token;
     }
@@ -39,4 +53,11 @@ async function onSignIn(googleUser) {
     console.log("Hell No!");
     console.log(json);
   }
+}
+
+function addingPercentage(username) {
+  return new Promise((resolve, reject) => {
+    username = username.split(" ").join("%20");
+    resolve(username);
+  });
 }

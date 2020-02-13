@@ -21,8 +21,11 @@
 let url = new URL(window.location);
 let username = url.searchParams.get("username");
 let token = url.searchParams.get("token");
-userSignedIn(username, token);
-
+if (token == null) {
+  console.log("wrong credentials");
+} else {
+  userSignedIn(username, token);
+}
 async function intializeBaseStuff() {
   return new Promise(async (resolve, reject) => {
     let options = {
@@ -49,6 +52,7 @@ let db;
 let latestDonatedItemId = "";
 
 async function userSignedIn(username, token) {
+  console.log(username);
   username = username.split("%20").join(" ");
   let response = await fetch(`/:${username}/:${token}`);
   let json = await response.json();
