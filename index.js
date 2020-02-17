@@ -116,8 +116,8 @@ app.get("/:user/:token", (req, res) => {
       retObj.status = "Failure";
       retObj.code = error.code;
       retObj.message = error.message;
-      console.log("Some sort of an error");
-      console.log("error is: " + error);
+      // console.log("Some sort of an error");
+      // console.log("error is: " + error);
       res.send(retObj);
     });
   // let credential = firebase.auth.GoogleAuthProvider.credential(token);
