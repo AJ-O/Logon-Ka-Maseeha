@@ -3,6 +3,7 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const dotenv = require("dotenv");
 const { OAuth2Client } = require("google-auth-library");
+const admin = require("firebase-admin");
 
 require("firebase/auth");
 require("firebase/firestore");
@@ -36,6 +37,12 @@ let firebaseConfig = {
 };
 
 firebase.initializeApp(firebaseConfig);
+
+let defaultApp = admin.initializeApp({
+  credential: admin.credential.applicationDefault(),
+  databaseURL: process.env.databaseURL
+});
+
 const db = firebase.database();
 
 app.post("/googleSignIn", (req, res) => {
@@ -58,6 +65,22 @@ app.post("/googleSignIn", (req, res) => {
   firebase
     .auth()
     .signInWithCredential(credential)
+    .then(() => {
+      let users = db.ref("users");
+      users.once("value", function(snapshot) {
+        if (!snapshot.child(userName).exists()) {
+          console.log("User does not exist!");
+          db.ref("users/" + userName).set(data);
+          returnObj["userName"] = userName;
+          returnObj["token"] = token;
+          res.send(returnObj);
+        } else {
+          returnObj["userName"] = userName;
+          returnObj["token"] = token;
+          res.send(returnObj);
+        }
+      });
+    })
     .catch(function(error) {
       returnObj[status] = "Failure";
       returnObj[code] = error.code;
@@ -65,21 +88,6 @@ app.post("/googleSignIn", (req, res) => {
       console.log("Some sort of an error");
       res.send(returnObj);
     });
-  //res.send(returnObj);
-  let users = db.ref("users");
-  users.once("value", function(snapshot) {
-    if (!snapshot.child(userName).exists()) {
-      console.log("User does not exist!");
-      db.ref("users/" + userName).set(data);
-      returnObj["userName"] = userName;
-      returnObj["token"] = token;
-      res.send(returnObj);
-    } else {
-      returnObj["userName"] = userName;
-      returnObj["token"] = token;
-      res.send(returnObj);
-    }
-  });
 });
 
 app.get("/:user/:token", (req, res) => {
@@ -104,6 +112,22 @@ app.get("/:user/:token", (req, res) => {
 
   verify(token)
     .then(() => {
+      // let user = firebase.auth().currentUser;
+      // if (user) {
+      //   //console.log(Object.keys(user));
+      //   let currentUserData = Object.keys(user);
+      //   console.log(currentUserData);
+      //   console.log(currentUserData[10]);
+      //   console.log(user["displayName"]);
+      //   if (user["displayName"] !== userName) {
+      //     console.log("wrong stuff!");
+      //   } else {
+      //     console.log("ur cool!");
+      //   }
+      // } else {
+      //   console.log("not user");
+      // }
+
       let userData = db.ref("users/");
       userData.once("value", function(snapshot) {
         let userRef = snapshot.child(`/${userName}`).val();
@@ -120,26 +144,6 @@ app.get("/:user/:token", (req, res) => {
       console.log("error is: " + error);
       res.send(retObj);
     });
-  // let credential = firebase.auth.GoogleAuthProvider.credential(token);
-  // firebase
-  //   .auth()
-  //   .signInWithCredential(credential)
-  //   .catch(function(error) {
-  //     // returnObj[status] = "Failure";
-  //     // returnObj[code] = error.code;
-  //     // returnObj[message] = error.message;
-  //     console.log("Some sort of an error");
-  //     console.log("error is: " + error);
-  //     //res.send(returnObj);
-  //   });
-
-  // let userData = db.ref("users/");
-  // userData.once("value", function(snapshot) {
-  //   let userRef = snapshot.child(`/${userName}`).val();
-  //   retObj["email"] = userRef.email;
-  //   retObj["pass"] = userRef.password;
-  //   res.send(retObj);
-  // });
 });
 
 app.post("/donateItem", (req, res) => {
@@ -164,12 +168,6 @@ app.post("/donateItem", (req, res) => {
     retObj.autoKey = newItemRef.key;
     res.send(retObj);
   });
-
-  // let updates = {};
-  // updates['/newData'] = data;
-  // db.ref('users/' + data.userName).update(updates, (someParameter) => {
-  //   console.log("sp: ", someParameter);
-  // });
 });
 
 app.listen(port, () => {
@@ -219,6 +217,7 @@ async function verify(token) {
 
   const payload = ticket.getPayload();
   const userid = payload["sub"];
+  //console.log(userid);
 }
 
 ///////////////////////////////////////////////////////////////////////
