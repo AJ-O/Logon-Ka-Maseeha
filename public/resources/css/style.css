@@ -8,7 +8,10 @@
 body {
   background-color: white;
   color: green;
-  font-family: "Courier Prime", Courier, monospace;
+  font-family: "Montserrat", Courier, monospace;
+}
+
+.every {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -80,5 +83,55 @@ a {
 
 .Q {
   font-size: 26px;
+}
+
+#ngo-log {
+  background-color: #004d00;
+  cursor: pointer;
+  width: 130px;
+  height: 46px;
+  position: fixed;
+  right: 140px;
+  top: 0;
+  -webkit-transition: 0.2s;
+  transition: 0.2s;
+  color: white;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+#ngo-log:hover {
+  background-color: green;
+}
+
+.ngo-login-form {
+  display: none;
+  width: 100vw;
+  height: 100%;
+  position: absolute;
+  top: 0;
+}
+
+.ngo-login-form form {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
 }
 /*# sourceMappingURL=style.css.map */

@@ -2,21 +2,21 @@
   margin: 0;
   padding: 0;
   -webkit-box-sizing: border-box;
-  box-sizing: border-box;
+          box-sizing: border-box;
 }
 
 body {
-  font-family: "Courier Prime", Courier, monospace;
+  font-family: "Montserrat", monospace;
 }
 
 li {
   list-style: none;
   -webkit-box-pack: left;
-  -ms-flex-pack: left;
-  justify-content: left;
+      -ms-flex-pack: left;
+          justify-content: left;
   -webkit-box-align: center;
-  -ms-flex-align: center;
-  align-items: center;
+      -ms-flex-align: center;
+          align-items: center;
   padding: 10px;
   margin: 4px;
   position: relative;
@@ -47,19 +47,19 @@ div {
   display: flex;
   -webkit-box-orient: vertical;
   -webkit-box-direction: normal;
-  -ms-flex-direction: column;
-  flex-direction: column;
+      -ms-flex-direction: column;
+          flex-direction: column;
   -webkit-box-pack: space-evenly;
-  -ms-flex-pack: space-evenly;
-  justify-content: space-evenly;
+      -ms-flex-pack: space-evenly;
+          justify-content: space-evenly;
   -webkit-box-align: center;
-  -ms-flex-align: center;
-  align-items: center;
+      -ms-flex-align: center;
+          align-items: center;
   -webkit-box-ordinal-group: 2;
-  -ms-flex-order: 1;
-  order: 1;
+      -ms-flex-order: 1;
+          order: 1;
   -ms-flex-preferred-size: 50%;
-  flex-basis: 50%;
+      flex-basis: 50%;
   height: 80vh;
   background-color: rgba(36, 192, 36, 0.87);
   padding: 5px;
@@ -78,16 +78,16 @@ div {
   display: -ms-flexbox;
   display: flex;
   -webkit-box-pack: justify;
-  -ms-flex-pack: justify;
-  justify-content: space-between;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
 }
 
 #statusBoard {
   -ms-flex-preferred-size: 50%;
-  flex-basis: 50%;
+      flex-basis: 50%;
   -webkit-box-ordinal-group: 3;
-  -ms-flex-order: 2;
-  order: 2;
+      -ms-flex-order: 2;
+          order: 2;
   height: 80vh;
   background-color: purple;
   display: -webkit-box;
@@ -95,7 +95,7 @@ div {
   display: flex;
   overflow: auto;
   -ms-flex-wrap: wrap;
-  flex-wrap: wrap;
+      flex-wrap: wrap;
   padding: 10px;
 }
 
@@ -133,8 +133,12 @@ img {
 }
 
 #loading {
-  justify-content: center;
-  align-items: center;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
   margin: 300px auto;
 }
 
@@ -144,37 +148,34 @@ img {
   margin: 30px auto;
   position: relative;
   -webkit-animation: rotateit 1.3s linear infinite;
-  -moz-animation: rotateit 1.3s linear infinite;
-  animation: rotateit 1.3s linear infinite;
+          animation: rotateit 1.3s linear infinite;
 }
 
 @-webkit-keyframes rotateit {
   from {
     -webkit-transform: rotate(360deg);
+            transform: rotate(360deg);
   }
   to {
     -webkit-transform: rotate(0deg);
+            transform: rotate(0deg);
   }
 }
-@-moz-keyframes rotateit {
-  from {
-    -moz-transform: rotate(360deg);
-  }
-  to {
-    -moz-transform: rotate(0deg);
-  }
-}
+
 @keyframes rotateit {
   from {
-    transform: rotate(360deg);
+    -webkit-transform: rotate(360deg);
+            transform: rotate(360deg);
   }
   to {
-    transform: rotate(0deg);
+    -webkit-transform: rotate(0deg);
+            transform: rotate(0deg);
   }
 }
+
 /*=======================================================
-* Circles code taken from https://www.crazyegg.com/blog/loading-spinners-css3-animation/
-*======================================================*/
+  * Circles code taken from https://www.crazyegg.com/blog/loading-spinners-css3-animation/
+  *======================================================*/
 .spinner.circles div {
   width: 20px;
   height: 20px;
@@ -184,51 +185,51 @@ img {
   top: 35px;
   left: 45px;
 }
+
 .spinner.circles div:nth-child(1) {
   -webkit-transform: rotate(0deg) translate(0, -35px) scale(1.4);
-  -moz-transform: rotate(0deg) translate(0, -35px) scale(1.4);
-  transform: rotate(0deg) translate(0, -35px) scale(1.4);
+          transform: rotate(0deg) translate(0, -35px) scale(1.4);
 }
+
 .spinner.circles div:nth-child(2) {
   -webkit-transform: rotate(45deg) translate(0, -35px) scale(1.2);
-  -moz-transform: rotate(45deg) translate(0, -35px) scale(1.2);
-  transform: rotate(45deg) translate(0, -35px) scale(1.2);
+          transform: rotate(45deg) translate(0, -35px) scale(1.2);
   opacity: 0.7;
 }
+
 .spinner.circles div:nth-child(3) {
   -webkit-transform: rotate(90deg) translate(0, -35px) scale(1.1);
-  -moz-transform: rotate(90deg) translate(0, -35px) scale(1.1);
-  transform: rotate(90deg) translate(0, -35px) scale(1.1);
+          transform: rotate(90deg) translate(0, -35px) scale(1.1);
   opacity: 0.6;
 }
+
 .spinner.circles div:nth-child(4) {
   -webkit-transform: rotate(135deg) translate(0, -35px) scale(0.9);
-  -moz-transform: rotate(135deg) translate(0, -35px) scale(0.9);
-  transform: rotate(135deg) translate(0, -35px) scale(0.9);
+          transform: rotate(135deg) translate(0, -35px) scale(0.9);
   opacity: 0.5;
 }
+
 .spinner.circles div:nth-child(5) {
   -webkit-transform: rotate(180deg) translate(0, -35px) scale(0.7);
-  -moz-transform: rotate(180deg) translate(0, -35px) scale(0.7);
-  transform: rotate(180deg) translate(0, -35px) scale(0.7);
+          transform: rotate(180deg) translate(0, -35px) scale(0.7);
   opacity: 0.4;
 }
+
 .spinner.circles div:nth-child(6) {
   -webkit-transform: rotate(225deg) translate(0, -35px) scale(0.5);
-  -moz-transform: rotate(225deg) translate(0, -35px) scale(0.5);
-  transform: rotate(225deg) translate(0, -35px) scale(0.5);
+          transform: rotate(225deg) translate(0, -35px) scale(0.5);
   opacity: 0.3;
 }
+
 .spinner.circles div:nth-child(7) {
   -webkit-transform: rotate(270deg) translate(0, -35px) scale(0.3);
-  -moz-transform: rotate(270deg) translate(0, -35px) scale(0.3);
-  transform: rotate(270deg) translate(0, -35px) scale(0.3);
+          transform: rotate(270deg) translate(0, -35px) scale(0.3);
   opacity: 0.2;
 }
+
 .spinner.circles div:nth-child(8) {
   -webkit-transform: rotate(315deg) translate(0, -35px) scale(0.1);
-  -moz-transform: rotate(315deg) translate(0, -35px) scale(0.1);
-  transform: rotate(315deg) translate(0, -35px) scale(0.1);
+          transform: rotate(315deg) translate(0, -35px) scale(0.1);
   opacity: 0.1;
 }
 /*# sourceMappingURL=mainPage.css.map */

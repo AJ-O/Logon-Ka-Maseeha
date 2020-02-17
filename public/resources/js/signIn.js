@@ -87,3 +87,18 @@ function addingPercentage(username) {
     resolve(retObj);
   });
 }
+
+// THE LINE BELOW TO BE REMOVED BEFORE PRODUCTION
+// window.onload = displayNGOForm();
+// THE LINE ABOVE TO BE REMOVED BEFORE PRODUCTION
+
+function displayNGOForm() {
+  const ngoForm = document.querySelector(".ngo-login-form");
+  document.querySelector(".every").style.filter = "blur(5px)";
+  ngoForm.style.display = "flex";
+  ngoForm.style.justifyContent = "center";
+  ngoForm.style.alignItems = "center";
+}
+
+const ngoLog = document.querySelector("#ngo-log");
+ngoLog.addEventListener("click", displayNGOForm);
