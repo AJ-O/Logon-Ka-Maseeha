@@ -4,3 +4,5 @@ package-lock.json
 public/resources/css/*.scss
 jsonTest.js
 *.map
+insertNGOData.js
+.gitignore

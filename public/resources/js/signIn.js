@@ -25,6 +25,7 @@ async function getTotalItemsCount() {
     console.log("error");
   }
 }
+
 async function onSignIn(googleUser) {
   let profile = googleUser.getBasicProfile();
   console.log("Name: " + profile.getName());
@@ -88,10 +89,7 @@ function addingPercentage(username) {
   });
 }
 
-// THE LINE BELOW TO BE REMOVED BEFORE PRODUCTION
-// window.onload = displayNGOForm();
-// THE LINE ABOVE TO BE REMOVED BEFORE PRODUCTION
-
+// Making the Sign In for the NGO
 function displayNGOForm() {
   const ngoForm = document.querySelector(".ngo-login-form");
   document.querySelector(".every").style.filter = "blur(5px)";
