@@ -59,7 +59,7 @@ a {
 .login {
   cursor: pointer;
   width: 130px;
-  height: 46px;
+  height: 50px;
   background-color: #004d00;
   display: -webkit-box;
   display: -ms-flexbox;
@@ -89,7 +89,7 @@ a {
   background-color: #004d00;
   cursor: pointer;
   width: 130px;
-  height: 46px;
+  height: 50px;
   position: fixed;
   right: 140px;
   top: 0;
