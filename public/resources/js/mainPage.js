@@ -43,7 +43,7 @@ async function intializeBaseStuff() {
       db = firebase.database();
       resolve("success");
     } else {
-      console.log("Error");
+      reject("Error");
     }
   });
 }
@@ -52,13 +52,30 @@ let db;
 let latestDonatedItemId = "";
 
 async function userSignedIn(username, token) {
+  // let status = await intializeBaseStuff();
+  // if (status == "success") {
+  //   firebase.auth().onAuthStateChanged(user => {
+  //     if (user) {
+  //       firebase
+  //         .auth()
+  //         .currentUser.getIdToken(true)
+  //         .then(idToken => {
+  //           console.log(idToken);
+  //         })
+  //         .catch(error => {
+  //           console.log(error);
+  //         });
+  //     } else {
+  //       console.log("no fking user!");
+  //     }
+  //   });
+  // }
   console.log(username);
   username = username.split("%20").join(" ");
+  console.log(username);
   let response = await fetch(`/:${username}/:${token}`);
   let json = await response.json();
-
   if (json.status === "Success") {
-    //let divDB = document.getElementById("dashboard");
     if (divDB) {
       console.log("Got db");
     } else {
@@ -72,7 +89,7 @@ async function userSignedIn(username, token) {
     console.log("Error");
     alert("Wrong Credentials!");
     //handleAuthError();
-    window.location = "../../index.html";
+    //window.location = "../../index.html";
   }
 }
 
@@ -340,8 +357,6 @@ function uploadStatusBarFunc() {
 
 function removeItem(evt) {
   console.log("Called");
-  // console.log(evt.target.thisItemId);
-  // let key = evt.target.thisItemId;
   console.log(evt.target.id);
   let key = evt.target.id;
   let deletionRef = db.ref("users/" + username + "/DonatedItemList/" + key);
