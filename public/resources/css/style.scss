@@ -1,0 +1,151 @@
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background-color: white;
+  color: green;
+  font-family: "Montserrat", Courier, monospace;
+}
+
+.every {
+  display: flex;
+}
+
+.name {
+  width: 40%;
+  font-size: 20px;
+  flex-direction: column;
+  padding: 5px;
+}
+
+.counter {
+  justify-content: center;
+  text-align: center;
+  margin-top: 20%;
+  width: 100%;
+}
+
+.number {
+  font-size: 80px;
+}
+
+.counter h3 {
+  margin: 10px;
+}
+
+div {
+  margin: 3px;
+}
+
+a {
+  color: red;
+}
+
+.login a {
+  color: green;
+}
+
+.login {
+  cursor: pointer;
+  width: 130px;
+  height: 50px;
+  background-color: #004d00;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: fixed;
+  top: 0;
+  right: 0;
+  transition: 0.2s;
+}
+
+.login:hover {
+  background-color: green;
+}
+
+.Q {
+  font-size: 26px;
+}
+
+#ngo-log {
+  background-color: #004d00;
+  cursor: pointer;
+  width: 130px;
+  height: 50px;
+  position: fixed;
+  right: 140px;
+  top: 0;
+  transition: 0.2s;
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#ngo-log:hover {
+  background-color: green;
+}
+
+.ngo-login-form {
+  display: none;
+  width: 100vw;
+  height: 100%;
+  position: absolute;
+  top: 0px;
+
+  form {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    flex-basis: 500px;
+
+    h1 {
+      margin: 40px;
+    }
+
+    .data {
+      display: flex;
+      flex-direction: row;
+      margin: 5px auto;
+    }
+
+    label {
+      display: inline-block;
+      width: 250px;
+      // float: left;
+    }
+
+    input {
+      width: 250px;
+      display: inline-block;
+    }
+
+    label,
+    input {
+      margin: auto 5px;
+      flex: 1 1 auto;
+    }
+  }
+
+  .ngo-submit {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 130px;
+    height: 46px;
+    margin: 50px auto;
+    color: white;
+    background-color: #004d00;
+    transition: 0.3s;
+    cursor: pointer;
+  }
+
+  .ngo-submit:hover {
+    background-color: green;
+  }
+}
+
+/*# sourceMappingURL=style.css.map */
