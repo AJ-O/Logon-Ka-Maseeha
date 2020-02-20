@@ -12,7 +12,7 @@
 // -- Styling statusBar
 // -- Use maps to get user location -- Done
 // -- Send NGO's data that item is donated according to their location
-// -- Lock  the item selected by NGO
+// -- Lock the item selected by NGO
 // -- Sharing details between user and NGO
 // -- Assign key in realtime [on client side] -- Done but using id, try if another way possible!
 // -- Show item is deleted in realtime [on client side] -- done but using reloading!
@@ -292,67 +292,6 @@ async function displayItems() {
   console.log(status);
   if (status == "success") {
     console.log("called!");
-    // let totalItems = db.ref("Donated_Items_List");
-    // totalItems.once("value", async snapshot => {
-    //   let totalItemsList = await snapshot.val();
-    //   totalCount = Object.keys(totalItemsList).length;
-    //   console.log(totalCount);
-    // let undefinedCount = 0;
-    // let inQueueCount = 0;
-    // let acceptedCount = 0;
-    // let itemPickedCount = 0;
-    // let itemDonatedCount = 0;
-
-    // for (item in totalItemsList) {
-    //   let itemStatus = totalItemsList[item]["data"]["status"];
-    //   //console.log(itemStatus);
-    //   if (itemStatus === "Awaiting Response") {
-    //     inQueueCount++;
-    //   } else if (itemStatus === "Accepted Item") {
-    //     acceptedCount++;
-    //   } else if (itemStatus === "Item Picked") {
-    //     itemPickedCount++;
-    //   } else if (itemStatus === "Item Donated") {
-    //     itemDonatedCount++;
-    //   } else {
-    //     console.log(itemStatus);
-    //     undefinedCount++;
-    //   }
-    // }
-    // console.log(
-    //   undefinedCount,
-    //   inQueueCount,
-    //   acceptedCount,
-    //   itemDonatedCount,
-    //   itemPickedCount
-    // );
-    // let awaitData = {
-    //   label: "Awaiting Response",
-    //   y: (inQueueCount / totalCount) * 100
-    // };
-
-    // let acceptData = {
-    //   label: "Accepted Items",
-    //   y: (acceptedCount / totalCount) * 100
-    // };
-
-    // let donatedData = {
-    //   label: "Donated Items",
-    //   y: (itemDonatedCount / totalCount) * 100
-    // };
-
-    // let pickedData = {
-    //   label: "Picked Items",
-    //   y: (itemPickedCount / totalCount) * 100
-    // };
-
-    // statusData.pickedData = pickedData;
-    // statusData.acceptData = acceptData;
-    // statusData.donatedData = donatedData;
-    // statusData.awaitData = awaitData;
-    // console.log(statusData);
-    // displayChart(statusData);
-    //});
 
     let dbRef = db.ref("users/" + username);
     let donatedItemList;
