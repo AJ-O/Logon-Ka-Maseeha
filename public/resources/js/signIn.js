@@ -34,12 +34,13 @@ async function onSignIn(googleUser) {
   let name = profile.getName();
   let id = profile.getId();
   let email = profile.getEmail();
-
+  console.log(googleUser);
   let data = {
     token: id_token,
     username: name,
     id: id,
-    userEmail: email
+    userEmail: email,
+    user: googleUser
   };
 
   let options = {

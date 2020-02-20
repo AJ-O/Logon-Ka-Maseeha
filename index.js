@@ -175,20 +175,37 @@ app.listen(port, () => {
 });
 
 function setDonatedItems() {
-  let users = db.ref("users/");
+  let users = db.ref("Donated_Items_List/");
   users.once("value", async snapshot => {
-    let usersRef = snapshot.val();
-    let users = Object.keys(usersRef);
-    console.log(users);
-    for (user in users) {
-      let donatedRef = await snapshot
-        .child(users[user] + "/DonatedItemList")
-        .val();
-      for (donatedItems in donatedRef) {
-        let donateRef = db
-          .ref("Donated_Items_List/" + donatedItems)
-          .set(donatedRef[donatedItems]);
-      }
+    // let usersRef = snapshot.val();
+    // let users = Object.keys(usersRef);
+    // console.log(users);
+    // for (user in users) {
+    //   let donatedRef = await snapshot
+    //     .child(users[user] + "/DonatedItemList")
+    //     .val();
+    //   for (donatedItems in donatedRef) {
+    //     let donateRef = db
+    //       .ref("Donated_Items_List/" + donatedItems)
+    //       .set(donatedRef[donatedItems]);
+    //   }
+    // }
+    let items = snapshot.val();
+    let donatedItemsRef = db.ref("Donated_Items_List/");
+    console.log("called!");
+    for (itemCode in items) {
+      console.log(itemCode);
+      let ref = donatedItemsRef.child(itemCode + "/data/status");
+      let responses = [
+        "Awaiting Response",
+        "Accepted Item",
+        "Item Picked",
+        "Item Donated"
+      ];
+      let response = responses[Math.floor(Math.random() * responses.length)];
+      let status = await ref.set(response);
+      console.log(response);
+      console.log(status);
     }
   });
 }
