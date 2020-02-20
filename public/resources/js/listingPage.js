@@ -27,6 +27,8 @@ async function initializeStuff() {
 
 function listingItems() {
   const db = firebase.database().ref("Donated_Items_List/");
+  let loading = document.querySelector("#loading");
+  loading.style.display = "flex";
   db.once("value", async snapshot => {
     let donatedItemsRef = snapshot.val();
     //console.log(dbRef);
@@ -83,4 +85,6 @@ function createLiItem(src, add, type, status, date) {
   divEle.append(pickupAddressEle, productTypeEle, statusEle);
   liElement.append(imageEle, divEle);
   unorderedListEle.prepend(liElement);
+
+  loading.style.display = "none";
 }

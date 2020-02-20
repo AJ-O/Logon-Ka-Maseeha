@@ -1,67 +1,36 @@
 * {
-  margin: 0px;
-  padding: 0px;
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
 }
 
 body {
-  font-family: "Montserrat", monospace;
+  font-family: "Montserrat", sans-serif;
+  // background-color: slategray;
 }
 
-img:hover {
-  height: 250px;
-  width: 300px;
-}
-
-li {
-  list-style: none;
-  -webkit-box-pack: left;
-  -ms-flex-pack: left;
-  justify-content: left;
-  -webkit-box-align: center;
-  -ms-flex-align: center;
-  align-items: center;
-  padding: 14px;
-  margin: 4px;
-  position: relative;
-  display: -webkit-box;
-  display: -ms-flexbox;
+.dashboard {
+  background-color: teal;
   display: flex;
-  max-width: 100%;
-  background-color: rgba(74, 0, 194, 0.699);
-  border-radius: 2vh;
+  flex: 1 1 25vw;
+  height: 100vh;
+  width: 25vw;
 }
 
-p {
-  max-width: 100%;
-  -webkit-box-pack: justify;
-  -ms-flex-pack: justify;
-  justify-content: space-between;
-}
-
-#listItems {
-  -webkit-box-ordinal-group: 3;
-  -ms-flex-order: 2;
-  order: 2;
-  display: -webkit-box;
-  display: -ms-flexbox;
+.things-to-be-picked-up {
+  background-color: greenyellow;
   display: flex;
-  -ms-flex-wrap: nowrap;
-  flex-wrap: nowrap;
-  -webkit-box-orient: vertical;
-  -webkit-box-direction: normal;
-  -ms-flex-direction: column;
-  flex-direction: column;
-  -webkit-box-pack: justify;
-  -ms-flex-pack: justify;
-  justify-content: space-between;
-  padding-left: 15px;
-  overflow: auto;
+  flex: 1 1 75vw;
+  height: 100vh;
+  width: 75vw;
 }
 
-img {
-  -webkit-transition: 0.3s;
-  transition: 0.3s;
+.collection {
+  display: flex;
+  flex-direction: row;
 }
+
+// FOR SPINNING ANIMATION //
 #loading {
   justify-content: center;
   align-items: center;
@@ -135,5 +104,3 @@ img {
   transform: rotate(315deg) translate(0, -35px) scale(0.1);
   opacity: 0.1;
 }
-
-/*# sourceMappingURL=listingsPage.css.map */

@@ -290,8 +290,8 @@ function findOutDistance(lat, long) {
   }
 }
 
-// api route to hash passwords entered by ngo
-app.post("/saltNGO", (req, res) => {
+// api route to login an ngo
+app.post("/NGOlogin", (req, res) => {
   console.log("in ngo post");
   const password = req.body.password;
   let email = req.body.email;
@@ -338,4 +338,9 @@ app.post("/saltNGO", (req, res) => {
       res.json({ status: "failure" });
     }
   });
+});
+
+// api route to go to ngo main page
+app.get("/ngoMainPage", (req, res) => {
+  res.redirect("http://localhost:8181/ngo.html");
 });
