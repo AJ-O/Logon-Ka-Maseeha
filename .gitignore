@@ -6,3 +6,4 @@ jsonTest.js
 *.map
 insertNGOData.js
 .gitignore
+fetchingTrial.js

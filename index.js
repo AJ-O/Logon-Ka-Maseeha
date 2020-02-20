@@ -4,6 +4,7 @@ const bodyParser = require("body-parser");
 const dotenv = require("dotenv");
 const { OAuth2Client } = require("google-auth-library");
 const admin = require("firebase-admin");
+const crypto = require("crypto");
 
 require("firebase/auth");
 require("firebase/firestore");
@@ -288,3 +289,53 @@ function findOutDistance(lat, long) {
     }
   }
 }
+
+// api route to hash passwords entered by ngo
+app.post("/saltNGO", (req, res) => {
+  console.log("in ngo post");
+  const password = req.body.password;
+  let email = req.body.email;
+  let name = req.body.NGOName;
+  name = name.toLowerCase();
+
+  const salt = "oofe";
+
+  const ngo = db.ref("NGO_user_accounts/");
+  ngo.once("value", async snapshot => {
+    console.log("in val");
+    let records = await snapshot.val();
+    let actualDetails = records[name];
+
+    if (!actualDetails) {
+      res.json({ status: "failure" });
+    }
+
+    console.log("after awaiting");
+    let actualEmail = actualDetails["email"];
+    let hashedPassword = actualDetails["password"];
+    let actualPosi = actualDetails["posi"];
+
+    console.log(actualEmail, hashedPassword, actualEmail);
+
+    const str1 = password.slice(0, actualPosi);
+    const str2 = password.slice(actualPosi);
+
+    let finalPassword = str1 + salt + str2;
+    const md5 = crypto.createHash("md5");
+    const hash = md5.update(finalPassword).digest("hex");
+
+    console.log(finalPassword);
+    console.log(hash);
+
+    actualEmail = actualEmail.toLowerCase();
+    name = name.toLowerCase();
+
+    console.log(actualEmail, email);
+
+    if (actualEmail === email && hash === hashedPassword) {
+      res.json({ status: "success" });
+    } else {
+      res.json({ status: "failure" });
+    }
+  });
+});
