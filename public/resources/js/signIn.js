@@ -115,12 +115,12 @@ document.querySelector("#ngoBut").addEventListener("click", async () => {
     body: JSON.stringify({ password, email, NGOName })
   };
 
-  const response = await fetch("/saltNGO", options);
+  const response = await fetch("/NGOlogin", options);
   const json = await response.json();
 
   if (json.status === "success") {
     // redirect to ngo's individual page
-    window.location = "https://www.google.com";
+    window.location = "http://localhost:8181/ngoMainPage";
   } else {
     document.querySelector("#alert").textContent =
       "Your e-mail or password were incorrect. Please check your details and try again. If you're convinced that you've entered correct details, contact us on our e-mail (logonkamaseeha@gmail.com)";

@@ -1,0 +1,146 @@
+* {
+  padding: 0;
+  margin: 0;
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+}
+
+body {
+  font-family: "Montserrat", sans-serif;
+}
+
+.dashboard {
+  background-color: teal;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-flex: 1;
+      -ms-flex: 1 1 25vw;
+          flex: 1 1 25vw;
+  height: 100vh;
+  width: 25vw;
+}
+
+.things-to-be-picked-up {
+  background-color: greenyellow;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-flex: 1;
+      -ms-flex: 1 1 75vw;
+          flex: 1 1 75vw;
+  height: 100vh;
+  width: 75vw;
+}
+
+.collection {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row;
+}
+
+#loading {
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  margin: 300px auto;
+}
+
+.spinner {
+  width: 100px;
+  height: 100px;
+  margin: 30px auto;
+  position: relative;
+  -webkit-animation: rotateit 1.3s linear infinite;
+          animation: rotateit 1.3s linear infinite;
+}
+
+@-webkit-keyframes rotateit {
+  from {
+    -webkit-transform: rotate(360deg);
+            transform: rotate(360deg);
+  }
+  to {
+    -webkit-transform: rotate(0deg);
+            transform: rotate(0deg);
+  }
+}
+
+@keyframes rotateit {
+  from {
+    -webkit-transform: rotate(360deg);
+            transform: rotate(360deg);
+  }
+  to {
+    -webkit-transform: rotate(0deg);
+            transform: rotate(0deg);
+  }
+}
+
+/*=======================================================
+  * Circles code taken from https://www.crazyegg.com/blog/loading-spinners-css3-animation/
+  *======================================================*/
+.spinner.circles div {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: black;
+  position: absolute;
+  top: 35px;
+  left: 45px;
+}
+
+.spinner.circles div:nth-child(1) {
+  -webkit-transform: rotate(0deg) translate(0, -35px) scale(1.4);
+          transform: rotate(0deg) translate(0, -35px) scale(1.4);
+}
+
+.spinner.circles div:nth-child(2) {
+  -webkit-transform: rotate(45deg) translate(0, -35px) scale(1.2);
+          transform: rotate(45deg) translate(0, -35px) scale(1.2);
+  opacity: 0.7;
+}
+
+.spinner.circles div:nth-child(3) {
+  -webkit-transform: rotate(90deg) translate(0, -35px) scale(1.1);
+          transform: rotate(90deg) translate(0, -35px) scale(1.1);
+  opacity: 0.6;
+}
+
+.spinner.circles div:nth-child(4) {
+  -webkit-transform: rotate(135deg) translate(0, -35px) scale(0.9);
+          transform: rotate(135deg) translate(0, -35px) scale(0.9);
+  opacity: 0.5;
+}
+
+.spinner.circles div:nth-child(5) {
+  -webkit-transform: rotate(180deg) translate(0, -35px) scale(0.7);
+          transform: rotate(180deg) translate(0, -35px) scale(0.7);
+  opacity: 0.4;
+}
+
+.spinner.circles div:nth-child(6) {
+  -webkit-transform: rotate(225deg) translate(0, -35px) scale(0.5);
+          transform: rotate(225deg) translate(0, -35px) scale(0.5);
+  opacity: 0.3;
+}
+
+.spinner.circles div:nth-child(7) {
+  -webkit-transform: rotate(270deg) translate(0, -35px) scale(0.3);
+          transform: rotate(270deg) translate(0, -35px) scale(0.3);
+  opacity: 0.2;
+}
+
+.spinner.circles div:nth-child(8) {
+  -webkit-transform: rotate(315deg) translate(0, -35px) scale(0.1);
+          transform: rotate(315deg) translate(0, -35px) scale(0.1);
+  opacity: 0.1;
+}
+/*# sourceMappingURL=ngoMainPage.css.map */
