@@ -22,6 +22,9 @@
   },
   "description": "",
   "dependencies": {
+    "body-parser": "^1.19.0",
+    "crypto": "^1.0.1",
+    "faker": "^4.1.0",
     "firebase": "^7.6.1",
     "firebase-admin": "^8.9.2",
     "google-auth-library": "^5.9.2",

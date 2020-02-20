@@ -25,6 +25,7 @@ async function getTotalItemsCount() {
     console.log("error");
   }
 }
+
 async function onSignIn(googleUser) {
   let profile = googleUser.getBasicProfile();
   console.log("Name: " + profile.getName());
@@ -89,10 +90,7 @@ function addingPercentage(username) {
   });
 }
 
-// THE LINE BELOW TO BE REMOVED BEFORE PRODUCTION
-// window.onload = displayNGOForm();
-// THE LINE ABOVE TO BE REMOVED BEFORE PRODUCTION
-
+// Making the Sign In for the NGO
 function displayNGOForm() {
   const ngoForm = document.querySelector(".ngo-login-form");
   document.querySelector(".every").style.filter = "blur(5px)";
@@ -103,3 +101,28 @@ function displayNGOForm() {
 
 const ngoLog = document.querySelector("#ngo-log");
 ngoLog.addEventListener("click", displayNGOForm);
+
+// NGO Sign IN
+document.querySelector("#ngoBut").addEventListener("click", async () => {
+  const email = document.querySelector("#ngo-mail").value;
+  const password = document.querySelector("#ngo-password").value;
+  const NGOName = document.querySelector("#ngo-name").value;
+  let options = {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({ password, email, NGOName })
+  };
+
+  const response = await fetch("/saltNGO", options);
+  const json = await response.json();
+
+  if (json.status === "success") {
+    // redirect to ngo's individual page
+    window.location = "https://www.google.com";
+  } else {
+    document.querySelector("#alert").textContent =
+      "Your e-mail or password were incorrect. Please check your details and try again. If you're convinced that you've entered correct details, contact us on our e-mail (logonkamaseeha@gmail.com)";
+  }
+});
