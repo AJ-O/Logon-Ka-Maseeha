@@ -52,6 +52,30 @@ let db;
 let latestDonatedItemId = "";
 
 async function userSignedIn(username, token) {
+  console.log(username);
+  username = username.split("%20").join(" ");
+  console.log(username);
+  let response = await fetch(`/:${username}/:${token}`);
+  let json = await response.json();
+  if (json.status === "Success") {
+    if (divDB) {
+      console.log("Got db");
+    } else {
+      console.log("Nope, didn't get db!");
+    }
+    //displayChart();
+    displayItems();
+    let userElement = document.createElement("p");
+    userElement.textContent = username;
+    userElement.style.padding = "50px";
+
+    divDB.prepend(userElement);
+  } else {
+    console.log("Error");
+    alert("Wrong Credentials!");
+    //handleAuthError();
+    //window.location = "../../index.html";
+  }
   // let status = await intializeBaseStuff();
   // if (status == "success") {
   //   firebase.auth().onAuthStateChanged(user => {
@@ -66,33 +90,12 @@ async function userSignedIn(username, token) {
   //           console.log(error);
   //         });
   //     } else {
+  //       console.log(user);
   //       console.log("no fking user!");
   //     }
   //   });
   // }
-  console.log(username);
-  username = username.split("%20").join(" ");
-  console.log(username);
-  let response = await fetch(`/:${username}/:${token}`);
-  let json = await response.json();
-  if (json.status === "Success") {
-    if (divDB) {
-      console.log("Got db");
-    } else {
-      console.log("Nope, didn't get db!");
-    }
-    displayItems();
-    let userElement = document.createElement("p");
-    userElement.textContent = username;
-    divDB.appendChild(userElement);
-  } else {
-    console.log("Error");
-    alert("Wrong Credentials!");
-    //handleAuthError();
-    //window.location = "../../index.html";
-  }
 }
-
 let donateButton = document.getElementById("donateItem");
 let form = document.getElementById("donationForm");
 let donate = document.getElementById("finalDonate");
@@ -102,6 +105,8 @@ let statusBarDiv = document.getElementById("statusBar");
 let myBar = document.getElementById("myBar");
 let coordButton = document.getElementById("getCoords");
 let divDB = document.getElementById("dashboard");
+let statusData = {};
+let totalCount;
 
 coordButton.addEventListener("click", getCoordinates);
 let uploadStatusBar = 0;
@@ -283,43 +288,82 @@ function createListItem(ptype, pickupadd, imageUrl, coo, key, productStatus) {
 async function displayItems() {
   let loading = document.querySelector("#loading");
   loading.style.display = "flex";
-  // let loading = document.createElement("img");
-  // loading.src = "../gifs/loading.gif";
-  // loading.style.width = "400px";
-  // loading.style.height = "400px";
-  // loading.style.display = "block";
-  // loading.setAttribute("class", "loading");
-  // document.querySelector("#statusBoard").appendChild(loading);
-
   let status = await intializeBaseStuff();
   console.log(status);
   if (status == "success") {
     console.log("called!");
-    let totalItems = db.ref("Donated_Items_List");
-    totalItems.once("value", async snapshot => {
-      let totalItemsList = await snapshot.val();
-      console.log(Object.keys(totalItemsList).length);
-      let undefinedCount = 0;
-      let inQueueCount = 0;
-      let acceptedCount = 0;
+    // let totalItems = db.ref("Donated_Items_List");
+    // totalItems.once("value", async snapshot => {
+    //   let totalItemsList = await snapshot.val();
+    //   totalCount = Object.keys(totalItemsList).length;
+    //   console.log(totalCount);
+    // let undefinedCount = 0;
+    // let inQueueCount = 0;
+    // let acceptedCount = 0;
+    // let itemPickedCount = 0;
+    // let itemDonatedCount = 0;
 
-      for (item in totalItemsList) {
-        let itemStatus = totalItemsList[item]["data"]["status"];
-        //console.log(itemStatus);
-        if (itemStatus == undefined) {
-          undefinedCount++;
-        } else if (itemStatus == "Awaiting response") {
-          inQueueCount++;
-        } else {
-          acceptedCount++;
-        }
-      }
-      console.log(undefinedCount, inQueueCount, acceptedCount);
-    });
+    // for (item in totalItemsList) {
+    //   let itemStatus = totalItemsList[item]["data"]["status"];
+    //   //console.log(itemStatus);
+    //   if (itemStatus === "Awaiting Response") {
+    //     inQueueCount++;
+    //   } else if (itemStatus === "Accepted Item") {
+    //     acceptedCount++;
+    //   } else if (itemStatus === "Item Picked") {
+    //     itemPickedCount++;
+    //   } else if (itemStatus === "Item Donated") {
+    //     itemDonatedCount++;
+    //   } else {
+    //     console.log(itemStatus);
+    //     undefinedCount++;
+    //   }
+    // }
+    // console.log(
+    //   undefinedCount,
+    //   inQueueCount,
+    //   acceptedCount,
+    //   itemDonatedCount,
+    //   itemPickedCount
+    // );
+    // let awaitData = {
+    //   label: "Awaiting Response",
+    //   y: (inQueueCount / totalCount) * 100
+    // };
+
+    // let acceptData = {
+    //   label: "Accepted Items",
+    //   y: (acceptedCount / totalCount) * 100
+    // };
+
+    // let donatedData = {
+    //   label: "Donated Items",
+    //   y: (itemDonatedCount / totalCount) * 100
+    // };
+
+    // let pickedData = {
+    //   label: "Picked Items",
+    //   y: (itemPickedCount / totalCount) * 100
+    // };
+
+    // statusData.pickedData = pickedData;
+    // statusData.acceptData = acceptData;
+    // statusData.donatedData = donatedData;
+    // statusData.awaitData = awaitData;
+    // console.log(statusData);
+    // displayChart(statusData);
+    //});
 
     let dbRef = db.ref("users/" + username);
+    let donatedItemList;
+    let undefinedCount = 0;
+    let inQueueCount = 0;
+    let acceptedCount = 0;
+    let itemPickedCount = 0;
+    let itemDonatedCount = 0;
+
     dbRef.once("value", async function(snapshot) {
-      let donatedItemList = await snapshot.child("DonatedItemList").val(); //Get the values under donated item list
+      donatedItemList = await snapshot.child("DonatedItemList").val(); //Get the values under donated item list
 
       loading.style.display = "none";
       for (item in donatedItemList) {
@@ -340,10 +384,59 @@ async function displayItems() {
           proStatus
         );
         unorderedList.prepend(documentItem);
+        console.log(item);
+        let itemStatus = donatedItemList[item]["data"]["status"];
+        //console.log(itemStatus);
+        if (itemStatus === "Awaiting Response") {
+          inQueueCount++;
+        } else if (itemStatus === "Accepted Item") {
+          acceptedCount++;
+        } else if (itemStatus === "Item Picked") {
+          itemPickedCount++;
+        } else if (itemStatus === "Item Donated") {
+          itemDonatedCount++;
+        } else {
+          console.log(itemStatus);
+          undefinedCount++;
+        }
       }
       statusBoard.appendChild(unorderedList);
-      console.log(Object.keys(donatedItemList).length);
+      let totalCount = Object.keys(donatedItemList).length;
+      //console.log(Object.keys(donatedItemList).length);
       //console.log(Object.keys(totalItems).length);
+      console.log(
+        undefinedCount,
+        inQueueCount,
+        acceptedCount,
+        itemDonatedCount,
+        itemPickedCount
+      );
+      let awaitData = {
+        label: "Awaiting Response",
+        y: (inQueueCount / totalCount) * 100
+      };
+
+      let acceptData = {
+        label: "Accepted Items",
+        y: (acceptedCount / totalCount) * 100
+      };
+
+      let donatedData = {
+        label: "Donated Items",
+        y: (itemDonatedCount / totalCount) * 100
+      };
+
+      let pickedData = {
+        label: "Picked Items",
+        y: (itemPickedCount / totalCount) * 100
+      };
+
+      statusData.pickedData = pickedData;
+      statusData.acceptData = acceptData;
+      statusData.donatedData = donatedData;
+      statusData.awaitData = awaitData;
+      console.log(statusData);
+      displayChart(statusData);
     });
   } else {
     alert("Error loading firebase data!");
@@ -378,4 +471,29 @@ function handleAuthError() {
   divDB.appendChild(errorEle);
   statusBoard.appendChild(errorEle);
   form.appendChild(errorEle);
+}
+
+function displayChart(statusData) {
+  let chart = new CanvasJS.Chart("chartContainer", {
+    animationEnabled: true,
+    backgroundColor: "transparent",
+    title: {
+      text: "User Item Status"
+    },
+    data: [
+      {
+        type: "pie",
+        startAngle: 240,
+        yValueFormatString: '##0.00"%"',
+        indexLabel: "{label} {y}",
+        dataPoints: [
+          { y: statusData.awaitData.y, label: statusData.awaitData.label },
+          { y: statusData.acceptData.y, label: statusData.acceptData.label },
+          { y: statusData.pickedData.y, label: statusData.pickedData.label },
+          { y: statusData.donatedData.y, label: statusData.donatedData.label }
+        ]
+      }
+    ]
+  });
+  chart.render();
 }

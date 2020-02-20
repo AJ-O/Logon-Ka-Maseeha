@@ -2,7 +2,6 @@ node_modules
 package-lock.json
 .env
 jsonTest.js
-*.map
 insertNGOData.js
 .gitignore
 fetchingTrial.js
