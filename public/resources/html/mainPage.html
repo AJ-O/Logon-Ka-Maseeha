@@ -37,17 +37,12 @@
       }
     </script>
     <button id="gSignOut">Sign Out</button>
-<<<<<<< HEAD
-
-    <div id="dashboard"></div>
-=======
     <button onclick="window.location = './listingsPage.html'">
       Click to see listings
     </button>
     <div id="dashboard">
       <div id="chartContainer"></div>
     </div>
->>>>>>> 1564d72cc9ea856306a69e66e3fbcb1dfacb16d7
 
     <div class="collection">
       <div id="statusBoard">
@@ -67,7 +62,19 @@
         <button id="donateItem">Donate Item</button>
         <div id="donationForm">
           <label>Product Type: </label>
-          <input id="product" type="text" required />
+          <!-- <input id="product" type="text" required /> -->
+          <select required id="product">
+            <datalist>
+              <option value="clothes">Clothes</option>
+              <option value="utensils">Utensils</option>
+              <option value="games">Games</option>
+              <option value="electronics">Electronics</option>
+              <option value="Tools">Tools</option>
+              <option value="Furniture">Furniture</option>
+              <option value="books">Books</option>
+              <option value="others">Others</option>
+            </datalist>
+          </select>
           <br />
           <br />
           <label>Upload Image: </label>

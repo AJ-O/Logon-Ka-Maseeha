@@ -17,6 +17,9 @@
 // -- Assign key in realtime [on client side] -- Done but using id, try if another way possible!
 // -- Show item is deleted in realtime [on client side] -- done but using reloading!
 // -- Change status when ngo accepts
+// -- drop down list -- Done
+// -- phone number
+// -- status of items
 
 let url = new URL(window.location);
 let username = url.searchParams.get("username");
