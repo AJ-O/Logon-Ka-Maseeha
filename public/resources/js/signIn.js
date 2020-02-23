@@ -102,6 +102,12 @@ function displayNGOForm() {
 const ngoLog = document.querySelector("#ngo-log");
 ngoLog.addEventListener("click", displayNGOForm);
 
+document.querySelector("#go-back").addEventListener("click", () => {
+  const ngoForm = document.querySelector(".ngo-login-form");
+  ngoForm.style.display = "none";
+  document.querySelector(".every").style.filter = "none";
+});
+
 // NGO Sign IN
 document.querySelector("#ngoBut").addEventListener("click", async () => {
   const email = document.querySelector("#ngo-mail").value;

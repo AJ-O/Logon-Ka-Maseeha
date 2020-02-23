@@ -190,4 +190,10 @@ a {
 .ngo-login-form .ngo-submit:hover {
   background-color: green;
 }
+
+#go-back {
+  font-size: 14px;
+  text-decoration: underline;
+  cursor: pointer;
+}
 /*# sourceMappingURL=style.css.map */
