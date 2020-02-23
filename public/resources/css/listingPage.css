@@ -1,0 +1,52 @@
+* {
+  margin: 0px;
+  padding: 0px;
+}
+
+body {
+  font-family: "Montserrat", monospace;
+}
+
+img:hover {
+  height: 250px;
+  width: 300px;
+}
+
+li {
+  list-style: none;
+  justify-content: left;
+  align-items: center;
+  padding: 14px;
+  margin: 4px;
+  position: relative;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  max-width: 100%;
+  background-color: rgba(74, 0, 194, 0.699);
+  border-radius: 2vh;
+}
+
+p {
+  max-width: 100%;
+  justify-content: space-between;
+}
+
+#listItems {
+  order: 2;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+
+  flex-wrap: nowrap;
+
+  flex-direction: column;
+
+  justify-content: space-between;
+  padding-left: 15px;
+  overflow: auto;
+}
+
+img {
+  transition: 0.3s;
+}
