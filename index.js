@@ -134,6 +134,11 @@ app.get("/:user/:token", (req, res) => {
         let userRef = snapshot.child(`/${userName}`).val();
         retObj["email"] = userRef.email;
         retObj["pass"] = userRef.password;
+        if (userRef.mobile_no === undefined) {
+          retObj["mobile"] = "Not entered";
+        } else {
+          retObj["mobile"] = userRef.mobile_no;
+        }
         res.send(retObj);
       });
     })
@@ -169,6 +174,17 @@ app.post("/donateItem", (req, res) => {
     retObj.autoKey = newItemRef.key;
     res.send(retObj);
   });
+});
+
+app.post("/set_mobile_number", (req, res) => {
+  let val = req.body.mobile;
+  let username = req.body.username;
+  console.log(val, username);
+  let retObj = {
+    status: "success"
+  };
+  db.ref("users/" + username + "/mobile_no").set(val);
+  res.send(retObj);
 });
 
 app.listen(port, () => {
