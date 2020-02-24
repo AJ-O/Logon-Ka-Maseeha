@@ -50,9 +50,6 @@ async function intializeBaseStuff() {
     }
   });
 }
-let db;
-//const db = firebase.database();
-let latestDonatedItemId = "";
 
 async function userSignedIn(username, token) {
   console.log(username);
@@ -61,12 +58,29 @@ async function userSignedIn(username, token) {
   let response = await fetch(`/:${username}/:${token}`);
   let json = await response.json();
   if (json.status === "Success") {
-    if (divDB) {
-      console.log("Got db");
+    if (json.mobile === "Not entered") {
+      let val = prompt(
+        "Kindly enter your mobile number so that the NGO's can contact you for picking up items"
+      );
+      let data = {
+        mobile: val,
+        username: username
+      };
+      console.log(data);
+      let options = {
+        method: "POST",
+        headers: {
+          "Content-type": "application/json"
+        },
+        body: JSON.stringify(data)
+      };
+      console.log(options);
+      let responsemno = await fetch("/set_mobile_number", options);
+      let jsonmno = await responsemno.json();
+      console.log(jsonmno);
     } else {
-      console.log("Nope, didn't get db!");
+      console.log(json.mobile);
     }
-    //displayChart();
     displayItems();
     let userElement = document.createElement("p");
     userElement.textContent = username;
@@ -108,14 +122,15 @@ let statusBarDiv = document.getElementById("statusBar");
 let myBar = document.getElementById("myBar");
 let coordButton = document.getElementById("getCoords");
 let divDB = document.getElementById("dashboard");
+let uploadStatusBar = 0;
+let allowedLocationAccess = false;
+let gotMobileNo = false;
 let statusData = {};
+let userCoordinates = {};
 let totalCount;
+let db;
 
 coordButton.addEventListener("click", getCoordinates);
-let uploadStatusBar = 0;
-let userCoordinates = {};
-let allowedLocationAccess = false;
-
 unorderedList.style.listStyleType = "none";
 donateButton.addEventListener("click", showForm);
 donate.addEventListener("click", getData);
@@ -307,78 +322,83 @@ async function displayItems() {
     dbRef.once("value", async function(snapshot) {
       donatedItemList = await snapshot.child("DonatedItemList").val(); //Get the values under donated item list
 
-      loading.style.display = "none";
-      for (item in donatedItemList) {
-        //Replace with the required field
-        let ptype = donatedItemList[item]["data"]["productType"];
-        let imageUrl = donatedItemList[item]["data"]["imageUrl"];
-        let pickupadd = donatedItemList[item]["data"]["pickupAddress"];
-        let userLocation = donatedItemList[item]["data"]["userCoordinates"];
-        let proStatus = donatedItemList[item]["data"]["status"];
-        let itemKey = item;
+      if (donatedItemList === null) {
+        console.log("no items donated yet!");
+        statusBoard.textContent = "No items donated yet!";
+      } else {
+        loading.style.display = "none";
+        for (item in donatedItemList) {
+          //Replace with the required field
+          let ptype = donatedItemList[item]["data"]["productType"];
+          let imageUrl = donatedItemList[item]["data"]["imageUrl"];
+          let pickupadd = donatedItemList[item]["data"]["pickupAddress"];
+          let userLocation = donatedItemList[item]["data"]["userCoordinates"];
+          let proStatus = donatedItemList[item]["data"]["status"];
+          let itemKey = item;
 
-        let documentItem = createListItem(
-          ptype,
-          pickupadd,
-          imageUrl,
-          userLocation,
-          itemKey,
-          proStatus
-        );
-        unorderedList.prepend(documentItem);
-        console.log(item);
-        let itemStatus = donatedItemList[item]["data"]["status"];
-        //console.log(itemStatus);
-        if (itemStatus === "Awaiting Response") {
-          inQueueCount++;
-        } else if (itemStatus === "Accepted Item") {
-          acceptedCount++;
-        } else if (itemStatus === "Item Picked") {
-          itemPickedCount++;
-        } else if (itemStatus === "Item Donated") {
-          itemDonatedCount++;
-        } else {
-          console.log(itemStatus);
-          undefinedCount++;
+          let documentItem = createListItem(
+            ptype,
+            pickupadd,
+            imageUrl,
+            userLocation,
+            itemKey,
+            proStatus
+          );
+          unorderedList.prepend(documentItem);
+          console.log(item);
+          let itemStatus = donatedItemList[item]["data"]["status"];
+          //console.log(itemStatus);
+          if (itemStatus === "Awaiting Response") {
+            inQueueCount++;
+          } else if (itemStatus === "Accepted Item") {
+            acceptedCount++;
+          } else if (itemStatus === "Item Picked") {
+            itemPickedCount++;
+          } else if (itemStatus === "Item Donated") {
+            itemDonatedCount++;
+          } else {
+            console.log(itemStatus);
+            undefinedCount++;
+          }
         }
+        statusBoard.appendChild(unorderedList);
+        let totalCount = Object.keys(donatedItemList).length;
+        //console.log(Object.keys(donatedItemList).length);
+        //console.log(Object.keys(totalItems).length);
+        console.log(
+          undefinedCount,
+          inQueueCount,
+          acceptedCount,
+          itemDonatedCount,
+          itemPickedCount
+        );
+        let awaitData = {
+          label: "Awaiting Response",
+          y: (inQueueCount / totalCount) * 100
+        };
+
+        let acceptData = {
+          label: "Accepted Items",
+          y: (acceptedCount / totalCount) * 100
+        };
+
+        let donatedData = {
+          label: "Donated Items",
+          y: (itemDonatedCount / totalCount) * 100
+        };
+
+        let pickedData = {
+          label: "Picked Items",
+          y: (itemPickedCount / totalCount) * 100
+        };
+
+        statusData.pickedData = pickedData;
+        statusData.acceptData = acceptData;
+        statusData.donatedData = donatedData;
+        statusData.awaitData = awaitData;
+        console.log(statusData);
+        displayChart(statusData);
       }
-      statusBoard.appendChild(unorderedList);
-      let totalCount = Object.keys(donatedItemList).length;
-      //console.log(Object.keys(donatedItemList).length);
-      //console.log(Object.keys(totalItems).length);
-      console.log(
-        undefinedCount,
-        inQueueCount,
-        acceptedCount,
-        itemDonatedCount,
-        itemPickedCount
-      );
-      let awaitData = {
-        label: "Awaiting Response",
-        y: (inQueueCount / totalCount) * 100
-      };
-
-      let acceptData = {
-        label: "Accepted Items",
-        y: (acceptedCount / totalCount) * 100
-      };
-
-      let donatedData = {
-        label: "Donated Items",
-        y: (itemDonatedCount / totalCount) * 100
-      };
-
-      let pickedData = {
-        label: "Picked Items",
-        y: (itemPickedCount / totalCount) * 100
-      };
-
-      statusData.pickedData = pickedData;
-      statusData.acceptData = acceptData;
-      statusData.donatedData = donatedData;
-      statusData.awaitData = awaitData;
-      console.log(statusData);
-      displayChart(statusData);
     });
   } else {
     alert("Error loading firebase data!");
