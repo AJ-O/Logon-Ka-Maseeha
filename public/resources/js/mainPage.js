@@ -282,23 +282,18 @@ function createListItem(ptype, pickupadd, imageUrl, coo, key, productStatus) {
   let listItem = document.createElement("li");
   listItem.appendChild(imageEle);
 
+  let myDiv = document.createElement("div");
+  myDiv.append(paraProEle, paraAddEle, latElement, longElement, statusEle);
+  myDiv.setAttribute("id", "myDiv");
+  listItem.append(myDiv);
+
   let removeButton = document.createElement("button");
   removeButton.textContent = "Remove Item";
   //removeButton.thisItemId = key;
   removeButton.id = key;
   removeButton.addEventListener("click", removeItem);
-
-  let myDiv = document.createElement("div");
-  myDiv.append(
-    paraProEle,
-    paraAddEle,
-    latElement,
-    longElement,
-    statusEle,
-    removeButton
-  );
-  myDiv.setAttribute("id", "myDiv");
-  listItem.append(myDiv);
+  removeButton.setAttribute("class", "remove-item");
+  listItem.append(removeButton);
 
   return listItem;
 }
