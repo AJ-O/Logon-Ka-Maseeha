@@ -314,6 +314,7 @@ app.post("/NGOlogin", (req, res) => {
   let email = req.body.email;
   let name = req.body.NGOName;
   name = name.toLowerCase();
+  email = email.toLowerCase();
 
   const salt = "oofe";
 
@@ -344,8 +345,8 @@ app.post("/NGOlogin", (req, res) => {
     console.log(finalPassword);
     console.log(hash);
 
-    actualEmail = actualEmail.toLowerCase();
-    name = name.toLowerCase();
+    // actualEmail = actualEmail.toLowerCase();
+    // name = name.toLowerCase();
 
     console.log(actualEmail, email);
 
