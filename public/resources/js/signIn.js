@@ -132,8 +132,11 @@ document.querySelector("#ngoBut").addEventListener("click", async () => {
   if (json.status === "success") {
     // redirect to ngo's individual page
     window.location = "http://localhost:8181/ngoMainPage";
+
+    document.cookie = "ngoHash=" + json.ngoHash;
   } else {
-    document.querySelector("#alert").textContent =
-      "Your e-mail or password were incorrect. Please check your details and try again. If you're convinced that you've entered correct details, contact us on our e-mail (logonkamaseeha@gmail.com)";
+    document.querySelector("#alert").style.textAlign = "center";
+    document.querySelector("#alert").innerHTML =
+      "Your e-mail or password were incorrect.<br>Please check your details and try again.<br>If you're convinced that you've entered correct details,<br> contact us on our e-mail <br>(logonkamaseeha@gmail.com)";
   }
 });

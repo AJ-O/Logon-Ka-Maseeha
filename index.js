@@ -347,6 +347,7 @@ app.post("/NGOlogin", (req, res) => {
   let email = req.body.email;
   let name = req.body.NGOName;
   name = name.toLowerCase();
+  email = email.toLowerCase();
 
   const salt = "oofe";
 
@@ -361,9 +362,20 @@ app.post("/NGOlogin", (req, res) => {
     }
 
     console.log("after awaiting");
-    let actualEmail = actualDetails["email"];
-    let hashedPassword = actualDetails["password"];
-    let actualPosi = actualDetails["posi"];
+
+    let actualEmail;
+    let hashedPassword;
+    let actualPosi;
+
+    try {
+      console.log("in try");
+      actualEmail = actualDetails["email"];
+      hashedPassword = actualDetails["password"];
+      actualPosi = actualDetails["posi"];
+    } catch {
+      console.log("Invalid Login Details");
+      return;
+    }
 
     console.log(actualEmail, hashedPassword, actualEmail);
 
@@ -377,13 +389,15 @@ app.post("/NGOlogin", (req, res) => {
     console.log(finalPassword);
     console.log(hash);
 
-    actualEmail = actualEmail.toLowerCase();
-    name = name.toLowerCase();
+    // actualEmail = actualEmail.toLowerCase();
+    // name = name.toLowerCase();
 
     console.log(actualEmail, email);
 
     if (actualEmail === email && hash === hashedPassword) {
-      res.json({ status: "success" });
+      const ngomd5 = crypto.createHash("md5");
+      const ngoHash = ngomd5.update(actualEmail).digest("hex");
+      res.json({ status: "success", ngoHash: ngoHash });
     } else {
       res.json({ status: "failure" });
     }

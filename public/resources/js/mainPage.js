@@ -155,7 +155,10 @@ async function getData() {
     console.log(userCoordinates);
     let productType = document.getElementById("product").value;
     let pickupAddress = document.getElementById("address").value;
+<<<<<<< HEAD
+=======
     let mobile_no = document.getElementById("mobile_no").value;
+>>>>>>> b44cca05981493e75e6440545377bb6be8ab8445
     let defaultProductStatus = "Awaiting Response";
     let tempKey = "tempKey";
 
@@ -271,24 +274,18 @@ function createListItem(
   let listItem = document.createElement("li");
   listItem.appendChild(imageEle);
 
+  let myDiv = document.createElement("div");
+  myDiv.append(paraProEle, paraAddEle, latElement, longElement, statusEle);
+  myDiv.setAttribute("id", "myDiv");
+  listItem.append(myDiv);
+
   let removeButton = document.createElement("button");
   removeButton.textContent = "Remove Item";
   //removeButton.thisItemId = key;
   removeButton.id = key;
   removeButton.addEventListener("click", removeItem);
-
-  let myDiv = document.createElement("div");
-  myDiv.append(
-    paraProEle,
-    paraAddEle,
-    latElement,
-    longElement,
-    statusEle,
-    mobileEle,
-    removeButton
-  );
-  myDiv.setAttribute("id", "myDiv");
-  listItem.append(myDiv);
+  removeButton.setAttribute("class", "remove-item");
+  listItem.append(removeButton);
 
   return listItem;
 }

@@ -5,3 +5,4 @@ jsonTest.js
 insertNGOData.js
 .gitignore
 fetchingTrial.js
+fakeNGODeets.json
