@@ -16,10 +16,15 @@ async function getTotalItemsCount() {
     const db = firebase.database();
     let itemCount = db.ref("Donated_Items_List/");
     itemCount.on("value", function(snapshot) {
-      let items = Object.keys(snapshot.val()).length;
-      console.log(items);
-      let numberEle = document.getElementsByClassName("number");
-      numberEle[0].textContent = items;
+      if (snapshot.val() == null) {
+        let numberEle = document.getElementsByClassName("number");
+        numberEle[0].textContent = 0;
+      } else {
+        let items = Object.keys(snapshot.val()).length;
+        console.log(items);
+        let numberEle = document.getElementsByClassName("number");
+        numberEle[0].textContent = items;
+      }
     });
   } else {
     console.log("error");
