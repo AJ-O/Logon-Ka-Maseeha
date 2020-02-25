@@ -16,10 +16,15 @@ async function getTotalItemsCount() {
     const db = firebase.database();
     let itemCount = db.ref("Donated_Items_List/");
     itemCount.on("value", function(snapshot) {
-      let items = Object.keys(snapshot.val()).length;
-      console.log(items);
-      let numberEle = document.getElementsByClassName("number");
-      numberEle[0].textContent = items;
+      if (snapshot.val() == null) {
+        let numberEle = document.getElementsByClassName("number");
+        numberEle[0].textContent = 0;
+      } else {
+        let items = Object.keys(snapshot.val()).length;
+        console.log(items);
+        let numberEle = document.getElementsByClassName("number");
+        numberEle[0].textContent = items;
+      }
     });
   } else {
     console.log("error");
@@ -127,8 +132,11 @@ document.querySelector("#ngoBut").addEventListener("click", async () => {
   if (json.status === "success") {
     // redirect to ngo's individual page
     window.location = "http://localhost:8181/ngoMainPage";
+
+    document.cookie = "ngoHash=" + json.ngoHash;
   } else {
-    document.querySelector("#alert").textContent =
-      "Your e-mail or password were incorrect. Please check your details and try again. If you're convinced that you've entered correct details, contact us on our e-mail (logonkamaseeha@gmail.com)";
+    document.querySelector("#alert").style.textAlign = "center";
+    document.querySelector("#alert").innerHTML =
+      "Your e-mail or password were incorrect.<br>Please check your details and try again.<br>If you're convinced that you've entered correct details,<br> contact us on our e-mail <br>(logonkamaseeha@gmail.com)";
   }
 });

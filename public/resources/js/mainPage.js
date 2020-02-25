@@ -178,7 +178,7 @@ async function getData() {
     console.log(userCoordinates);
     let productType = document.getElementById("product").value;
     let pickupAddress = document.getElementById("address").value;
-    let defaultProductStatus = "Awaiting response";
+    let defaultProductStatus = "Awaiting Response";
     let tempKey = "tempKey";
     // let pickupAddressLat = userCoordinates.lat;
     // let pickupAddressLong = userCoordinates.lat;
