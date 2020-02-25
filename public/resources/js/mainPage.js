@@ -18,7 +18,8 @@
 // -- Show item is deleted in realtime [on client side] -- done but using reloading!
 // -- Change status when ngo accepts
 // -- drop down list -- Done
-// -- phone number
+// -- phone number:
+// --4 try for displaying used mobile numbers
 // -- status of items
 
 let url = new URL(window.location);
@@ -58,29 +59,6 @@ async function userSignedIn(username, token) {
   let response = await fetch(`/:${username}/:${token}`);
   let json = await response.json();
   if (json.status === "Success") {
-    if (json.mobile === "Not entered") {
-      let val = prompt(
-        "Kindly enter your mobile number so that the NGO's can contact you for picking up items"
-      );
-      let data = {
-        mobile: val,
-        username: username
-      };
-      console.log(data);
-      let options = {
-        method: "POST",
-        headers: {
-          "Content-type": "application/json"
-        },
-        body: JSON.stringify(data)
-      };
-      console.log(options);
-      let responsemno = await fetch("/set_mobile_number", options);
-      let jsonmno = await responsemno.json();
-      console.log(jsonmno);
-    } else {
-      console.log(json.mobile);
-    }
     displayItems();
     let userElement = document.createElement("p");
     userElement.textContent = username;
@@ -124,7 +102,6 @@ let coordButton = document.getElementById("getCoords");
 let divDB = document.getElementById("dashboard");
 let uploadStatusBar = 0;
 let allowedLocationAccess = false;
-let gotMobileNo = false;
 let statusData = {};
 let userCoordinates = {};
 let totalCount;
@@ -178,10 +155,12 @@ async function getData() {
     console.log(userCoordinates);
     let productType = document.getElementById("product").value;
     let pickupAddress = document.getElementById("address").value;
+<<<<<<< HEAD
+=======
+    let mobile_no = document.getElementById("mobile_no").value;
+>>>>>>> b44cca05981493e75e6440545377bb6be8ab8445
     let defaultProductStatus = "Awaiting Response";
     let tempKey = "tempKey";
-    // let pickupAddressLat = userCoordinates.lat;
-    // let pickupAddressLong = userCoordinates.lat;
 
     reader.onload = async function() {
       let date = Date.now();
@@ -194,7 +173,8 @@ async function getData() {
         blobDataResult,
         userCoordinates,
         tempKey,
-        defaultProductStatus
+        defaultProductStatus,
+        mobile_no
       );
       uploadStatusBarFunc();
 
@@ -218,7 +198,8 @@ async function getData() {
           userName: username,
           imageUrl: imageUrl,
           date: date,
-          status: defaultProductStatus
+          status: defaultProductStatus,
+          mobile_no: mobile_no
         };
 
         let option = {
@@ -251,13 +232,21 @@ async function getData() {
   reader.readAsDataURL(fileObj);
 }
 
-async function uploadStatusBoard(p1, p2, iu, co, key, productStatus) {
-  let item = createListItem(p1, p2, iu, co, key, productStatus);
+async function uploadStatusBoard(p1, p2, iu, co, key, productStatus, mno) {
+  let item = createListItem(p1, p2, iu, co, key, productStatus, mno);
   unorderedList.prepend(item);
   statusBoard.appendChild(unorderedList);
 }
 
-function createListItem(ptype, pickupadd, imageUrl, coo, key, productStatus) {
+function createListItem(
+  ptype,
+  pickupadd,
+  imageUrl,
+  coo,
+  key,
+  productStatus,
+  mno
+) {
   //pickupadd, imageUrl, coo) {
   let imageEle = document.createElement("img");
   imageEle.src = imageUrl;
@@ -278,6 +267,9 @@ function createListItem(ptype, pickupadd, imageUrl, coo, key, productStatus) {
 
   let statusEle = document.createElement("p");
   statusEle.textContent = productStatus;
+
+  let mobileEle = document.createElement("p");
+  mobileEle.textContent = mno;
 
   let listItem = document.createElement("li");
   listItem.appendChild(imageEle);
@@ -317,6 +309,7 @@ async function displayItems() {
     dbRef.once("value", async function(snapshot) {
       donatedItemList = await snapshot.child("DonatedItemList").val(); //Get the values under donated item list
 
+      // Need to work on css
       if (donatedItemList === null) {
         console.log("no items donated yet!");
         statusBoard.textContent = "No items donated yet!";
@@ -329,6 +322,7 @@ async function displayItems() {
           let pickupadd = donatedItemList[item]["data"]["pickupAddress"];
           let userLocation = donatedItemList[item]["data"]["userCoordinates"];
           let proStatus = donatedItemList[item]["data"]["status"];
+          let mobile_no = donatedItemList[item]["data"]["mobile_no"];
           let itemKey = item;
 
           let documentItem = createListItem(
@@ -337,7 +331,8 @@ async function displayItems() {
             imageUrl,
             userLocation,
             itemKey,
-            proStatus
+            proStatus,
+            mobile_no
           );
           unorderedList.prepend(documentItem);
           console.log(item);
@@ -410,6 +405,10 @@ function removeItem(evt) {
   console.log(evt.target.id);
   let key = evt.target.id;
   let deletionRef = db.ref("users/" + username + "/DonatedItemList/" + key);
+  let itemDeletionRef = db.ref("Donated_Items_List/" + key);
+  itemDeletionRef.remove(() => {
+    console.log("Item removed!");
+  });
   deletionRef.remove(() => {
     location.reload();
   });

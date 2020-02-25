@@ -24,10 +24,6 @@
       async
       defer
     ></script>
-    <script
-      type="text/javascript"
-      src="https://canvasjs.com/assets/script/canvasjs.min.js"
-    ></script>
     <script>
       function onLoad() {
         gapi.load("auth2", function() {
@@ -36,6 +32,10 @@
         });
       }
     </script>
+    <script
+      type="text/javascript"
+      src="https://canvasjs.com/assets/script/canvasjs.min.js"
+    ></script>
     <button id="gSignOut">Sign Out</button>
 
     <div id="dashboard">
@@ -79,6 +79,8 @@
           <input id="filename" type="file" accept="image/*" required />
           <br />
           <br />
+          <label>Enter mobile number: </label>
+          <input id="mobile_no" type="text" required />
           <label>Address: </label>
           <textarea id="address" rows="5" cols="50"></textarea>
           <button id="getCoords">Get Coordinates</button>
