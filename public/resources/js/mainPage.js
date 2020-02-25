@@ -271,11 +271,11 @@ function createListItem(
   let listItem = document.createElement("li");
   listItem.appendChild(imageEle);
 
-  let removeButton = document.createElement("button");
-  removeButton.textContent = "Remove Item";
-  //removeButton.thisItemId = key;
-  removeButton.id = key;
-  removeButton.addEventListener("click", removeItem);
+  // let removeButton = document.createElement("button");
+  // removeButton.textContent = "Remove Item";
+  // //removeButton.thisItemId = key;
+  // removeButton.id = key;
+  // removeButton.addEventListener("click", removeItem);
 
   let myDiv = document.createElement("div");
   myDiv.append(
@@ -284,8 +284,8 @@ function createListItem(
     latElement,
     longElement,
     statusEle,
-    mobileEle,
-    removeButton
+    mobileEle
+    //removeButton
   );
   myDiv.setAttribute("id", "myDiv");
   listItem.append(myDiv);
@@ -315,7 +315,9 @@ async function displayItems() {
       // Need to work on css
       if (donatedItemList === null) {
         console.log("no items donated yet!");
-        statusBoard.textContent = "No items donated yet!";
+        let liItem = document.createElement("li");
+        liItem.textContent = "No items donated yet";
+        statusBoard.appendChild(liItem);
       } else {
         loading.style.display = "none";
         for (item in donatedItemList) {
