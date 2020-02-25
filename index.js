@@ -91,12 +91,11 @@ app.post("/googleSignIn", (req, res) => {
     });
 });
 
-app.get("/:user/:token", (req, res) => {
+app.get("/:user", (req, res) => {
   console.log("called get!");
   console.log("Username: " + req.params.user);
   //console.log("token: " + req.params.token);
   let userName = req.params.user;
-  let token = req.params.token;
   //console.log(token);
   if (userName.includes(":")) {
     userName = userName.replace(":", "");
@@ -107,49 +106,75 @@ app.get("/:user/:token", (req, res) => {
     userName: userName
   };
 
-  if (token.includes(":")) {
-    token = token.replace(":", "");
-  }
-
-  verify(token)
-    .then(() => {
-      // let user = firebase.auth().currentUser;
-      // if (user) {
-      //   //console.log(Object.keys(user));
-      //   let currentUserData = Object.keys(user);
-      //   console.log(currentUserData);
-      //   console.log(currentUserData[10]);
-      //   console.log(user["displayName"]);
-      //   if (user["displayName"] !== userName) {
-      //     console.log("wrong stuff!");
-      //   } else {
-      //     console.log("ur cool!");
-      //   }
-      // } else {
-      //   console.log("not user");
-      // }
-
-      let userData = db.ref("users/");
-      userData.once("value", function(snapshot) {
-        let userRef = snapshot.child(`/${userName}`).val();
-        retObj["email"] = userRef.email;
-        retObj["pass"] = userRef.password;
-        if (userRef.mobile_no === undefined) {
-          retObj["mobile"] = "Not entered";
-        } else {
-          retObj["mobile"] = userRef.mobile_no;
-        }
-        res.send(retObj);
-      });
-    })
-    .catch(error => {
+  let userData = db.ref("users/");
+  userData.once(
+    "value",
+    function(snapshot) {
+      let userRef = snapshot.child(`/${userName}`).val();
+      retObj["email"] = userRef.email;
+      retObj["pass"] = userRef.password;
+      if (userRef.mobile_no === undefined) {
+        retObj["mobile"] = "Not entered";
+      } else {
+        retObj["mobile"] = userRef.mobile_no;
+      }
+      res.send(retObj);
+    },
+    function(error) {
       retObj.status = "Failure";
       retObj.code = error.code;
       retObj.message = error.message;
-      // console.log("Some sort of an error");
-      // console.log("error is: " + error);
       res.send(retObj);
-    });
+    }
+  );
+
+  // retObj.status = "Failure";
+  // retObj.code = error.code;
+  // retObj.message = error.message;
+  // res.send(retObj);
+  // if (token.includes(":")) {
+  //   token = token.replace(":", "");
+  // }
+
+  // verify(token)
+  //   .then(() => {
+  //     // let user = firebase.auth().currentUser;
+  //     // if (user) {
+  //     //   //console.log(Object.keys(user));
+  //     //   let currentUserData = Object.keys(user);
+  //     //   console.log(currentUserData);
+  //     //   console.log(currentUserData[10]);
+  //     //   console.log(user["displayName"]);
+  //     //   if (user["displayName"] !== userName) {
+  //     //     console.log("wrong stuff!");
+  //     //   } else {
+  //     //     console.log("ur cool!");
+  //     //   }
+  //     // } else {
+  //     //   console.log("not user");
+  //     // }
+
+  //   let userData = db.ref("users/");
+  //   userData.once("value", function(snapshot) {
+  //     let userRef = snapshot.child(`/${userName}`).val();
+  //     retObj["email"] = userRef.email;
+  //     retObj["pass"] = userRef.password;
+  //     if (userRef.mobile_no === undefined) {
+  //       retObj["mobile"] = "Not entered";
+  //     } else {
+  //       retObj["mobile"] = userRef.mobile_no;
+  //     }
+  //     res.send(retObj);
+  //   });
+  // })
+  //   .catch(error => {
+  //     retObj.status = "Failure";
+  //     retObj.code = error.code;
+  //     retObj.message = error.message;
+  //     // console.log("Some sort of an error");
+  //     // console.log("error is: " + error);
+  //     res.send(retObj);
+  //   });
 });
 
 app.post("/donateItem", (req, res) => {
@@ -347,6 +372,7 @@ app.post("/NGOlogin", (req, res) => {
   let email = req.body.email;
   let name = req.body.NGOName;
   name = name.toLowerCase();
+  email = email.toLowerCase();
 
   const salt = "oofe";
 
@@ -361,9 +387,20 @@ app.post("/NGOlogin", (req, res) => {
     }
 
     console.log("after awaiting");
-    let actualEmail = actualDetails["email"];
-    let hashedPassword = actualDetails["password"];
-    let actualPosi = actualDetails["posi"];
+
+    let actualEmail;
+    let hashedPassword;
+    let actualPosi;
+
+    try {
+      console.log("in try");
+      actualEmail = actualDetails["email"];
+      hashedPassword = actualDetails["password"];
+      actualPosi = actualDetails["posi"];
+    } catch {
+      console.log("Invalid Login Details");
+      return;
+    }
 
     console.log(actualEmail, hashedPassword, actualEmail);
 
@@ -377,13 +414,15 @@ app.post("/NGOlogin", (req, res) => {
     console.log(finalPassword);
     console.log(hash);
 
-    actualEmail = actualEmail.toLowerCase();
-    name = name.toLowerCase();
+    // actualEmail = actualEmail.toLowerCase();
+    // name = name.toLowerCase();
 
     console.log(actualEmail, email);
 
     if (actualEmail === email && hash === hashedPassword) {
-      res.json({ status: "success" });
+      const ngomd5 = crypto.createHash("md5");
+      const ngoHash = ngomd5.update(actualEmail).digest("hex");
+      res.json({ status: "success", ngoHash: ngoHash });
     } else {
       res.json({ status: "failure" });
     }

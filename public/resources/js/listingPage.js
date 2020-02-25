@@ -48,18 +48,26 @@ function listingItems() {
       let productType = donatedItemsRef[donatedItems]["data"]["productType"];
       let status = donatedItemsRef[donatedItems]["data"]["status"];
       let date = donatedItemsRef[donatedItems]["data"]["date"];
+      let mobile_no = donatedItemsRef[donatedItems]["data"]["mobile_no"];
 
       if (status == undefined) {
         status = "In queue";
       }
-      createLiItem(imageSrc, pickupAddress, productType, status, date);
+      createLiItem(
+        imageSrc,
+        pickupAddress,
+        productType,
+        status,
+        date,
+        mobile_no
+      );
       count++;
       console.log(count);
     }
     // }
   });
 }
-function createLiItem(src, add, type, status, date) {
+function createLiItem(src, add, type, status, date, mobile_no) {
   let liElement = document.createElement("li");
   console.log(date);
   liElement.setAttribute("id", date);
@@ -80,9 +88,12 @@ function createLiItem(src, add, type, status, date) {
   let statusEle = document.createElement("p");
   statusEle.textContent = status;
 
+  let mobileEle = document.createElement("p");
+  mobileEle.textContent = mobile_no;
+
   let divEle = document.createElement("div");
   divEle.setAttribute("id", "listItems");
-  divEle.append(pickupAddressEle, productTypeEle, statusEle);
+  divEle.append(pickupAddressEle, productTypeEle, statusEle, mobileEle);
   liElement.append(imageEle, divEle);
   unorderedListEle.prepend(liElement);
 

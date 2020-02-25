@@ -21,15 +21,47 @@
 // -- phone number:
 // --4 try for displaying used mobile numbers
 // -- status of items
+// -- cookie deletion
+getCookie()
+  .then(username => {
+    console.log(username);
+    if (username == "''") {
+      alert("You haven't signed in\nKindly sign in");
+      window.location = "http://localhost:8181";
+    } else {
+      domusername = username;
+      userSignedIn(username);
+    }
+  })
+  .catch(error => {
+    console.log(error);
+    alert("You haven't signed in\nKindly sign in");
+    window.location = "http://localhost:8181";
+  });
+// let url = new URL(window.location);
+// let username = url.searchParams.get("username");
+// let token = url.searchParams.get("token");
+// if (token == null) {
+//   console.log("wrong credentials");
+// } else {
+//   userSignedIn(username, token);
+// }
 
-let url = new URL(window.location);
-let username = url.searchParams.get("username");
-let token = url.searchParams.get("token");
-if (token == null) {
-  console.log("wrong credentials");
-} else {
-  userSignedIn(username, token);
+function getCookie() {
+  return new Promise((resolve, reject) => {
+    let decodedCookie = decodeURIComponent(document.cookie);
+    let ca = decodedCookie.split(";");
+    for (let i = 0; i < ca.length; i++) {
+      let values = ca[i].split("=");
+      if (values[0] === " username") {
+        let username = values[1];
+        resolve(username);
+      }
+    }
+    reject("");
+  });
 }
+
 async function intializeBaseStuff() {
   return new Promise(async (resolve, reject) => {
     let options = {
@@ -52,14 +84,12 @@ async function intializeBaseStuff() {
   });
 }
 
-async function userSignedIn(username, token) {
+async function userSignedIn(username) {
   console.log(username);
-  username = username.split("%20").join(" ");
-  console.log(username);
-  let response = await fetch(`/:${username}/:${token}`);
+  let response = await fetch(`/:${username}`);
   let json = await response.json();
   if (json.status === "Success") {
-    displayItems();
+    displayItems(username);
     let userElement = document.createElement("p");
     userElement.textContent = username;
     userElement.style.padding = "50px";
@@ -68,28 +98,7 @@ async function userSignedIn(username, token) {
   } else {
     console.log("Error");
     alert("Wrong Credentials!");
-    //handleAuthError();
-    //window.location = "../../index.html";
   }
-  // let status = await intializeBaseStuff();
-  // if (status == "success") {
-  //   firebase.auth().onAuthStateChanged(user => {
-  //     if (user) {
-  //       firebase
-  //         .auth()
-  //         .currentUser.getIdToken(true)
-  //         .then(idToken => {
-  //           console.log(idToken);
-  //         })
-  //         .catch(error => {
-  //           console.log(error);
-  //         });
-  //     } else {
-  //       console.log(user);
-  //       console.log("no fking user!");
-  //     }
-  //   });
-  // }
 }
 let donateButton = document.getElementById("donateItem");
 let form = document.getElementById("donationForm");
@@ -105,6 +114,7 @@ let allowedLocationAccess = false;
 let statusData = {};
 let userCoordinates = {};
 let totalCount;
+let domusername;
 let db;
 
 coordButton.addEventListener("click", getCoordinates);
@@ -271,12 +281,6 @@ function createListItem(
   let listItem = document.createElement("li");
   listItem.appendChild(imageEle);
 
-  // let removeButton = document.createElement("button");
-  // removeButton.textContent = "Remove Item";
-  // //removeButton.thisItemId = key;
-  // removeButton.id = key;
-  // removeButton.addEventListener("click", removeItem);
-
   let myDiv = document.createElement("div");
   myDiv.append(
     paraProEle,
@@ -285,15 +289,22 @@ function createListItem(
     longElement,
     statusEle,
     mobileEle
-    //removeButton
   );
   myDiv.setAttribute("id", "myDiv");
   listItem.append(myDiv);
 
+  let removeButton = document.createElement("button");
+  removeButton.textContent = "Remove Item";
+  //removeButton.thisItemId = key;
+  removeButton.id = key;
+  removeButton.addEventListener("click", removeItem);
+  removeButton.setAttribute("class", "remove-item");
+  listItem.append(removeButton);
+
   return listItem;
 }
 
-async function displayItems() {
+async function displayItems(username) {
   let loading = document.querySelector("#loading");
   loading.style.display = "flex";
   let status = await intializeBaseStuff();
@@ -340,7 +351,6 @@ async function displayItems() {
             mobile_no
           );
           unorderedList.prepend(documentItem);
-          console.log(item);
           let itemStatus = donatedItemList[item]["data"]["status"];
           //console.log(itemStatus);
           if (itemStatus === "Awaiting Response") {
@@ -409,7 +419,8 @@ function removeItem(evt) {
   console.log("Called");
   console.log(evt.target.id);
   let key = evt.target.id;
-  let deletionRef = db.ref("users/" + username + "/DonatedItemList/" + key);
+  console.log(domusername);
+  let deletionRef = db.ref("users/" + domusername + "/DonatedItemList/" + key);
   let itemDeletionRef = db.ref("Donated_Items_List/" + key);
   itemDeletionRef.remove(() => {
     console.log("Item removed!");
@@ -424,14 +435,6 @@ function updateButtonKey(key) {
   let ele = document.getElementById("tempKey");
   ele.id = key;
   console.log("Key updated!");
-}
-
-function handleAuthError() {
-  let errorEle = document.createElement("p");
-  errorEle.textContent = "error";
-  divDB.appendChild(errorEle);
-  statusBoard.appendChild(errorEle);
-  form.appendChild(errorEle);
 }
 
 function displayChart(statusData) {
