@@ -23,20 +23,21 @@
 // -- status of items
 // -- cookie deletion
 getCookie()
-  .then(username => {
-    console.log(username);
-    if (username == "''") {
+  .then(data => {
+    console.log(data[0], data[1]);
+    portNo = data[1];
+    if (data[0] == "''") {
       alert("You haven't signed in\nKindly sign in");
       window.location = "http://localhost:8181";
     } else {
-      domusername = username;
-      userSignedIn(username);
+      domusername = data[0];
+      userSignedIn(data[0]);
     }
   })
   .catch(error => {
     console.log(error);
-    alert("You haven't signed in\nKindly sign in");
-    window.location = "http://localhost:8181";
+    // alert("You haven't signed in\nKindly sign in");
+    // window.location = "http://localhost:8181";
   });
 // let url = new URL(window.location);
 // let username = url.searchParams.get("username");
@@ -48,14 +49,26 @@ getCookie()
 // }
 
 function getCookie() {
-  return new Promise((resolve, reject) => {
+  return new Promise(async (resolve, reject) => {
     let decodedCookie = decodeURIComponent(document.cookie);
     let ca = decodedCookie.split(";");
     for (let i = 0; i < ca.length; i++) {
       let values = ca[i].split("=");
       if (values[0] === " username") {
         let username = values[1];
-        resolve(username);
+        let option = {
+          method: "GET",
+          headers: {
+            "Content-type": "application/json"
+          }
+        };
+        let response = await fetch("/getPortNo", option);
+        let json = await response.json();
+
+        if (json.status == "success") {
+          console.log(json.port);
+          resolve([username, json.port]);
+        }
       }
     }
     reject("");
@@ -86,7 +99,14 @@ async function intializeBaseStuff() {
 
 async function userSignedIn(username) {
   console.log(username);
-  let response = await fetch(`/:${username}`);
+  //let options = {
+  //   method: "GET",
+  //   headers: {
+  //     "Content-type": "application/json"
+  //   },
+  //   body: JSON.stringify(username)
+  // };
+  let response = await fetch(`/:${username}/userdata`);
   let json = await response.json();
   if (json.status === "Success") {
     displayItems(username);
@@ -115,6 +135,7 @@ let statusData = {};
 let userCoordinates = {};
 let totalCount;
 let domusername;
+let portNo;
 let db;
 
 let noItems;
