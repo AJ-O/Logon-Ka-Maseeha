@@ -155,10 +155,7 @@ async function getData() {
     console.log(userCoordinates);
     let productType = document.getElementById("product").value;
     let pickupAddress = document.getElementById("address").value;
-<<<<<<< HEAD
-=======
     let mobile_no = document.getElementById("mobile_no").value;
->>>>>>> b44cca05981493e75e6440545377bb6be8ab8445
     let defaultProductStatus = "Awaiting Response";
     let tempKey = "tempKey";
 
