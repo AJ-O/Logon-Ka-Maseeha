@@ -27,3 +27,10 @@ if (!_ngoHash) {
   );
   window.location = "http://localhost:8181";
 }
+
+function signOutAsNGO() {
+  document.cookie = "ngoHash= ; expires= Thu, 01 Jan 1970 00:00:00 GMT";
+  window.location = "http://localhost:8181";
+}
+
+document.querySelector("#goBack").addEventListener("click", signOutAsNGO);

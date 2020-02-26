@@ -30,6 +30,8 @@ let donateItemsEle = document.getElementById("donatedItems");
 let unorderedListEle = document.createElement("ul");
 unorderedListEle.style.listStyle = "none";
 
+let loaded;
+
 donateItemsEle.appendChild(unorderedListEle);
 initializeStuff();
 
@@ -90,16 +92,17 @@ function listingItems() {
       );
       count++;
       console.log(count);
+      // loaded = true;
     }
+    enableItemsPickUp();
     // }
   });
 }
+
 function createLiItem(src, add, type, status, date, mobile_no) {
   let liElement = document.createElement("li");
   console.log(date);
   liElement.setAttribute("id", date);
-  // liElement.style.display = "flex";
-  // liElement.style.flexDirection = "column";
 
   let imageEle = document.createElement("img");
   imageEle.src = src;
@@ -124,10 +127,39 @@ function createLiItem(src, add, type, status, date, mobile_no) {
 
   let ngoPickUp = document.createElement("button");
   ngoPickUp.textContent = "Pick Up";
+  ngoPickUp.setAttribute("id", date);
+  ngoPickUp.setAttribute("class", "ngoPickUp");
 
   liElement.append(imageEle, divEle, ngoPickUp);
   // liElement.appendChild(ngoPickUp);
   unorderedListEle.prepend(liElement);
 
   loading.style.display = "none";
+}
+
+function enableItemsPickUp() {
+  // console.log("Hello");
+  let pickUps = document.getElementsByClassName("ngoPickUp");
+  for (let i = 0; i < pickUps.length; i++) {
+    // console.log(pickUps[i]);
+    pickUps[i].addEventListener("click", () => {
+      actuallyPickUp(pickUps[i].id);
+    });
+  }
+}
+
+async function actuallyPickUp(idOfItem) {
+  // console.log(idOfItem);
+  const options = {
+    method: "POST",
+    headers: {
+      "Content-type": "application/json"
+    },
+    body: JSON.stringify({ idOfItem })
+  };
+
+  let response = await fetch("/NGOPickingUp", options);
+  let json = await response.json();
+
+  console.log(json);
 }
