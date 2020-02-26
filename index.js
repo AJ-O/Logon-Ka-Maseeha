@@ -466,11 +466,19 @@ app.post("/NGOPickingUp", (req, res) => {
     .catch(err => {
       res.json({ status: "failure" });
       console.error(err);
+      const errorObj = {
+        errorMessage: err,
+        time: Date()
+      };
+      logError(errorObj);
     });
 
   // console.log(_ngoName);
 });
 
-// function logError(errorItems) {
-//   const
-// }
+function logError(errorItems) {
+  const errorRef = db.ref("Errors/");
+  errorRef.set(errorItems);
+
+  console.log("logged error in database");
+}
