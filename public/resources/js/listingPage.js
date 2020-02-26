@@ -88,7 +88,8 @@ function listingItems() {
         productType,
         status,
         date,
-        mobile_no
+        mobile_no,
+        donatedItems
       );
       count++;
       console.log(count);
@@ -99,7 +100,7 @@ function listingItems() {
   });
 }
 
-function createLiItem(src, add, type, status, date, mobile_no) {
+function createLiItem(src, add, type, status, date, mobile_no, donatedItems) {
   let liElement = document.createElement("li");
   console.log(date);
   liElement.setAttribute("id", date);
@@ -127,7 +128,7 @@ function createLiItem(src, add, type, status, date, mobile_no) {
 
   let ngoPickUp = document.createElement("button");
   ngoPickUp.textContent = "Pick Up";
-  ngoPickUp.setAttribute("id", date);
+  ngoPickUp.setAttribute("id", donatedItems);
   ngoPickUp.setAttribute("class", "ngoPickUp");
 
   liElement.append(imageEle, divEle, ngoPickUp);
@@ -148,14 +149,14 @@ function enableItemsPickUp() {
   }
 }
 
-async function actuallyPickUp(idOfItem) {
+async function actuallyPickUp(keyOfItem) {
   // console.log(idOfItem);
   const options = {
     method: "POST",
     headers: {
       "Content-type": "application/json"
     },
-    body: JSON.stringify({ idOfItem })
+    body: JSON.stringify({ keyOfItem })
   };
 
   let response = await fetch("/NGOPickingUp", options);

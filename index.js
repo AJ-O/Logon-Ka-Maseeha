@@ -424,3 +424,10 @@ app.get("/getPortNo", (req, res) => {
   };
   res.send(retObj);
 });
+
+app.post("/NGOPickingUp", (req, res) => {
+  // retrieveing data for the specific id
+  let itemKey = req.body.keyOfItem;
+
+  let preExisting = db.ref("Donated_Items_List/" + itemKey + "/data"); // to work on this later: fetching the values, sending it back, updating status
+});
