@@ -117,6 +117,8 @@ let totalCount;
 let domusername;
 let db;
 
+let noItems;
+
 coordButton.addEventListener("click", getCoordinates);
 unorderedList.style.listStyleType = "none";
 donateButton.addEventListener("click", showForm);
@@ -202,7 +204,7 @@ async function getData() {
           productType: productType,
           pickupAddress: pickupAddress,
           userCoordinates: userCoordinates,
-          userName: username,
+          userName: domusername,
           imageUrl: imageUrl,
           date: date,
           status: defaultProductStatus,
@@ -225,6 +227,9 @@ async function getData() {
           console.log(json["autoKey"]);
           updateButtonKey(json["autoKey"]);
           alert("Data uploaded");
+          if (noItems) {
+            location.reload();
+          }
         }
       } else {
         console.log("Try again");
@@ -326,9 +331,17 @@ async function displayItems(username) {
       // Need to work on css
       if (donatedItemList === null) {
         console.log("no items donated yet!");
-        let liItem = document.createElement("li");
-        liItem.textContent = "No items donated yet";
-        statusBoard.appendChild(liItem);
+        noItems = document.createElement("span");
+        noItems.textContent = "No Items Donated Yet!";
+        noItems.style.fontSize = "30px";
+        document.querySelector("#statusBoard").style.justifyContent = "center";
+        document.querySelector("#statusBoard").style.alignItems = "center";
+        document.querySelector("#loading").style.display = "none";
+        document.querySelector("#statusBoard").append(noItems);
+        noItems = true;
+        // let liItem = document.createElement("li");
+        // liItem.textContent = "No items donated yet";
+        // statusBoard.appendChild(liItem);
       } else {
         loading.style.display = "none";
         for (item in donatedItemList) {

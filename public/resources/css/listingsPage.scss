@@ -4,6 +4,8 @@
 }
 
 body {
+  background-color: rgba(255, 166, 0, 0.349);
+  color: green;
   font-family: "Montserrat", monospace;
 }
 
@@ -19,12 +21,10 @@ li {
   padding: 14px;
   margin: 4px;
   position: relative;
-  display: -webkit-box;
-  display: -ms-flexbox;
   display: flex;
   max-width: 100%;
-  background-color: rgba(74, 0, 194, 0.699);
   border-radius: 2vh;
+  background-color: rgba(255, 166, 0, 0.644);
 }
 
 p {
@@ -34,8 +34,6 @@ p {
 
 #listItems {
   order: 2;
-  display: -webkit-box;
-  display: -ms-flexbox;
   display: flex;
 
   flex-wrap: nowrap;
@@ -49,4 +47,12 @@ p {
 
 img {
   transition: 0.3s;
+}
+
+li {
+  button {
+    order: 3;
+    position: absolute;
+    right: 10px;
+  }
 }

@@ -1,3 +1,30 @@
+function getCookie(cname) {
+  var name = cname + "=";
+  var decodedCookie = decodeURIComponent(document.cookie);
+  var ca = decodedCookie.split(";");
+  for (var i = 0; i < ca.length; i++) {
+    var c = ca[i];
+    while (c.charAt(0) == " ") {
+      c = c.substring(1);
+    }
+    if (c.indexOf(name) == 0) {
+      return c.substring(name.length, c.length);
+    }
+  }
+  return "";
+}
+
+const _ngoHash = getCookie("ngoHash");
+// console.log(_ngoHash);
+
+if (!_ngoHash) {
+  document.querySelector("body").display = "none";
+  alert(
+    "You haven't loggin in as an NGO!\nPlease log in as an NGO and try again!"
+  );
+  window.location = "http://localhost:8181";
+}
+
 let count = 0;
 let donateItemsEle = document.getElementById("donatedItems");
 let unorderedListEle = document.createElement("ul");
@@ -93,8 +120,13 @@ function createLiItem(src, add, type, status, date, mobile_no) {
 
   let divEle = document.createElement("div");
   divEle.setAttribute("id", "listItems");
-  divEle.append(pickupAddressEle, productTypeEle, statusEle, mobileEle);
-  liElement.append(imageEle, divEle);
+  divEle.append(pickupAddressEle, productTypeEle, statusEle);
+
+  let ngoPickUp = document.createElement("button");
+  ngoPickUp.textContent = "Pick Up";
+
+  liElement.append(imageEle, divEle, ngoPickUp);
+  // liElement.appendChild(ngoPickUp);
   unorderedListEle.prepend(liElement);
 
   loading.style.display = "none";

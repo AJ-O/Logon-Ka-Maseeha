@@ -4,6 +4,8 @@
 }
 
 body {
+  background-color: rgba(255, 166, 0, 0.349);
+  color: green;
   font-family: "Montserrat", monospace;
 }
 
@@ -15,11 +17,11 @@ img:hover {
 li {
   list-style: none;
   -webkit-box-pack: left;
-  -ms-flex-pack: left;
-  justify-content: left;
+      -ms-flex-pack: left;
+          justify-content: left;
   -webkit-box-align: center;
-  -ms-flex-align: center;
-  align-items: center;
+      -ms-flex-align: center;
+          align-items: center;
   padding: 14px;
   margin: 4px;
   position: relative;
@@ -27,33 +29,33 @@ li {
   display: -ms-flexbox;
   display: flex;
   max-width: 100%;
-  background-color: rgba(74, 0, 194, 0.699);
   border-radius: 2vh;
+  background-color: rgba(255, 166, 0, 0.644);
 }
 
 p {
   max-width: 100%;
   -webkit-box-pack: justify;
-  -ms-flex-pack: justify;
-  justify-content: space-between;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
 }
 
 #listItems {
   -webkit-box-ordinal-group: 3;
-  -ms-flex-order: 2;
-  order: 2;
+      -ms-flex-order: 2;
+          order: 2;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
   -ms-flex-wrap: nowrap;
-  flex-wrap: nowrap;
+      flex-wrap: nowrap;
   -webkit-box-orient: vertical;
   -webkit-box-direction: normal;
-  -ms-flex-direction: column;
-  flex-direction: column;
+      -ms-flex-direction: column;
+          flex-direction: column;
   -webkit-box-pack: justify;
-  -ms-flex-pack: justify;
-  justify-content: space-between;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
   padding-left: 15px;
   overflow: auto;
 }
@@ -62,78 +64,12 @@ img {
   -webkit-transition: 0.3s;
   transition: 0.3s;
 }
-#loading {
-  justify-content: center;
-  align-items: center;
-  margin: 300px auto;
-}
 
-.spinner {
-  width: 100px;
-  height: 100px;
-  margin: 30px auto;
-  position: relative;
-  animation: rotateit 1.3s linear infinite;
-}
-
-@keyframes rotateit {
-  from {
-    transform: rotate(360deg);
-  }
-  to {
-    transform: rotate(0deg);
-  }
-}
-/*=======================================================
-  * Circles code taken from https://www.crazyegg.com/blog/loading-spinners-css3-animation/
-  *======================================================*/
-.spinner.circles div {
-  width: 20px;
-  height: 20px;
-  border-radius: 50%;
-  background: black;
+li button {
+  -webkit-box-ordinal-group: 4;
+      -ms-flex-order: 3;
+          order: 3;
   position: absolute;
-  top: 35px;
-  left: 45px;
+  right: 10px;
 }
-
-.spinner.circles div:nth-child(1) {
-  transform: rotate(0deg) translate(0, -35px) scale(1.4);
-}
-
-.spinner.circles div:nth-child(2) {
-  transform: rotate(45deg) translate(0, -35px) scale(1.2);
-  opacity: 0.7;
-}
-
-.spinner.circles div:nth-child(3) {
-  transform: rotate(90deg) translate(0, -35px) scale(1.1);
-  opacity: 0.6;
-}
-
-.spinner.circles div:nth-child(4) {
-  transform: rotate(135deg) translate(0, -35px) scale(0.9);
-  opacity: 0.5;
-}
-
-.spinner.circles div:nth-child(5) {
-  transform: rotate(180deg) translate(0, -35px) scale(0.7);
-  opacity: 0.4;
-}
-
-.spinner.circles div:nth-child(6) {
-  transform: rotate(225deg) translate(0, -35px) scale(0.5);
-  opacity: 0.3;
-}
-
-.spinner.circles div:nth-child(7) {
-  transform: rotate(270deg) translate(0, -35px) scale(0.3);
-  opacity: 0.2;
-}
-
-.spinner.circles div:nth-child(8) {
-  transform: rotate(315deg) translate(0, -35px) scale(0.1);
-  opacity: 0.1;
-}
-
 /*# sourceMappingURL=listingsPage.css.map */
