@@ -428,8 +428,3 @@ app.post("/NGOlogin", (req, res) => {
     }
   });
 });
-
-// api route to go to ngo main page
-app.get("/ngoMainPage", (req, res) => {
-  res.redirect("http://localhost:8181/ngo.html");
-});

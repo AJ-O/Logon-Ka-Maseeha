@@ -120,7 +120,7 @@ function createLiItem(src, add, type, status, date, mobile_no) {
 
   let divEle = document.createElement("div");
   divEle.setAttribute("id", "listItems");
-  divEle.append(pickupAddressEle, productTypeEle, statusEle);
+  divEle.append(pickupAddressEle, productTypeEle, statusEle, mobileEle);
 
   let ngoPickUp = document.createElement("button");
   ngoPickUp.textContent = "Pick Up";
