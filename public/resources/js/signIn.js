@@ -68,11 +68,8 @@ async function onSignIn(googleUser) {
       let modifiedName = data.username;
       if (data.status == "success") {
         console.log(modifiedName);
-        window.location =
-          "../html/mainPage.html?username=" +
-          modifiedName +
-          "&token=" +
-          json.token;
+        window.location = "http://localhost:8181/mainPage.html";
+        document.cookie = "username=" + encodeURIComponent(username);
       }
     } else {
       // window.location =
