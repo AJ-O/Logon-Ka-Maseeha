@@ -1,4 +1,3 @@
-// added
 const express = require("express");
 const bodyParser = require("body-parser");
 const dotenv = require("dotenv");
@@ -91,10 +90,10 @@ app.post("/googleSignIn", (req, res) => {
     });
 });
 
-app.get("/:user", (req, res) => {
+app.get("/:user/userdata", (req, res) => {
   console.log("called get!");
-  console.log("Username: " + req.params.user);
-  //console.log("token: " + req.params.token);
+  //console.log("Username: " + req.body.user);
+  console.log("user: " + req.params.user);
   let userName = req.params.user;
   //console.log(token);
   if (userName.includes(":")) {
@@ -128,7 +127,7 @@ app.get("/:user", (req, res) => {
     }
   );
 
-  // retObj.status = "Failure";
+  // retObj.status = "Failure";javascript
   // retObj.code = error.code;
   // retObj.message = error.message;
   // res.send(retObj);
@@ -198,17 +197,6 @@ app.post("/donateItem", (req, res) => {
       findOutDistance(userCoordinates.lat, userCoordinates.long);
     });
   });
-});
-
-app.post("/set_mobile_number", (req, res) => {
-  let val = req.body.mobile;
-  let username = req.body.username;
-  console.log(val, username);
-  let retObj = {
-    status: "success"
-  };
-  db.ref("users/" + username + "/mobile_no").set(val);
-  res.send(retObj);
 });
 
 app.listen(port, () => {
@@ -427,4 +415,12 @@ app.post("/NGOlogin", (req, res) => {
       res.json({ status: "failure" });
     }
   });
+});
+
+app.get("/getPortNo", (req, res) => {
+  let retObj = {
+    port: port,
+    status: "success"
+  };
+  res.send(retObj);
 });
