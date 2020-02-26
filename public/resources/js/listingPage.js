@@ -15,7 +15,9 @@ function getCookie(cname) {
 }
 
 const _ngoHash = getCookie("ngoHash");
+const _ngoName = getCookie("ngoName");
 // console.log(_ngoHash);
+console.log(_ngoName);
 
 if (!_ngoHash) {
   document.querySelector("body").display = "none";
@@ -156,11 +158,16 @@ async function actuallyPickUp(keyOfItem) {
     headers: {
       "Content-type": "application/json"
     },
-    body: JSON.stringify({ keyOfItem })
+    body: JSON.stringify({ keyOfItem, _ngoHash, _ngoName })
   };
 
   let response = await fetch("/NGOPickingUp", options);
   let json = await response.json();
 
-  console.log(json);
+  if (json.status === "success") {
+    location.reload();
+  } else {
+    alert("Some error occured. Please try later");
+    location.reload();
+  }
 }

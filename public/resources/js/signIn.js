@@ -131,6 +131,7 @@ document.querySelector("#ngoBut").addEventListener("click", async () => {
     window.location = "http://localhost:8181/ngo.html";
 
     document.cookie = "ngoHash=" + json.ngoHash;
+    document.cookie = "ngoName=" + json.ngoName;
   } else {
     document.querySelector("#alert").style.textAlign = "center";
     document.querySelector("#alert").innerHTML =
