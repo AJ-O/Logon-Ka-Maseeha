@@ -194,7 +194,7 @@ app.post("/donateItem", (req, res) => {
       retObj.status = "success";
       retObj.autoKey = newItemRef.key;
       res.send(retObj);
-      findOutDistance(userCoordinates.lat, userCoordinates.long);
+      //findOutDistance(userCoordinates.lat, userCoordinates.long);
     });
   });
 });

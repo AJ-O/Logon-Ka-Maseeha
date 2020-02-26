@@ -195,7 +195,6 @@ async function getData() {
     reader.onload = async function() {
       let date = Date.now();
       blobDataResult = reader.result;
-      console.log(blobDataResult);
       uploadStatusBar = 20;
       uploadStatusBoard(
         productType,
@@ -325,6 +324,7 @@ function createListItem(
   removeButton.id = key;
   removeButton.addEventListener("click", removeItem);
   removeButton.setAttribute("class", "remove-item");
+  removeButton.setAttribute("class", imageUrl);
   listItem.append(removeButton);
 
   return listItem;
@@ -453,15 +453,30 @@ function removeItem(evt) {
   console.log("Called");
   console.log(evt.target.id);
   let key = evt.target.id;
+  let imageRef = evt.target.className;
   console.log(domusername);
   let deletionRef = db.ref("users/" + domusername + "/DonatedItemList/" + key);
   let itemDeletionRef = db.ref("Donated_Items_List/" + key);
+
   itemDeletionRef.remove(() => {
     console.log("Item removed!");
   });
   deletionRef.remove(() => {
     location.reload();
   });
+  console.log(imageRef);
+  let imageNameSplit = imageRef.split("?");
+  let imageName = imageNameSplit[0].split("/");
+  imageName = decodeURIComponent(imageName[imageName.length - 1]);
+  let storageRef = firebase.storage().ref(imageName);
+  storageRef
+    .delete()
+    .then(() => {
+      console.log("Item deleted!");
+    })
+    .catch(error => {
+      console.log(error);
+    });
 }
 
 function updateButtonKey(key) {
