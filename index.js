@@ -410,14 +410,13 @@ app.post("/NGOlogin", (req, res) => {
     if (actualEmail === email && hash === hashedPassword) {
       const ngomd5 = crypto.createHash("md5");
       const ngoHash = ngomd5.update(actualEmail).digest("hex");
-      res.json({ status: "success", ngoHash: ngoHash });
+      res.json({ status: "success", ngoHash: ngoHash, ngoName: name });
     } else {
       res.json({ status: "failure" });
     }
   });
 });
 
-// api route to go to ngo main page
 app.get("/getPortNo", (req, res) => {
   let retObj = {
     port: port,
@@ -425,3 +424,61 @@ app.get("/getPortNo", (req, res) => {
   };
   res.send(retObj);
 });
+
+app.post("/NGOPickingUp", (req, res) => {
+  // retrieveing data for the specific id
+  let itemKey = req.body.keyOfItem;
+  let itemData;
+  const _ngoName = req.body._ngoName;
+  const _ngoHash = req.body._ngoHash;
+
+  let preExisting = db.ref("Donated_Items_List/" + itemKey);
+  preExisting
+    .once("value", snapshot => {
+      itemData = snapshot.child("/data").val(); // itemData is the actual data of the item, in full
+      // console.log(itemData);
+    })
+    .then(() => {
+      console.log("NGO_user_accounts/" + _ngoName + "/items_to_be_picked_up");
+      let newItem = db.ref(
+        "NGO_user_accounts/" + _ngoName + "/items_to_be_picked_up"
+      ); // new Item is the reference to the database of the ngo's
+      newItem.set(itemData);
+
+      console.log("inserted into firebase for ngo");
+      console.log(itemData);
+
+      res.json({ status: "success" });
+
+      let itemToBeRemoved = db.ref("Donated_Items_List/" + itemKey); // itemToBeRemoved is the item to be deleted from donated items list
+      itemToBeRemoved.remove();
+      console.log("removed from donated items list");
+
+      const _userName = itemData.userName;
+      console.log(_userName);
+
+      let itemFromUser = db.ref("users/" + _userName + "/DonatedItemList"); // itemFromUser is the listing of the item in the user's database
+      itemFromUser
+        .child("/" + itemKey + "/data")
+        .update({ status: "Accepted Item" });
+      console.log("updated in user's database");
+    })
+    .catch(err => {
+      res.json({ status: "failure" });
+      console.error(err);
+      const errorObj = {
+        errorMessage: err,
+        time: Date()
+      };
+      logError(errorObj);
+    });
+
+  // console.log(_ngoName);
+});
+
+function logError(errorItems) {
+  const errorRef = db.ref("Errors/");
+  errorRef.set(errorItems);
+
+  console.log("logged error in database");
+}

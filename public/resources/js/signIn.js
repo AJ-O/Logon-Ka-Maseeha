@@ -128,9 +128,10 @@ document.querySelector("#ngoBut").addEventListener("click", async () => {
 
   if (json.status === "success") {
     // redirect to ngo's individual page
-    window.location = "http://localhost:8181/ngoMainPage";
+    window.location = "http://localhost:8181/ngo.html";
 
     document.cookie = "ngoHash=" + json.ngoHash;
+    document.cookie = "ngoName=" + json.ngoName;
   } else {
     document.querySelector("#alert").style.textAlign = "center";
     document.querySelector("#alert").innerHTML =

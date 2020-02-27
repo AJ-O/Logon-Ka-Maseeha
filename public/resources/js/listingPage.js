@@ -15,7 +15,9 @@ function getCookie(cname) {
 }
 
 const _ngoHash = getCookie("ngoHash");
+const _ngoName = getCookie("ngoName");
 // console.log(_ngoHash);
+console.log(_ngoName);
 
 if (!_ngoHash) {
   document.querySelector("body").display = "none";
@@ -29,6 +31,8 @@ let count = 0;
 let donateItemsEle = document.getElementById("donatedItems");
 let unorderedListEle = document.createElement("ul");
 unorderedListEle.style.listStyle = "none";
+
+let loaded;
 
 donateItemsEle.appendChild(unorderedListEle);
 initializeStuff();
@@ -86,20 +90,22 @@ function listingItems() {
         productType,
         status,
         date,
-        mobile_no
+        mobile_no,
+        donatedItems
       );
       count++;
       console.log(count);
+      // loaded = true;
     }
+    enableItemsPickUp();
     // }
   });
 }
-function createLiItem(src, add, type, status, date, mobile_no) {
+
+function createLiItem(src, add, type, status, date, mobile_no, donatedItems) {
   let liElement = document.createElement("li");
   console.log(date);
   liElement.setAttribute("id", date);
-  // liElement.style.display = "flex";
-  // liElement.style.flexDirection = "column";
 
   let imageEle = document.createElement("img");
   imageEle.src = src;
@@ -120,14 +126,48 @@ function createLiItem(src, add, type, status, date, mobile_no) {
 
   let divEle = document.createElement("div");
   divEle.setAttribute("id", "listItems");
-  divEle.append(pickupAddressEle, productTypeEle, statusEle);
+  divEle.append(pickupAddressEle, productTypeEle, statusEle, mobileEle);
 
   let ngoPickUp = document.createElement("button");
   ngoPickUp.textContent = "Pick Up";
+  ngoPickUp.setAttribute("id", donatedItems);
+  ngoPickUp.setAttribute("class", "ngoPickUp");
 
   liElement.append(imageEle, divEle, ngoPickUp);
   // liElement.appendChild(ngoPickUp);
   unorderedListEle.prepend(liElement);
 
   loading.style.display = "none";
+}
+
+function enableItemsPickUp() {
+  // console.log("Hello");
+  let pickUps = document.getElementsByClassName("ngoPickUp");
+  for (let i = 0; i < pickUps.length; i++) {
+    // console.log(pickUps[i]);
+    pickUps[i].addEventListener("click", () => {
+      actuallyPickUp(pickUps[i].id);
+    });
+  }
+}
+
+async function actuallyPickUp(keyOfItem) {
+  // console.log(idOfItem);
+  const options = {
+    method: "POST",
+    headers: {
+      "Content-type": "application/json"
+    },
+    body: JSON.stringify({ keyOfItem, _ngoHash, _ngoName })
+  };
+
+  let response = await fetch("/NGOPickingUp", options);
+  let json = await response.json();
+
+  if (json.status === "success") {
+    location.reload();
+  } else {
+    alert("Some error occured. Please try later");
+    location.reload();
+  }
 }
