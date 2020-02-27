@@ -450,9 +450,9 @@ app.post("/NGOPickingUp", (req, res) => {
 
       res.json({ status: "success" });
 
-      let itemToBeRemoved = db.ref("Donated_Items_List/" + itemKey); // itemToBeRemoved is the item to be deleted from donated items list
-      itemToBeRemoved.remove();
-      console.log("removed from donated items list");
+      let itemStatus = db.ref("Donated_Items_List/" + itemKey + "/data/status");
+      itemStatus.set("Accepted Item");
+      console.log("Status changed in donated items list");
 
       const _userName = itemData.userName;
       console.log(_userName);
