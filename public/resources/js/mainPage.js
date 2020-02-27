@@ -318,15 +318,16 @@ function createListItem(
   myDiv.setAttribute("id", "myDiv");
   listItem.append(myDiv);
 
-  let removeButton = document.createElement("button");
-  removeButton.textContent = "Remove Item";
-  //removeButton.thisItemId = key;
-  removeButton.id = key;
-  removeButton.addEventListener("click", removeItem);
-  removeButton.setAttribute("class", "remove-item");
-  removeButton.setAttribute("class", imageUrl);
-  listItem.append(removeButton);
-
+  if (productStatus === "Awaiting Response") {
+    let removeButton = document.createElement("button");
+    removeButton.textContent = "Remove Item";
+    //removeButton.thisItemId = key;
+    removeButton.id = key;
+    removeButton.addEventListener("click", removeItem);
+    removeButton.setAttribute("class", "remove-item " + imageUrl);
+    //removeButton.setAttribute("class", imageUrl);
+    listItem.append(removeButton);
+  }
   return listItem;
 }
 

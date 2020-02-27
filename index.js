@@ -439,9 +439,11 @@ app.post("/NGOPickingUp", (req, res) => {
       // console.log(itemData);
     })
     .then(() => {
-      console.log("NGO_user_accounts/" + _ngoName + "/items_to_be_picked_up");
+      console.log(
+        "NGO_user_accounts/" + _ngoName + "/items_to_be_picked_up/" + itemKey
+      );
       let newItem = db.ref(
-        "NGO_user_accounts/" + _ngoName + "/items_to_be_picked_up"
+        "NGO_user_accounts/" + _ngoName + "/items_to_be_picked_up/" + itemKey
       ); // new Item is the reference to the database of the ngo's
       newItem.set(itemData);
 

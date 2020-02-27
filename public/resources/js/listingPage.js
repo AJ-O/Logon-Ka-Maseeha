@@ -84,15 +84,18 @@ function listingItems() {
       if (status == undefined) {
         status = "In queue";
       }
-      createLiItem(
-        imageSrc,
-        pickupAddress,
-        productType,
-        status,
-        date,
-        mobile_no,
-        donatedItems
-      );
+
+      if (status === "Awaiting Response") {
+        createLiItem(
+          imageSrc,
+          pickupAddress,
+          productType,
+          status,
+          date,
+          mobile_no,
+          donatedItems
+        );
+      }
       count++;
       console.log(count);
       // loaded = true;
