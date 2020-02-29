@@ -484,3 +484,16 @@ function logError(errorItems) {
 
   console.log("logged error in database");
 }
+
+app.post("/displayItemsForNGO", (req, res) => {
+  const _ngoName = req.body._ngoName;
+  console.log(_ngoName);
+  const displayNGOref = db.ref(
+    "NGO_user_accounts/" + _ngoName + "/items_to_be_picked_up"
+  );
+  displayNGOref.once("value", async snapshot => {
+    let records = await snapshot.val();
+
+    res.json(records);
+  });
+});

@@ -23,6 +23,8 @@ body {
   flex: 1 1 75vw;
   height: 100vh;
   width: 75vw;
+  flex-direction: column;
+  padding: 5px;
 }
 
 .collection {
@@ -108,4 +110,31 @@ body {
 #goBack {
   position: absolute;
   right: 5px;
+}
+
+li {
+  list-style: none;
+}
+
+.things-to-be-picked-up {
+  ul {
+    display: flex;
+    flex-direction: column;
+    margin: 10px;
+
+    li {
+      display: flex;
+      align-items: center;
+      // padding: 10px;
+      margin: 10px;
+    }
+  }
+}
+
+.itemData {
+  margin: 5px;
+}
+
+#ngo-name {
+  font-size: 30px;
 }

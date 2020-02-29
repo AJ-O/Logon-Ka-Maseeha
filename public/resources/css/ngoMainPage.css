@@ -31,6 +31,11 @@ body {
           flex: 1 1 75vw;
   height: 100vh;
   width: 75vw;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  padding: 5px;
 }
 
 .collection {
@@ -147,5 +152,38 @@ body {
 #goBack {
   position: absolute;
   right: 5px;
+}
+
+li {
+  list-style: none;
+}
+
+.things-to-be-picked-up ul {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  margin: 10px;
+}
+
+.things-to-be-picked-up ul li {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  margin: 10px;
+}
+
+.itemData {
+  margin: 5px;
+}
+
+#ngo-name {
+  font-size: 30px;
 }
 /*# sourceMappingURL=ngoMainPage.css.map */

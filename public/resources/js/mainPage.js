@@ -173,6 +173,7 @@ function getCoordinates() {
 
   http.onreadystatechange = e => {
     responseInStr = http.responseText;
+
     let responseInJson = JSON.parse(responseInStr);
 
     userCoordinates.lat = responseInJson.location.lat;
