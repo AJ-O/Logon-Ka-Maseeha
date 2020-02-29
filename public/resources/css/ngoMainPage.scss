@@ -7,29 +7,38 @@
 body {
   font-family: "Montserrat", sans-serif;
   // background-color: slategray;
+  // background-color: rgba(255, 166, 0, 0.349);
+  background-color: rgba(255, 166, 0, 0.411);
+  color: green;
 }
 
 .dashboard {
-  background-color: teal;
+  // background-color: teal;
   display: flex;
   flex: 1 1 25vw;
   height: 100vh;
   width: 25vw;
+  margin-right: 5px;
+  // margin: 15px;
+  padding-left: 10px;
+  background-color: rgba(255, 166, 0, 0.411);
 }
 
 .things-to-be-picked-up {
-  background-color: greenyellow;
+  // background-color: greenyellow;
   display: flex;
   flex: 1 1 75vw;
   height: 100vh;
   width: 75vw;
   flex-direction: column;
   padding: 5px;
+  background-color: rgba(255, 166, 0, 0.411);
 }
 
 .collection {
   display: flex;
   flex-direction: row;
+  padding: 10px;
 }
 
 // FOR SPINNING ANIMATION //
@@ -125,8 +134,17 @@ li {
     li {
       display: flex;
       align-items: center;
-      // padding: 10px;
+      padding: 25px;
       margin: 10px;
+      background-color: rgba(255, 166, 0, 0.644);
+
+      p {
+        margin: 5px;
+      }
+
+      div {
+        padding: 10px;
+      }
     }
   }
 }
