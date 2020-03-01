@@ -22,6 +22,7 @@
 // --4 try for displaying used mobile numbers
 // -- status of items
 // -- cookie deletion
+// -- status for item in ngo page -- 1) to be shown or not, 2) change it in database
 getCookie()
   .then(data => {
     console.log(data[0], data[1]);
@@ -492,7 +493,8 @@ function removeItem(evt) {
     location.reload();
   });
   console.log(imageRef);
-  let imageNameSplit = imageRef.split("?");
+  imageRef = imageRef.split(" ");
+  let imageNameSplit = imageRef[1].split("?");
   let imageName = imageNameSplit[0].split("/");
   imageName = decodeURIComponent(imageName[imageName.length - 1]);
   let storageRef = firebase.storage().ref(imageName);

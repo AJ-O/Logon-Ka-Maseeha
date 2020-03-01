@@ -2,7 +2,7 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const dotenv = require("dotenv");
 const { OAuth2Client } = require("google-auth-library");
-const admin = require("firebase-admin");
+//const admin = require("firebase-admin");
 const crypto = require("crypto");
 
 require("firebase/auth");
@@ -38,10 +38,10 @@ let firebaseConfig = {
 
 firebase.initializeApp(firebaseConfig);
 
-let defaultApp = admin.initializeApp({
-  credential: admin.credential.applicationDefault(),
-  databaseURL: process.env.databaseURL
-});
+// let defaultApp = admin.initializeApp({
+//   credential: admin.credential.applicationDefault(),
+//   databaseURL: process.env.databaseURL
+// });
 
 const db = firebase.database();
 
@@ -385,7 +385,7 @@ app.post("/NGOlogin", (req, res) => {
       actualEmail = actualDetails["email"];
       hashedPassword = actualDetails["password"];
       actualPosi = actualDetails["posi"];
-    } catch {
+    } catch (error) {
       console.log("Invalid Login Details");
       return;
     }
@@ -436,19 +436,16 @@ app.post("/NGOPickingUp", (req, res) => {
   preExisting
     .once("value", snapshot => {
       itemData = snapshot.child("/data").val(); // itemData is the actual data of the item, in full
-      // console.log(itemData);
+      itemData.status = "Accepted Item";
     })
     .then(() => {
-      console.log(
-        "NGO_user_accounts/" + _ngoName + "/items_to_be_picked_up/" + itemKey
-      );
       let newItem = db.ref(
         "NGO_user_accounts/" + _ngoName + "/items_to_be_picked_up/" + itemKey
       ); // new Item is the reference to the database of the ngo's
       newItem.set(itemData);
 
       console.log("inserted into firebase for ngo");
-      console.log(itemData);
+      //console.log(itemData);
 
       res.json({ status: "success" });
 
@@ -475,7 +472,7 @@ app.post("/NGOPickingUp", (req, res) => {
       logError(errorObj);
     });
 
-  // console.log(_ngoName);
+  console.log(_ngoName);
 });
 
 function logError(errorItems) {
