@@ -153,29 +153,54 @@ function showForm() {
   donateButton.style.display = "none";
 }
 
+// function getCoordinates() {
+//   if (navigator.geolocation) {
+//     navigator.geolocation.getCurrentPosition(onSuccess, error, {
+//       timeout: 10000
+//     });
+//     allowedLocationAccess = true;
+//   } else {
+//     alert("Can't get position");
+//   }
+// }
+
 function getCoordinates() {
-  if (navigator.geolocation) {
-    navigator.geolocation.getCurrentPosition(onSuccess, error);
+  const http = new XMLHttpRequest();
+  const url = "https://location.services.mozilla.com/v1/geolocate?key=test";
+
+  http.open("GET", url);
+  http.send();
+
+  http.onreadystatechange = e => {
+    responseInStr = http.responseText;
+
+    let responseInJson = JSON.parse(responseInStr);
+
+    userCoordinates.lat = responseInJson.location.lat;
+    userCoordinates.long = responseInJson.location.lng;
+
+    // console.log(userCoordinates);
+
     allowedLocationAccess = true;
-  } else {
-    alert("Can't get position");
-  }
+    coordButton.textContent = "Received Co-Ordinates";
+    coordButton.disabled = true;
+  };
 }
 
-function onSuccess(position) {
-  console.log(position.coords.latitude);
-  console.log(position.coords.longitude);
-  let lat = position.coords.latitude;
-  let long = position.coords.longitude;
-  userCoordinates.lat = lat;
-  userCoordinates.long = long;
+// function onSuccess(position) {
+//   console.log(position.coords.latitude);
+//   console.log(position.coords.longitude);
+//   let lat = position.coords.latitude;
+//   let long = position.coords.longitude;
+//   userCoordinates.lat = lat;
+//   userCoordinates.long = long;
 
-  coordButton.textContent = "Received Co-Ordinates";
-  coordButton.disabled = true;
-}
+//   coordButton.textContent = "Received Co-Ordinates";
+//   coordButton.disabled = true;
+// }
 
 function error(err) {
-  console.log(err);
+  console.error(err);
 }
 
 async function getData() {

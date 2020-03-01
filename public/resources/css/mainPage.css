@@ -272,4 +272,8 @@ li .remove-item {
   position: absolute;
   right: 5px;
 }
+
+textarea {
+  font-size: 20px;
+}
 /*# sourceMappingURL=mainPage.css.map */

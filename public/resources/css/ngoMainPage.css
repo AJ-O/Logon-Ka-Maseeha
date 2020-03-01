@@ -7,10 +7,11 @@
 
 body {
   font-family: "Montserrat", sans-serif;
+  background-color: rgba(255, 166, 0, 0.411);
+  color: green;
 }
 
 .dashboard {
-  background-color: teal;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -19,10 +20,12 @@ body {
           flex: 1 1 25vw;
   height: 100vh;
   width: 25vw;
+  margin-right: 5px;
+  padding-left: 10px;
+  background-color: rgba(255, 166, 0, 0.411);
 }
 
 .things-to-be-picked-up {
-  background-color: greenyellow;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -31,6 +34,12 @@ body {
           flex: 1 1 75vw;
   height: 100vh;
   width: 75vw;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  padding: 5px;
+  background-color: rgba(255, 166, 0, 0.411);
 }
 
 .collection {
@@ -41,6 +50,7 @@ body {
   -webkit-box-direction: normal;
       -ms-flex-direction: row;
           flex-direction: row;
+  padding: 10px;
 }
 
 #loading {
@@ -147,5 +157,48 @@ body {
 #goBack {
   position: absolute;
   right: 5px;
+}
+
+li {
+  list-style: none;
+}
+
+.things-to-be-picked-up ul {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  margin: 10px;
+}
+
+.things-to-be-picked-up ul li {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  padding: 25px;
+  margin: 10px;
+  background-color: rgba(255, 166, 0, 0.644);
+}
+
+.things-to-be-picked-up ul li p {
+  margin: 5px;
+}
+
+.things-to-be-picked-up ul li div {
+  padding: 10px;
+}
+
+.itemData {
+  margin: 5px;
+}
+
+#ngo-name {
+  font-size: 30px;
 }
 /*# sourceMappingURL=ngoMainPage.css.map */
