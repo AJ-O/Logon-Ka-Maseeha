@@ -80,6 +80,7 @@ function createListItem(
   userName
 ) {
   let individual = document.createElement("li");
+  individual.setAttribute("class", "individual-attribute");
 
   let dateEle = document.createElement("p");
   dateEle.textContent = "Date Uploaded: \t" + new Date(date);
@@ -102,7 +103,7 @@ function createListItem(
   statusEle.textContent = "Status: \t" + status;
 
   let coordsEle = document.createElement("p");
-  coordsEle.textContent = "Co-ordinates: \t" + coords.lat + ", " + coords.long;
+  coordsEle.textContent = "Co-Ordinates: \t" + coords.lat + ", " + coords.long;
 
   let userNameEle = document.createElement("p");
   userNameEle.textContent = "Uploaded By: \t" + userName;
@@ -118,9 +119,14 @@ function createListItem(
     coordsEle,
     userNameEle
   );
+
+  let changeStatus = document.createElement("button");
+  changeStatus.textContent = "Change Status";
+  changeStatus.setAttribute("id", "changeStatus");
+
   loading.style.display = "none";
 
-  individual.append(imageURLEle, collection);
+  individual.append(imageURLEle, collection, changeStatus);
 
   document.querySelector("ul").appendChild(individual);
 }

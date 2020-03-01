@@ -163,6 +163,10 @@ li {
   list-style: none;
 }
 
+.things-to-be-picked-up {
+  overflow: scroll;
+}
+
 .things-to-be-picked-up ul {
   display: -webkit-box;
   display: -ms-flexbox;
@@ -184,6 +188,8 @@ li {
   padding: 25px;
   margin: 10px;
   background-color: rgba(255, 166, 0, 0.644);
+  -ms-flex-wrap: wrap;
+      flex-wrap: wrap;
 }
 
 .things-to-be-picked-up ul li p {
@@ -200,5 +206,28 @@ li {
 
 #ngo-name {
   font-size: 30px;
+}
+
+#changeStatus {
+  position: absolute;
+  right: 45px;
+  margin: 10px;
+}
+
+.change-status {
+  height: 100%;
+  width: 100vw;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  position: absolute;
+  top: 0px;
 }
 /*# sourceMappingURL=ngoMainPage.css.map */
