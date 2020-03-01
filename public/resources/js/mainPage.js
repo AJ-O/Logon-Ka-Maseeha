@@ -272,6 +272,7 @@ async function getData() {
           console.log(json["autoKey"]);
           updateButtonKey(json["autoKey"]);
           alert("Data uploaded");
+          // location.reload();
           if (noItems) {
             location.reload();
           }
