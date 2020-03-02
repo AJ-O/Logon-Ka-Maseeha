@@ -126,6 +126,7 @@ li {
 }
 
 .things-to-be-picked-up {
+  overflow: scroll;
   ul {
     display: flex;
     flex-direction: column;
@@ -137,6 +138,7 @@ li {
       padding: 25px;
       margin: 10px;
       background-color: rgba(255, 166, 0, 0.644);
+      flex-wrap: wrap;
 
       p {
         margin: 5px;
@@ -155,4 +157,20 @@ li {
 
 #ngo-name {
   font-size: 30px;
+}
+
+#changeStatus {
+  position: absolute;
+  right: 45px;
+  margin: 10px;
+}
+
+.change-status {
+  height: 100%;
+  width: 100vw;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  position: absolute;
+  top: 0px;
 }

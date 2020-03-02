@@ -85,6 +85,7 @@ function listingItems() {
         status = "In queue";
       }
 
+      let randomBool = true; // this will decide when to display the no items message
       if (status === "Awaiting Response") {
         createLiItem(
           imageSrc,
@@ -95,6 +96,17 @@ function listingItems() {
           mobile_no,
           donatedItems
         );
+        randomBool = false;
+      } else {
+        if (randomBool == false) {
+          document.querySelector("#text").textContent =
+            "No Listings Available!";
+          loading.style.display = "none";
+          document.querySelector(".text").style.display = "flex";
+          document.querySelector(".text").style.justifyContent = "center";
+          document.querySelector(".text").style.alignItems = "center";
+          document.querySelector("#text").style.fontSize = "50px";
+        }
       }
       count++;
       console.log(count);

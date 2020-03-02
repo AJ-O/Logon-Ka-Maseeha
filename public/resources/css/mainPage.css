@@ -140,6 +140,7 @@ img {
 #gSignOut {
   position: absolute;
   right: 10px;
+  z-index: 1;
 }
 
 #myBar {

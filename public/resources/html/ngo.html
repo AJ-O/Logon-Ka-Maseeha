@@ -12,32 +12,60 @@
     <link rel="shortcut icon" href="../icons/favicon.ico" type="image/x-icon" />
   </head>
   <body>
-    <button onclick="window.location = './listingsPage.html'">
-      Click to see listings
-    </button>
-    <button id="goBack">
-      Sign Out
-    </button>
-    <div class="collection">
-      <div class="dashboard">
-        <div id="ngo-name"></div>
-      </div>
-      <div class="things-to-be-picked-up">
-        <h1>Things to be picked up:</h1>
-        <div class="spinner circles" id="loading">
-          <div></div>
-          <div></div>
-          <div></div>
-          <div></div>
-          <div></div>
-          <div></div>
-          <div></div>
-          <div></div>
+    <div class="every">
+      <button onclick="window.location = './listingsPage.html'">
+        Click to see listings
+      </button>
+      <button id="goBack">
+        Sign Out
+      </button>
+      <div class="collection">
+        <div class="dashboard">
+          <div id="ngo-name"></div>
         </div>
-        <br />
-        <ul></ul>
+        <div class="things-to-be-picked-up">
+          <h1>Things to be picked up:</h1>
+          <div class="spinner circles" id="loading">
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+          </div>
+          <br />
+          <ul></ul>
+        </div>
       </div>
     </div>
+
+    <!-- <div class="change-status">
+      <ul>
+        <li>
+          <input type="radio" name="status" id="AwaitingResponse" />
+          <label for="AwaitingResponse">Awaiting Response</label>
+        </li>
+        <br />
+        <li>
+          <input type="radio" name="status" id="AcceptedItem" />
+          <label for="AcceptedItem">Accepted Item </label>
+        </li>
+        <br />
+        <li>
+          <input type="radio" name="status" id="ItemPicked" />
+          <label for="ItemPicked">Item Picked</label>
+        </li>
+        <br />
+        <li>
+          <input type="radio" name="status" id="ItemDonated" />
+          <label for="ItemDonated">Item Donated</label>
+        </li>
+        <br />
+      </ul>
+      <button id="save">Save</button>
+    </div> -->
 
     <script src="../js/ngoMainPage.js" type="text/javascript"></script>
   </body>
