@@ -67,7 +67,7 @@ app.post("/googleSignIn", (req, res) => {
     .signInWithCredential(credential)
     .then(() => {
       let users = db.ref("users");
-      users.once("value", function(snapshot) {
+      users.once("value", (snapshot) => {
         if (!snapshot.child(userName).exists()) {
           console.log("User does not exist!");
           db.ref("users/" + userName).set(data);
@@ -81,12 +81,15 @@ app.post("/googleSignIn", (req, res) => {
         }
       });
     })
-    .catch(function(error) {
+    .catch((error) => {
       returnObj[status] = "Failure";
       returnObj[code] = error.code;
       returnObj[message] = error.message;
       console.log("Some sort of an error");
       res.send(returnObj);
+      errorObj = returnObj;
+      errorObj.date = Date();
+      logError(errorObj);
     });
 });
 
@@ -108,7 +111,7 @@ app.get("/:user/userdata", (req, res) => {
   let userData = db.ref("users/");
   userData.once(
     "value",
-    function(snapshot) {
+    (snapshot) => {
       let userRef = snapshot.child(`/${userName}`).val();
       retObj["email"] = userRef.email;
       retObj["pass"] = userRef.password;
@@ -119,11 +122,14 @@ app.get("/:user/userdata", (req, res) => {
       }
       res.send(retObj);
     },
-    function(error) {
+    (error) => {
       retObj.status = "Failure";
       retObj.code = error.code;
       retObj.message = error.message;
       res.send(retObj);
+      errorObj = retObj;
+      errorObj.date = Date();
+      logError(errorObj);
     }
   );
 
@@ -195,6 +201,13 @@ app.post("/donateItem", (req, res) => {
       retObj.autoKey = newItemRef.key;
       res.send(retObj);
       //findOutDistance(userCoordinates.lat, userCoordinates.long);
+    }, (error) => {
+      console.log(error);
+      let errorObj = {
+        msg: "Synchronization Failed",
+        date: Date()
+      }
+      logError(errorObj);
     });
   });
 });

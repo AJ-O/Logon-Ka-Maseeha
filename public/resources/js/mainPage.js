@@ -17,19 +17,14 @@
 // -- Assign key in realtime [on client side] -- Done but using id, try if another way possible!
 // -- Show item is deleted in realtime [on client side] -- done but using reloading!
 // -- Change status when ngo accepts
-// -- drop down list -- Done
-// -- phone number:
-// --4 try for displaying used mobile numbers
-// -- status of items
-// -- cookie deletion
-// -- status for item in ngo page -- 1) to be shown or not, 2) change it in database
+
 getCookie()
   .then(data => {
     console.log(data[0], data[1]);
     portNo = data[1];
     if (data[0] == "''") {
       alert("You haven't signed in\nKindly sign in");
-      window.location = "http://localhost:8181";
+      window.location = "http://localhost:" + portNo;
     } else {
       domusername = data[0];
       userSignedIn(data[0]);
@@ -37,8 +32,6 @@ getCookie()
   })
   .catch(error => {
     console.log(error);
-    // alert("You haven't signed in\nKindly sign in");
-    // window.location = "http://localhost:8181";
   });
 // let url = new URL(window.location);
 // let username = url.searchParams.get("username");
@@ -76,7 +69,7 @@ function getCookie() {
   });
 }
 
-async function intializeBaseStuff() {
+async function initializeBaseStuff() {
   return new Promise(async (resolve, reject) => {
     let options = {
       method: "POST",
@@ -93,6 +86,7 @@ async function intializeBaseStuff() {
       db = firebase.database();
       resolve("success");
     } else {
+      console.log("Failed to initialize firebase!");
       reject("Error");
     }
   });
@@ -281,6 +275,11 @@ async function getData() {
       } else {
         console.log("Try again");
         alert("Error uploading image, please try again!");
+        let errorObj = {
+          msg: "Error uploading image",
+          date: Date()
+        };
+        logError(errorObj);
       }
     };
   }
@@ -361,7 +360,7 @@ function createListItem(
 async function displayItems(username) {
   let loading = document.querySelector("#loading");
   loading.style.display = "flex";
-  let status = await intializeBaseStuff();
+  let status = await initializeBaseStuff();
   console.log(status);
   if (status == "success") {
     console.log("called!");
@@ -468,7 +467,12 @@ async function displayItems(username) {
       }
     });
   } else {
-    alert("Error loading firebase data!");
+    alert("Error initializing firebase!");
+    let errorObj = {
+      msg: "Error initializing firebase",
+      date: Date()
+    };
+    logError(errorObj);
   }
 }
 
@@ -505,6 +509,11 @@ function removeItem(evt) {
     })
     .catch(error => {
       console.log(error);
+      let errorObj = {
+        msg: error.message,
+        date: Date()
+      };
+      logError(errorObj);
     });
 }
 
@@ -538,4 +547,9 @@ function displayChart(statusData) {
     ]
   });
   chart.render();
+}
+
+function logError(errorObj){
+  db.ref("Error/").set(errorObj);
+  console.log("Logged error in database");
 }
