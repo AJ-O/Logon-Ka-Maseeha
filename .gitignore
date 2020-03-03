@@ -6,3 +6,4 @@ insertNGOData.js
 .gitignore
 fetchingTrial.js
 fakeNGODeets.json
+retrievalTest.js

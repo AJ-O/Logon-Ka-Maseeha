@@ -194,25 +194,24 @@ app.post("/donateItem", (req, res) => {
   let newItemRef = db.ref("users/" + data.userName + "/DonatedItemList").push();
   console.log(newItemRef.key); //Getting the auto generated id!
   newItemRef.set({ data }, someParameter => {
-    donatedItemsListRef.child(newItemRef.key).set(
-      { data },
-      someParameter1 => {
+    donatedItemsListRef
+      .child(newItemRef.key)
+      .set({ data }, someParameter1 => {
         console.log("sp1: ", someParameter);
         console.log("Works");
         retObj.status = "success";
         retObj.autoKey = newItemRef.key;
         res.send(retObj);
         //findOutDistance(userCoordinates.lat, userCoordinates.long);
-      },
-      error => {
+      })
+      .catch(error => {
         console.log(error);
         let errorObj = {
           msg: "Synchronization Failed",
           date: Date()
         };
         logError(errorObj);
-      }
-    );
+      });
   });
 });
 
@@ -526,4 +525,16 @@ app.post("/updateStatusNGOSide", (req, res) => {
   console.log("updated to status: " + _newStatus);
 
   res.json({ status: "success" });
+
+  const someRef = db.ref(
+    "NGO_user_accounts/" + _ngoName + "/items_to_be_picked_up/" + _itemKey
+  );
+  someRef.once("value", async snapshot => {
+    let _userName = snapshot.val().userName;
+
+    const _userRef = db.ref(
+      "users/" + _userName + "/DonatedItemList/" + _itemKey + "/data"
+    );
+    _userRef.update({ status: _newStatus });
+  });
 });
