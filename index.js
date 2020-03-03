@@ -536,5 +536,8 @@ app.post("/updateStatusNGOSide", (req, res) => {
       "users/" + _userName + "/DonatedItemList/" + _itemKey + "/data"
     );
     _userRef.update({ status: _newStatus });
+
+    const _donatedRef = db.ref("Donated_Items_List" + _itemKey + "/data");
+    _donatedRef.update({ status: _newStatus });
   });
 });
