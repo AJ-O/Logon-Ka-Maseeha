@@ -98,7 +98,7 @@ function listingItems() {
         );
         randomBool = false;
       } else {
-        if (randomBool == false) {
+        if (randomBool == false || true) {
           document.querySelector("#text").textContent =
             "No Listings Available!";
           loading.style.display = "none";

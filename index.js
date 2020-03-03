@@ -67,7 +67,7 @@ app.post("/googleSignIn", (req, res) => {
     .signInWithCredential(credential)
     .then(() => {
       let users = db.ref("users");
-      users.once("value", (snapshot) => {
+      users.once("value", snapshot => {
         if (!snapshot.child(userName).exists()) {
           console.log("User does not exist!");
           db.ref("users/" + userName).set(data);
@@ -81,7 +81,7 @@ app.post("/googleSignIn", (req, res) => {
         }
       });
     })
-    .catch((error) => {
+    .catch(error => {
       returnObj[status] = "Failure";
       returnObj[code] = error.code;
       returnObj[message] = error.message;
@@ -111,7 +111,7 @@ app.get("/:user/userdata", (req, res) => {
   let userData = db.ref("users/");
   userData.once(
     "value",
-    (snapshot) => {
+    snapshot => {
       let userRef = snapshot.child(`/${userName}`).val();
       retObj["email"] = userRef.email;
       retObj["pass"] = userRef.password;
@@ -122,7 +122,7 @@ app.get("/:user/userdata", (req, res) => {
       }
       res.send(retObj);
     },
-    (error) => {
+    error => {
       retObj.status = "Failure";
       retObj.code = error.code;
       retObj.message = error.message;
@@ -194,21 +194,25 @@ app.post("/donateItem", (req, res) => {
   let newItemRef = db.ref("users/" + data.userName + "/DonatedItemList").push();
   console.log(newItemRef.key); //Getting the auto generated id!
   newItemRef.set({ data }, someParameter => {
-    donatedItemsListRef.child(newItemRef.key).set({ data }, someParameter1 => {
-      console.log("sp1: ", someParameter);
-      console.log("Works");
-      retObj.status = "success";
-      retObj.autoKey = newItemRef.key;
-      res.send(retObj);
-      //findOutDistance(userCoordinates.lat, userCoordinates.long);
-    }, (error) => {
-      console.log(error);
-      let errorObj = {
-        msg: "Synchronization Failed",
-        date: Date()
+    donatedItemsListRef.child(newItemRef.key).set(
+      { data },
+      someParameter1 => {
+        console.log("sp1: ", someParameter);
+        console.log("Works");
+        retObj.status = "success";
+        retObj.autoKey = newItemRef.key;
+        res.send(retObj);
+        //findOutDistance(userCoordinates.lat, userCoordinates.long);
+      },
+      error => {
+        console.log(error);
+        let errorObj = {
+          msg: "Synchronization Failed",
+          date: Date()
+        };
+        logError(errorObj);
       }
-      logError(errorObj);
-    });
+    );
   });
 });
 
@@ -456,6 +460,7 @@ app.post("/NGOPickingUp", (req, res) => {
         "NGO_user_accounts/" + _ngoName + "/items_to_be_picked_up/" + itemKey
       ); // new Item is the reference to the database of the ngo's
       newItem.set(itemData);
+      newItem.update({ status: "Accepted Item" });
 
       console.log("inserted into firebase for ngo");
       //console.log(itemData);
@@ -506,4 +511,19 @@ app.post("/displayItemsForNGO", (req, res) => {
 
     res.json(records);
   });
+});
+
+app.post("/updateStatusNGOSide", (req, res) => {
+  const _itemKey = req.body.itemKey;
+  const _newStatus = req.body.newStatus;
+  const _ngoName = req.body.ngoName;
+
+  const _ngoRef = db.ref(
+    "NGO_user_accounts/" + _ngoName + "/items_to_be_picked_up"
+  );
+
+  _ngoRef.child("/" + _itemKey).update({ status: _newStatus });
+  console.log("updated to status: " + _newStatus);
+
+  res.json({ status: "success" });
 });
