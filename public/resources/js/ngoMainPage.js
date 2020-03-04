@@ -64,9 +64,27 @@ async function displayItems() {
       productType,
       status,
       coords,
-      userName
+      userName,
+      itemKeys[i]
     );
   }
+
+  const buttons = document.querySelectorAll(".changeStatus");
+  buttons.forEach(ele => {
+    ele.addEventListener("click", evt => {
+      console.log("clicked");
+      assignStatus(evt.target.id, evt.target.className.split(" ")[1], _ngoName);
+    });
+  });
+
+  const ngoButtons = document.querySelectorAll("button");
+  console.log(ngoButtons);
+  ngoButtons.forEach(ele => {
+    console.log(ele.textContent);
+    if (ele.textContent === "Everything Done") {
+      ele.disabled = true;
+    }
+  });
 }
 
 function createListItem(
@@ -77,7 +95,8 @@ function createListItem(
   productType,
   status,
   coords,
-  userName
+  userName,
+  itemKey
 ) {
   let individual = document.createElement("li");
   individual.setAttribute("class", "individual-attribute");
@@ -121,11 +140,14 @@ function createListItem(
   );
 
   let changeStatus = document.createElement("button");
-  changeStatus.textContent = "Change Status";
-  changeStatus.setAttribute("id", "changeStatus");
+  changeStatus.textContent = assignName(status);
+  changeStatus.setAttribute(
+    "class",
+    "changeStatus " + status.replace(" ", ".")
+  );
+  changeStatus.setAttribute("id", itemKey);
 
   loading.style.display = "none";
-
   individual.append(imageURLEle, collection, changeStatus);
 
   document.querySelector("ul").appendChild(individual);
@@ -141,3 +163,39 @@ document.querySelector("#goBack").addEventListener("click", signOutAsNGO);
 displayItems();
 
 document.querySelector("#ngo-name").textContent = _ngoName;
+
+function assignName(status) {
+  let textResponse = "";
+  if (status === "Accepted Item") {
+    textResponse = "Item Picked Up";
+  } else if (status === "Item Picked Up" || status === "Item Picked") {
+    textResponse = "Item Donated";
+  } else if (status === "Item Donated") {
+    textResponse = "Everything Done";
+  } else {
+    textResponse = status;
+  }
+
+  return textResponse;
+}
+
+async function assignStatus(itemKey, currentStatus, ngoName) {
+  let newStatus = assignName(currentStatus.replace(".", " "));
+  let options = {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({ itemKey, newStatus, ngoName })
+  };
+
+  const response = await fetch("/updateStatusNGOSide", options);
+  const json = await response.json();
+
+  console.log(json);
+  if (json.status === "success") {
+    location.reload();
+  } else {
+    alert("Oops! Something went wrong! Try again later!");
+  }
+}

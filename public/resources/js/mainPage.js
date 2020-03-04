@@ -418,7 +418,10 @@ async function displayItems(username) {
             inQueueCount++;
           } else if (itemStatus === "Accepted Item") {
             acceptedCount++;
-          } else if (itemStatus === "Item Picked") {
+          } else if (
+            itemStatus === "Item Picked" ||
+            itemStatus === "Item Picked Up"
+          ) {
             itemPickedCount++;
           } else if (itemStatus === "Item Donated") {
             itemDonatedCount++;
@@ -549,7 +552,7 @@ function displayChart(statusData) {
   chart.render();
 }
 
-function logError(errorObj){
+function logError(errorObj) {
   db.ref("Error/").set(errorObj);
   console.log("Logged error in database");
 }

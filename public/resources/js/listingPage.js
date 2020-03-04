@@ -57,6 +57,8 @@ async function initializeStuff() {
 }
 
 function listingItems() {
+  document.querySelector("#text").textContent = "";
+
   const db = firebase.database().ref("Donated_Items_List/");
   let loading = document.querySelector("#loading");
   loading.style.display = "flex";
@@ -85,7 +87,8 @@ function listingItems() {
         status = "In queue";
       }
 
-      let randomBool = true; // this will decide when to display the no items message
+      // let randomBool = false; // this will decide when to display the no items message
+      let toDisplay = true;
       if (status === "Awaiting Response") {
         createLiItem(
           imageSrc,
@@ -96,16 +99,21 @@ function listingItems() {
           mobile_no,
           donatedItems
         );
-        randomBool = false;
+        // randomBool = true;
+        toDisplay = false;
       } else {
-        if (randomBool == false) {
+        // if (randomBool) {
+        if (toDisplay) {
           document.querySelector("#text").textContent =
-            "No Listings Available!";
+            "No Additional Listings Available!";
           loading.style.display = "none";
           document.querySelector(".text").style.display = "flex";
           document.querySelector(".text").style.justifyContent = "center";
           document.querySelector(".text").style.alignItems = "center";
           document.querySelector("#text").style.fontSize = "50px";
+          // }
+        } else {
+          toDisplay = true;
         }
       }
       count++;
