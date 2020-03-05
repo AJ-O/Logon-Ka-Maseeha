@@ -78,7 +78,6 @@ async function displayItems() {
   });
 
   const ngoButtons = document.querySelectorAll("button");
-  console.log(ngoButtons);
   ngoButtons.forEach(ele => {
     console.log(ele.textContent);
     if (ele.textContent === "Everything Done") {

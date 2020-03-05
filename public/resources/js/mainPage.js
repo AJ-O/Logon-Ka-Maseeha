@@ -290,8 +290,8 @@ async function getData() {
   reader.readAsDataURL(fileObj);
 }
 
-async function uploadStatusBoard(p1, p2, iu, co, key, productStatus, mno) {
-  let item = createListItem(p1, p2, iu, co, key, productStatus, mno);
+async function uploadStatusBoard(productType, pickupAddress, imageUrl, coordinates, key, productStatus, mobile_no) {
+  let item = createListItem(productType, pickupAddress, imageUrl, coordinates, key, productStatus, mobile_no);
   unorderedList.prepend(item);
   statusBoard.appendChild(unorderedList);
 }
@@ -368,7 +368,7 @@ async function displayItems(username) {
     let dbRef = db.ref("users/" + username);
     let donatedItemList;
     let undefinedCount = 0;
-    let inQueueCount = 0;
+    let awaitCount = 0;
     let acceptedCount = 0;
     let itemPickedCount = 0;
     let itemDonatedCount = 0;
@@ -392,13 +392,34 @@ async function displayItems(username) {
         // statusBoard.appendChild(liItem);
       } else {
         loading.style.display = "none";
+        
+        let awaitData = {
+          label: "Awaiting Response",
+          y: 0
+        };
+
+        let acceptData = {
+          label: "Accepted Items",
+          y: 0
+        };
+
+        let donatedData = {
+          label: "Donated Items",
+          y: 0
+        };
+
+        let pickedData = {
+          label: "Picked Items",
+          y: 0
+        };
+
         for (item in donatedItemList) {
           //Replace with the required field
           let ptype = donatedItemList[item]["data"]["productType"];
           let imageUrl = donatedItemList[item]["data"]["imageUrl"];
           let pickupadd = donatedItemList[item]["data"]["pickupAddress"];
           let userLocation = donatedItemList[item]["data"]["userCoordinates"];
-          let proStatus = donatedItemList[item]["data"]["status"];
+          let itemStatus = donatedItemList[item]["data"]["status"];
           let mobile_no = donatedItemList[item]["data"]["mobile_no"];
           let itemKey = item;
 
@@ -408,23 +429,22 @@ async function displayItems(username) {
             imageUrl,
             userLocation,
             itemKey,
-            proStatus,
+            itemStatus,
             mobile_no
           );
           unorderedList.prepend(documentItem);
-          let itemStatus = donatedItemList[item]["data"]["status"];
           //console.log(itemStatus);
           if (itemStatus === "Awaiting Response") {
-            inQueueCount++;
+            awaitData.y++;
           } else if (itemStatus === "Accepted Item") {
-            acceptedCount++;
+            acceptData.y++;
           } else if (
             itemStatus === "Item Picked" ||
             itemStatus === "Item Picked Up"
           ) {
-            itemPickedCount++;
+            pickedData.y++;
           } else if (itemStatus === "Item Donated") {
-            itemDonatedCount++;
+            donatedData++;
           } else {
             console.log(itemStatus);
             undefinedCount++;
@@ -434,33 +454,37 @@ async function displayItems(username) {
         let totalCount = Object.keys(donatedItemList).length;
         //console.log(Object.keys(donatedItemList).length);
         //console.log(Object.keys(totalItems).length);
-        console.log(
-          undefinedCount,
-          inQueueCount,
-          acceptedCount,
-          itemDonatedCount,
-          itemPickedCount
-        );
-        let awaitData = {
-          label: "Awaiting Response",
-          y: (inQueueCount / totalCount) * 100
-        };
+        // console.log(
+        //   undefinedCount,
+        //   awaitCount,
+        //   acceptedCount,
+        //   itemDonatedCount,
+        //   itemPickedCount
+        // );
 
-        let acceptData = {
-          label: "Accepted Items",
-          y: (acceptedCount / totalCount) * 100
-        };
+        // let awaitData = {
+        //   label: "Awaiting Response",
+        //   y: (awaitCount / totalCount) * 100
+        // };
 
-        let donatedData = {
-          label: "Donated Items",
-          y: (itemDonatedCount / totalCount) * 100
-        };
+        // let acceptData = {
+        //   label: "Accepted Items",
+        //   y: (acceptedCount / totalCount) * 100
+        // };
 
-        let pickedData = {
-          label: "Picked Items",
-          y: (itemPickedCount / totalCount) * 100
-        };
+        // let donatedData = {
+        //   label: "Donated Items",
+        //   y: (itemDonatedCount / totalCount) * 100
+        // };
 
+        // let pickedData = {
+        //   label: "Picked Items",
+        //   y: (itemPickedCount / totalCount) * 100
+        // };
+        awaitData.y = (awaitData.y  / totalCount ) * 100;
+        acceptData.y = (acceptData.y / totalCount) * 100;
+        donatedData.y = (donatedData.y / totalCount) * 100;
+        pickedData.y = (pickedData.y / totalCount) * 100;
         statusData.pickedData = pickedData;
         statusData.acceptData = acceptData;
         statusData.donatedData = donatedData;
