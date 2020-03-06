@@ -1,6 +1,8 @@
 // let loading = document.querySelector("#loading");
 // loading.style.display = "flex";
 
+let itemStatus = {};
+
 function getCookie(cname) {
   var name = cname + "=";
   var decodedCookie = decodeURIComponent(document.cookie);
@@ -45,8 +47,26 @@ async function displayItems() {
   const items = await response.json();
 
   let itemKeys = Object.keys(items);
+
+  let itemPickedStatus = {
+    label: "Items Picked",
+    y: 0
+  };
+
+  let itemAcceptedStatus = {
+    label: "Items Accpeted",
+    y: 0
+  };
+
+  let itemDonatedStatus = {
+    label: "Items Donated",
+    y: 0
+  };
+
+  let totalItems = itemKeys.length;
+
   for (let i = 0; i < itemKeys.length; i++) {
-    // console.log(items[itemKeys[i]]);
+    
     const date = items[itemKeys[i]].date;
     const imageURL = items[itemKeys[i]].imageUrl;
     const mobileNumber = items[itemKeys[i]].mobile_no;
@@ -55,6 +75,14 @@ async function displayItems() {
     const status = items[itemKeys[i]].status;
     const coords = items[itemKeys[i]].userCoordinates;
     const userName = items[itemKeys[i]].userName;
+
+    if (status === "Accepted Item"){
+      itemAcceptedStatus.y++;
+    } else if (status === "Item Picked" || status === "Item Picked Up") {
+      itemPickedStatus.y++;
+    } else {
+      itemDonatedStatus.y++;
+    }
 
     createListItem(
       date,
@@ -68,6 +96,16 @@ async function displayItems() {
       itemKeys[i]
     );
   }
+
+  itemAcceptedStatus.y = (itemAcceptedStatus.y / totalItems) * 100;
+  itemDonatedStatus.y = (itemDonatedStatus.y / totalItems) * 100;
+  itemPickedStatus.y =  (itemPickedStatus.y / totalItems) * 100;
+
+  itemStatus.accepted = itemAcceptedStatus;
+  itemStatus.picked = itemPickedStatus;
+  itemStatus.donated = itemDonatedStatus;
+
+  displayChart(itemStatus);
 
   const buttons = document.querySelectorAll(".changeStatus");
   buttons.forEach(ele => {
@@ -197,4 +235,28 @@ async function assignStatus(itemKey, currentStatus, ngoName) {
   } else {
     alert("Oops! Something went wrong! Try again later!");
   }
+}
+
+function displayChart(itemStatus){
+  let chart1 = new CanvasJS.Chart("chartContainer", {
+    animationEnabled: true,
+    backgroundColor: "transparent",
+    title: {
+      text: "Item Status"
+    },
+    data: [
+      {
+        type: "pie",
+        startAngle: 240,
+        yValueFormatString: '##0.00"%"',
+        indexLabel: "{label} {y}",
+        dataPoints: [
+          { y: itemStatus.accepted.y, label: itemStatus.accepted.label },
+          { y: itemStatus.picked.y, label: itemStatus.picked.label },
+          { y: itemStatus.donated.y, label: itemStatus.donated.label }
+        ]
+      }
+    ]
+  });
+  chart1.render();
 }

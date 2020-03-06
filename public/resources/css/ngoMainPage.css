@@ -53,6 +53,12 @@ body {
   padding: 10px;
 }
 
+#chartContainer {
+  margin-top: 30vh;
+  width: 350px;
+  height: 250px;
+}
+
 #loading {
   -webkit-box-pack: center;
       -ms-flex-pack: center;

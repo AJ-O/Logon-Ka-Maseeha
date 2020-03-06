@@ -127,6 +127,7 @@ let divDB = document.getElementById("dashboard");
 let uploadStatusBar = 0;
 let allowedLocationAccess = false;
 let statusData = {};
+let productCountData = {}
 let userCoordinates = {};
 let totalCount;
 let domusername;
@@ -367,11 +368,6 @@ async function displayItems(username) {
 
     let dbRef = db.ref("users/" + username);
     let donatedItemList;
-    let undefinedCount = 0;
-    let awaitCount = 0;
-    let acceptedCount = 0;
-    let itemPickedCount = 0;
-    let itemDonatedCount = 0;
 
     dbRef.once("value", async function(snapshot) {
       donatedItemList = await snapshot.child("DonatedItemList").val(); //Get the values under donated item list
@@ -413,6 +409,39 @@ async function displayItems(username) {
           y: 0
         };
 
+        // let clothesData = {
+        //   label: "Clothes",
+        //   y: 0
+        // }
+        // let utensilsData = {
+        //   label: "Utensils",
+        //   y: 0
+        // }
+        // let gamesData = {
+        //   label: "Games",
+        //   y: 0
+        // }
+        // let electronicsData = {
+        //   label: "Electronics",
+        //   y: 0
+        // }
+        // let furnitureData = {
+        //   label: "Furniture",
+        //   y: 0
+        // }
+        // let booksData = {
+        //   label: "Books",
+        //   y: 0
+        // }
+        // let toolsData = {
+        //   label: "Tools",
+        //   y: 0
+        // }
+        // let othersData = {
+        //   label: "Others",
+        //   y: 0
+        // }
+
         for (item in donatedItemList) {
           //Replace with the required field
           let ptype = donatedItemList[item]["data"]["productType"];
@@ -433,6 +462,30 @@ async function displayItems(username) {
             mobile_no
           );
           unorderedList.prepend(documentItem);
+
+          // if(ptype === "Clothes"){
+          //   clothesData.y++;
+          // }
+          // else if(ptype === "Books"){
+          //   booksData.y++;
+          // }
+          // else if(ptype === "Tools"){
+          //   toolsData.y++;
+          // }
+          // else if(ptype === "Furniture"){
+          //   furnitureData.y++;
+          // }
+          // else if(ptype === "Electronics"){
+          //   electronicsData.y++;
+          // }
+          // else if(ptype === "Utensils"){
+          //   utensilsData.y++;
+          // }
+          // else if(ptype === "Games"){
+          //   gamesData.y++;
+          // } else {
+          //   othersData.y++;
+          // }
           //console.log(itemStatus);
           if (itemStatus === "Awaiting Response") {
             awaitData.y++;
@@ -444,7 +497,7 @@ async function displayItems(username) {
           ) {
             pickedData.y++;
           } else if (itemStatus === "Item Donated") {
-            donatedData++;
+            donatedData.y++;
           } else {
             console.log(itemStatus);
             undefinedCount++;
@@ -452,45 +505,40 @@ async function displayItems(username) {
         }
         statusBoard.appendChild(unorderedList);
         let totalCount = Object.keys(donatedItemList).length;
-        //console.log(Object.keys(donatedItemList).length);
-        //console.log(Object.keys(totalItems).length);
-        // console.log(
-        //   undefinedCount,
-        //   awaitCount,
-        //   acceptedCount,
-        //   itemDonatedCount,
-        //   itemPickedCount
-        // );
+        
+        let totalCountEle = document.createElement("p");
+        totalCountEle.innerHTML = "<b>Total Items Donated<br>" + totalCount + "</b>";
+        divDB.append(totalCountEle);
 
-        // let awaitData = {
-        //   label: "Awaiting Response",
-        //   y: (awaitCount / totalCount) * 100
-        // };
+        // clothesData.y = (clothesData.y / totalCount) * 100;
+        // toolsData.y = (toolsData.y / totalCount) * 100;
+        // furnitureData.y = (furnitureData.y / totalCount) * 100;
+        // gamesData.y = (gamesData.y / totalCount) * 100;
+        // electronicsData.y = (electronicsData.y / totalCount) * 100;
+        // booksData.y = (booksData.y / totalCount) * 100;
+        // utensilsData.y = (utensilsData.y / totalCount) * 100;
+        // othersData.y = (othersData.y / totalCount) * 100;
 
-        // let acceptData = {
-        //   label: "Accepted Items",
-        //   y: (acceptedCount / totalCount) * 100
-        // };
-
-        // let donatedData = {
-        //   label: "Donated Items",
-        //   y: (itemDonatedCount / totalCount) * 100
-        // };
-
-        // let pickedData = {
-        //   label: "Picked Items",
-        //   y: (itemPickedCount / totalCount) * 100
-        // };
         awaitData.y = (awaitData.y  / totalCount ) * 100;
         acceptData.y = (acceptData.y / totalCount) * 100;
         donatedData.y = (donatedData.y / totalCount) * 100;
         pickedData.y = (pickedData.y / totalCount) * 100;
+        
+        // productCountData.clothesData = clothesData;
+        // productCountData.toolsData = toolsData;
+        // productCountData.furnitureData = furnitureData;
+        // productCountData.gamesData = gamesData;
+        // productCountData.electronicsData = electronicsData;
+        // productCountData.booksData = booksData;
+        // productCountData.utensilsData = utensilsData;
+        // productCountData.othersData = othersData;
+
         statusData.pickedData = pickedData;
         statusData.acceptData = acceptData;
         statusData.donatedData = donatedData;
         statusData.awaitData = awaitData;
         console.log(statusData);
-        displayChart(statusData);
+        displayChart(statusData, productCountData);
       }
     });
   } else {
@@ -551,8 +599,8 @@ function updateButtonKey(key) {
   console.log("Key updated!");
 }
 
-function displayChart(statusData) {
-  let chart = new CanvasJS.Chart("chartContainer", {
+function displayChart(statusData, productCountData) {
+  let chart1 = new CanvasJS.Chart("chartContainer", {
     animationEnabled: true,
     backgroundColor: "transparent",
     title: {
@@ -573,7 +621,34 @@ function displayChart(statusData) {
       }
     ]
   });
-  chart.render();
+  chart1.render();
+  
+  // let chart2 = new CanvasJS.Chart("chartContainer", {
+  //   animationEnabled: true,
+  //   backgroundColor: "transparent",
+  //   title: {
+  //     text: "Product Types"
+  //   },
+  //   data: [
+  //     {
+  //       type: "Bar",
+  //       yValueFormatString: '##0.00"%"',
+  //       indexLabel: "{label} {y}",
+  //       dataPoints: [
+  //         { y: productCountData.clothesData.y, label: productCountData.clothesData.label },
+  //         { y: productCountData.gamesData.y, label: productCountData.gamesData.label },
+  //         { y: productCountData.utensilsData.y, label: productCountData.utensilsData.label },
+  //         { y: productCountData.furnitureData.y, label: productCountData.furnitureData.label },
+  //         { y: productCountData.toolsData.y, label: productCountData.toolsData.label },
+  //         { y: productCountData.booksData.y, label: productCountData.booksData.label },
+  //         { y: productCountData.electronicsData.y, label: productCountData.electronicsData.label },
+  //         { y: productCountData.othersData.y, label: productCountData.othersData.label },
+  //       ]
+  //     }
+  //   ]
+  // });
+  // chart2.render();
+  // console.log(chart2);
 }
 
 function logError(errorObj) {
