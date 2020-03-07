@@ -38,6 +38,7 @@ body {
 
 div {
   margin: 3px;
+  margin-bottom: 20px;
 }
 
 a {
@@ -154,9 +155,16 @@ a {
   cursor: pointer;
 }
 
-#cookie-consent{
-  padding-top: 8vh;
-  text-align: center;
-  font-size: xx-large;
+#cookie-consent {
+  height: 35px;
+  width: 100vw;
+  // background-color: rgba(0, 128, 0, 0.527);
+  // position: fixed;
+  // bottom: 0px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 18px;
+  // font-size: xx-large;
 }
 /*# sourceMappingURL=style.css.map */
