@@ -21,6 +21,7 @@ body {
   margin-right: 5px;
   // margin: 15px;
   padding-left: 10px;
+  flex-direction: column;
   background-color: rgba(255, 166, 0, 0.411);
 }
 
@@ -41,7 +42,7 @@ body {
   padding: 10px;
 }
 
-#chartContainer{
+#chartContainer {
   margin-top: 30vh;
   width: 350px;
   height: 250px;
@@ -179,4 +180,10 @@ li {
   flex-direction: column;
   position: absolute;
   top: 0px;
+}
+
+#chartContainer {
+  height: 250px;
+  width: 100%;
+  position: relative;
 }
