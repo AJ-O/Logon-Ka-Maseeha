@@ -107,79 +107,29 @@ app.get("/:user/userdata", (req, res) => {
     status: "Success",
     userName: userName
   };
-
-  let userData = db.ref("users/");
-  userData.once(
-    "value",
-    snapshot => {
-      let userRef = snapshot.child(`/${userName}`).val();
-      retObj["email"] = userRef.email;
-      retObj["pass"] = userRef.password;
-      if (userRef.mobile_no === undefined) {
+  let userData;
+  let userRef = db.ref("users/");
+  userRef.once(
+    "value"
+    ).then((snapshot) => {
+      userData = snapshot.child(`/${userName}`).val();
+      retObj["email"] = userData.email;
+      retObj["pass"] = userData.password;
+      if (userData.mobile_no === undefined) {
         retObj["mobile"] = "Not entered";
       } else {
-        retObj["mobile"] = userRef.mobile_no;
+        retObj["mobile"] = userData.mobile_no;
       }
       res.send(retObj);
-    },
-    error => {
+    }).catch((error) => {
       retObj.status = "Failure";
       retObj.code = error.code;
       retObj.message = error.message;
       res.send(retObj);
       errorObj = retObj;
       errorObj.date = Date();
-      logError(errorObj);
-    }
-  );
-
-  // retObj.status = "Failure";javascript
-  // retObj.code = error.code;
-  // retObj.message = error.message;
-  // res.send(retObj);
-  // if (token.includes(":")) {
-  //   token = token.replace(":", "");
-  // }
-
-  // verify(token)
-  //   .then(() => {
-  //     // let user = firebase.auth().currentUser;
-  //     // if (user) {
-  //     //   //console.log(Object.keys(user));
-  //     //   let currentUserData = Object.keys(user);
-  //     //   console.log(currentUserData);
-  //     //   console.log(currentUserData[10]);
-  //     //   console.log(user["displayName"]);
-  //     //   if (user["displayName"] !== userName) {
-  //     //     console.log("wrong stuff!");
-  //     //   } else {
-  //     //     console.log("ur cool!");
-  //     //   }
-  //     // } else {
-  //     //   console.log("not user");
-  //     // }
-
-  //   let userData = db.ref("users/");
-  //   userData.once("value", function(snapshot) {
-  //     let userRef = snapshot.child(`/${userName}`).val();
-  //     retObj["email"] = userRef.email;
-  //     retObj["pass"] = userRef.password;
-  //     if (userRef.mobile_no === undefined) {
-  //       retObj["mobile"] = "Not entered";
-  //     } else {
-  //       retObj["mobile"] = userRef.mobile_no;
-  //     }
-  //     res.send(retObj);
-  //   });
-  // })
-  //   .catch(error => {
-  //     retObj.status = "Failure";
-  //     retObj.code = error.code;
-  //     retObj.message = error.message;
-  //     // console.log("Some sort of an error");
-  //     // console.log("error is: " + error);
-  //     res.send(retObj);
-  //   });
+      //logError(errorObj);
+    })
 });
 
 app.post("/donateItem", (req, res) => {
@@ -218,61 +168,6 @@ app.post("/donateItem", (req, res) => {
 app.listen(port, () => {
   console.log(`Listening to ${port}`);
 });
-
-function setDonatedItems() {
-  let dlRef = db.ref("Donated_Items_List/");
-  dlRef.once("value", async snapshot => {
-    let dilRefs = snapshot.val();
-    let items = Object.keys(dilRefs);
-    let mobile_nos = [
-      "9991123456",
-      "9114213132",
-      "9112315199",
-      "1235359181",
-      "9383492121",
-      "8359134200",
-      "9423040923",
-      "4930249223"
-    ];
-    for (dilRef in dilRefs) {
-      console.log(dilRef);
-      let itemRef = dlRef.child(dlRef[dilRef] + "/data/mobile_no");
-      let mobile_no = mobile_nos[Math.floor(Math.random() * mobile_nos.length)];
-      await itemRef.set(mobile_no);
-    }
-    // let usersRef = snapshot.val();
-    // let users = Object.keys(usersRef);
-    // console.log(users);
-    // for (user in users) {
-    //   let donatedRef = await snapshot
-    //     .child(users[user] + "/DonatedItemList")
-    //     .val();
-    //   for (donatedItems in donatedRef) {
-    //     let donateRef = db
-    //       .ref("Donated_Items_List/" + donatedItems)
-    //       .set(donatedRef[donatedItems]);
-    //   }
-    // }
-    // let items = snapshot.val();
-    // let donatedItemsRef = db.ref("Donated_Items_List/");
-    // console.log("called!");
-    // for (itemCode in items) {
-    //   console.log(itemCode);
-    //   let ref = donatedItemsRef.child(itemCode + "/data/status");
-    //   let responses = [
-    //     "Awaiting Response",
-    //     "Accepted Item",
-    //     "Item Picked",
-    //     "Item Donated"
-    //   ];
-    //   let response = responses[Math.floor(Math.random() * responses.length)];
-    //   let status = await ref.set(response);
-    //   console.log(response);
-    //   console.log(status);
-    // }
-  });
-}
-//setDonatedItems();
 
 app.post("/request_fb_initialization", (req, res) => {
   let firebaseConfig = {
