@@ -108,8 +108,8 @@ async function userSignedIn(username) {
     let userElement = document.createElement("p");
     userElement.textContent = username;
     userElement.style.padding = "50px";
-
-    divDB.prepend(userElement);
+    userDetailsEle.append(userElement);
+    divDB.prepend(userDetailsEle);
   } else {
     console.log("Error");
     alert("Wrong Credentials!");
@@ -124,6 +124,7 @@ let statusBarDiv = document.getElementById("statusBar");
 let myBar = document.getElementById("myBar");
 let coordButton = document.getElementById("getCoords");
 let divDB = document.getElementById("dashboard");
+let userDetailsEle = document.getElementById("userDetails");
 let uploadStatusBar = 0;
 let allowedLocationAccess = false;
 let statusData = {};
@@ -409,38 +410,38 @@ async function displayItems(username) {
           y: 0
         };
 
-        // let clothesData = {
-        //   label: "Clothes",
-        //   y: 0
-        // }
-        // let utensilsData = {
-        //   label: "Utensils",
-        //   y: 0
-        // }
-        // let gamesData = {
-        //   label: "Games",
-        //   y: 0
-        // }
-        // let electronicsData = {
-        //   label: "Electronics",
-        //   y: 0
-        // }
-        // let furnitureData = {
-        //   label: "Furniture",
-        //   y: 0
-        // }
-        // let booksData = {
-        //   label: "Books",
-        //   y: 0
-        // }
-        // let toolsData = {
-        //   label: "Tools",
-        //   y: 0
-        // }
-        // let othersData = {
-        //   label: "Others",
-        //   y: 0
-        // }
+        let clothesData = {
+          label: "Clothes",
+          y: 0
+        }
+        let utensilsData = {
+          label: "Utensils",
+          y: 0
+        }
+        let gamesData = {
+          label: "Games",
+          y: 0
+        }
+        let electronicsData = {
+          label: "Electronics",
+          y: 0
+        }
+        let furnitureData = {
+          label: "Furniture",
+          y: 0
+        }
+        let booksData = {
+          label: "Books",
+          y: 0
+        }
+        let toolsData = {
+          label: "Tools",
+          y: 0
+        }
+        let othersData = {
+          label: "Others",
+          y: 0
+        }
 
         for (item in donatedItemList) {
           //Replace with the required field
@@ -463,30 +464,30 @@ async function displayItems(username) {
           );
           unorderedList.prepend(documentItem);
 
-          // if(ptype === "Clothes"){
-          //   clothesData.y++;
-          // }
-          // else if(ptype === "Books"){
-          //   booksData.y++;
-          // }
-          // else if(ptype === "Tools"){
-          //   toolsData.y++;
-          // }
-          // else if(ptype === "Furniture"){
-          //   furnitureData.y++;
-          // }
-          // else if(ptype === "Electronics"){
-          //   electronicsData.y++;
-          // }
-          // else if(ptype === "Utensils"){
-          //   utensilsData.y++;
-          // }
-          // else if(ptype === "Games"){
-          //   gamesData.y++;
-          // } else {
-          //   othersData.y++;
-          // }
-          //console.log(itemStatus);
+          if(ptype === "Clothes"){
+            clothesData.y++;
+          }
+          else if(ptype === "Books"){
+            booksData.y++;
+          }
+          else if(ptype === "Tools"){
+            toolsData.y++;
+          }
+          else if(ptype === "Furniture"){
+            furnitureData.y++;
+          }
+          else if(ptype === "Electronics"){
+            electronicsData.y++;
+          }
+          else if(ptype === "Utensils"){
+            utensilsData.y++;
+          }
+          else if(ptype === "Games"){
+            gamesData.y++;
+          } else {
+            othersData.y++;
+          }
+          console.log(itemStatus);
           if (itemStatus === "Awaiting Response") {
             awaitData.y++;
           } else if (itemStatus === "Accepted Item") {
@@ -507,37 +508,38 @@ async function displayItems(username) {
         let totalCount = Object.keys(donatedItemList).length;
         
         let totalCountEle = document.createElement("p");
-        totalCountEle.innerHTML = "<b>Total Items Donated<br>" + totalCount + "</b>";
-        divDB.append(totalCountEle);
+        totalCountEle.innerHTML = "Total Items Donated: " + totalCount;
+        userDetailsEle.append(totalCountEle);
 
-        // clothesData.y = (clothesData.y / totalCount) * 100;
-        // toolsData.y = (toolsData.y / totalCount) * 100;
-        // furnitureData.y = (furnitureData.y / totalCount) * 100;
-        // gamesData.y = (gamesData.y / totalCount) * 100;
-        // electronicsData.y = (electronicsData.y / totalCount) * 100;
-        // booksData.y = (booksData.y / totalCount) * 100;
-        // utensilsData.y = (utensilsData.y / totalCount) * 100;
-        // othersData.y = (othersData.y / totalCount) * 100;
+        clothesData.y = (clothesData.y / totalCount) * 100;
+        toolsData.y = (toolsData.y / totalCount) * 100;
+        furnitureData.y = (furnitureData.y / totalCount) * 100;
+        gamesData.y = (gamesData.y / totalCount) * 100;
+        electronicsData.y = (electronicsData.y / totalCount) * 100;
+        booksData.y = (booksData.y / totalCount) * 100;
+        utensilsData.y = (utensilsData.y / totalCount) * 100;
+        othersData.y = (othersData.y / totalCount) * 100;
 
         awaitData.y = (awaitData.y  / totalCount ) * 100;
         acceptData.y = (acceptData.y / totalCount) * 100;
         donatedData.y = (donatedData.y / totalCount) * 100;
         pickedData.y = (pickedData.y / totalCount) * 100;
         
-        // productCountData.clothesData = clothesData;
-        // productCountData.toolsData = toolsData;
-        // productCountData.furnitureData = furnitureData;
-        // productCountData.gamesData = gamesData;
-        // productCountData.electronicsData = electronicsData;
-        // productCountData.booksData = booksData;
-        // productCountData.utensilsData = utensilsData;
-        // productCountData.othersData = othersData;
+        productCountData.clothesData = clothesData;
+        productCountData.toolsData = toolsData;
+        productCountData.furnitureData = furnitureData;
+        productCountData.gamesData = gamesData;
+        productCountData.electronicsData = electronicsData;
+        productCountData.booksData = booksData;
+        productCountData.utensilsData = utensilsData;
+        productCountData.othersData = othersData;
 
         statusData.pickedData = pickedData;
         statusData.acceptData = acceptData;
         statusData.donatedData = donatedData;
         statusData.awaitData = awaitData;
         console.log(statusData);
+        console.log(productCountData);
         displayChart(statusData, productCountData);
       }
     });
@@ -600,7 +602,7 @@ function updateButtonKey(key) {
 }
 
 function displayChart(statusData, productCountData) {
-  let chart1 = new CanvasJS.Chart("chartContainer", {
+  let chart1 = new CanvasJS.Chart("chartContainer1", {
     animationEnabled: true,
     backgroundColor: "transparent",
     title: {
@@ -622,33 +624,36 @@ function displayChart(statusData, productCountData) {
     ]
   });
   chart1.render();
-  
-  // let chart2 = new CanvasJS.Chart("chartContainer", {
-  //   animationEnabled: true,
-  //   backgroundColor: "transparent",
-  //   title: {
-  //     text: "Product Types"
-  //   },
-  //   data: [
-  //     {
-  //       type: "Bar",
-  //       yValueFormatString: '##0.00"%"',
-  //       indexLabel: "{label} {y}",
-  //       dataPoints: [
-  //         { y: productCountData.clothesData.y, label: productCountData.clothesData.label },
-  //         { y: productCountData.gamesData.y, label: productCountData.gamesData.label },
-  //         { y: productCountData.utensilsData.y, label: productCountData.utensilsData.label },
-  //         { y: productCountData.furnitureData.y, label: productCountData.furnitureData.label },
-  //         { y: productCountData.toolsData.y, label: productCountData.toolsData.label },
-  //         { y: productCountData.booksData.y, label: productCountData.booksData.label },
-  //         { y: productCountData.electronicsData.y, label: productCountData.electronicsData.label },
-  //         { y: productCountData.othersData.y, label: productCountData.othersData.label },
-  //       ]
-  //     }
-  //   ]
-  // });
-  // chart2.render();
-  // console.log(chart2);
+  displayChart2(productCountData);
+}
+
+function displayChart2(productCountData){
+  let chart2 = new CanvasJS.Chart("chartContainer2", {
+    animationEnabled: true,
+    backgroundColor: "transparent",
+    title: {
+      text: "Product Types"
+    },
+    data: [
+      {
+        type: "pie",
+        startAngle: 240,
+        yValueFormatString: '##0.00"%"',
+        indexLabel: "{label} {y}",
+        dataPoints: [
+          { y: productCountData.clothesData.y, label: productCountData.clothesData.label },
+          { y: productCountData.gamesData.y, label: productCountData.gamesData.label },
+          { y: productCountData.utensilsData.y, label: productCountData.utensilsData.label },
+          { y: productCountData.furnitureData.y, label: productCountData.furnitureData.label },
+          { y: productCountData.toolsData.y, label: productCountData.toolsData.label },
+          { y: productCountData.booksData.y, label: productCountData.booksData.label },
+          { y: productCountData.electronicsData.y, label: productCountData.electronicsData.label },
+          { y: productCountData.othersData.y, label: productCountData.othersData.label }
+        ]
+      }
+    ]
+  });
+  chart2.render();
 }
 
 function logError(errorObj) {

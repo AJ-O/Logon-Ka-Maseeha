@@ -1,5 +1,11 @@
 window.onload = getTotalItemsCount();
 
+let cancelCookieNoticeEle = document.getElementById("cancelCookieDisplay");
+cancelCookieNoticeEle.addEventListener("click", ()=> {
+  let cancelNoticeEle = document.getElementById("cookie-consent");
+  cancelNoticeEle.style.display = "none";
+})
+
 async function getTotalItemsCount() {
   let options = {
     method: "POST",

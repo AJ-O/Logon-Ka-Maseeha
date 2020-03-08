@@ -158,13 +158,18 @@ a {
 #cookie-consent {
   height: 35px;
   width: 100vw;
-  // background-color: rgba(0, 128, 0, 0.527);
-  // position: fixed;
-  // bottom: 0px;
+  background-color: rgba(0, 180, 0, 0.459);
   display: flex;
   justify-content: center;
+}
+
+#cookieNotice{
   align-items: center;
-  font-size: 18px;
-  // font-size: xx-large;
+  font-size: 25px; 
+}
+
+#cancelCookieDisplay{
+  display: flex;
+  justify-content: flex-end;
 }
 /*# sourceMappingURL=style.css.map */
