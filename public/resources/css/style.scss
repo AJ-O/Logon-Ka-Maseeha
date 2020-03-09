@@ -163,13 +163,14 @@ a {
   justify-content: center;
 }
 
-#cookieNotice{
+#cookieNotice {
   align-items: center;
-  font-size: 25px; 
+  font-size: 25px;
 }
 
-#cancelCookieDisplay{
+#cancelCookieDisplay {
   display: flex;
   justify-content: flex-end;
+  cursor: pointer;
 }
 /*# sourceMappingURL=style.css.map */
