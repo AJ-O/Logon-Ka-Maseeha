@@ -1,10 +1,10 @@
 window.onload = getTotalItemsCount();
 
 let cancelCookieNoticeEle = document.getElementById("cancelCookieDisplay");
-cancelCookieNoticeEle.addEventListener("click", ()=> {
+cancelCookieNoticeEle.addEventListener("click", () => {
   let cancelNoticeEle = document.getElementById("cookie-consent");
   cancelNoticeEle.style.display = "none";
-})
+});
 
 async function getTotalItemsCount() {
   let options = {
@@ -141,6 +141,6 @@ document.querySelector("#ngoBut").addEventListener("click", async () => {
   } else {
     document.querySelector("#alert").style.textAlign = "center";
     document.querySelector("#alert").innerHTML =
-      "Your e-mail or password were incorrect.<br>Please check your details and try again.<br>If you're convinced that you've entered correct details,<br> contact us on our e-mail <br>(logonkamaseeha@gmail.com)";
+      "Your e-mail or password or NGO name were incorrect.<br>Please check your details and try again.<br>If you're convinced that you've entered correct details,<br> contact us on our e-mail <br>(logonkamaseeha@gmail.com)";
   }
 });
