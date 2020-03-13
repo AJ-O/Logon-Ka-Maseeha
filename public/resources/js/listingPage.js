@@ -16,15 +16,13 @@ function getCookie(cname) {
 
 const _ngoHash = getCookie("ngoHash");
 const _ngoName = getCookie("ngoName");
-// console.log(_ngoHash);
-console.log(_ngoName);
 
 if (!_ngoHash) {
   document.querySelector("body").display = "none";
   alert(
     "You haven't loggin in as an NGO!\nPlease log in as an NGO and try again!"
   );
-  window.location = "http://localhost:8181";
+  window.location = "http://logon-ka-maseeha.glitch.me";
 }
 
 let count = 0;
@@ -64,16 +62,7 @@ function listingItems() {
   loading.style.display = "flex";
   db.once("value", async snapshot => {
     let donatedItemsRef = snapshot.val();
-    //console.log(dbRef);
-    // for (item in dbRef) {
-    //   console.log(dbRef[item]);
-    // }
-    // let users = Object.keys(dbRef);
-    // for (user in users) {
-    //   let donatedItemsRef = await snapshot
-    //     .child(users[user] + "/DonatedItemList")
-    //     .val();
-    //   //console.log(donatedItemsRef);
+    
     for (donatedItems in donatedItemsRef) {
       let imageSrc = donatedItemsRef[donatedItems]["data"]["imageUrl"];
       let pickupAddress =
@@ -86,8 +75,7 @@ function listingItems() {
       if (status == undefined) {
         status = "In queue";
       }
-
-      // let randomBool = false; // this will decide when to display the no items message
+      
       let toDisplay = true;
       if (status === "Awaiting Response") {
         createLiItem(
@@ -102,7 +90,6 @@ function listingItems() {
         // randomBool = true;
         toDisplay = false;
       } else {
-        // if (randomBool) {
         if (toDisplay) {
           document.querySelector("#text").textContent =
             "No Additional Listings Available!";
@@ -111,23 +98,18 @@ function listingItems() {
           document.querySelector(".text").style.justifyContent = "center";
           document.querySelector(".text").style.alignItems = "center";
           document.querySelector("#text").style.fontSize = "50px";
-          // }
         } else {
           toDisplay = true;
         }
       }
       count++;
-      console.log(count);
-      // loaded = true;
     }
     enableItemsPickUp();
-    // }
   });
 }
 
 function createLiItem(src, add, type, status, date, mobile_no, donatedItems) {
   let liElement = document.createElement("li");
-  console.log(date);
   liElement.setAttribute("id", date);
 
   let imageEle = document.createElement("img");
@@ -164,10 +146,8 @@ function createLiItem(src, add, type, status, date, mobile_no, donatedItems) {
 }
 
 function enableItemsPickUp() {
-  // console.log("Hello");
   let pickUps = document.getElementsByClassName("ngoPickUp");
   for (let i = 0; i < pickUps.length; i++) {
-    // console.log(pickUps[i]);
     pickUps[i].addEventListener("click", () => {
       actuallyPickUp(pickUps[i].id);
     });
@@ -175,7 +155,6 @@ function enableItemsPickUp() {
 }
 
 async function actuallyPickUp(keyOfItem) {
-  // console.log(idOfItem);
   const options = {
     method: "POST",
     headers: {

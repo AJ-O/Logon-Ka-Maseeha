@@ -46,11 +46,11 @@ firebase.initializeApp(firebaseConfig);
 const db = firebase.database();
 
 app.post("/googleSignIn", (req, res) => {
-  console.log("called post!");
+  
+  console.log("Called!");
   let token = req.body["token"];
   let userName = req.body["username"];
   let email = req.body["userEmail"];
-  //console.log(token);
   let data = {
     email: email
   };
@@ -69,7 +69,6 @@ app.post("/googleSignIn", (req, res) => {
       let users = db.ref("users");
       users.once("value", snapshot => {
         if (!snapshot.child(userName).exists()) {
-          console.log("User does not exist!");
           db.ref("users/" + userName).set(data);
           returnObj["userName"] = userName;
           returnObj["token"] = token;
@@ -94,14 +93,9 @@ app.post("/googleSignIn", (req, res) => {
 });
 
 app.get("/:user/userdata", (req, res) => {
-  console.log("called get!");
-  //console.log("Username: " + req.body.user);
-  console.log("user: " + req.params.user);
   let userName = req.params.user;
-  //console.log(token);
   if (userName.includes(":")) {
     userName = userName.replace(":", "");
-    console.log(userName);
   }
   let retObj = {
     status: "Success",
@@ -136,19 +130,14 @@ app.post("/donateItem", (req, res) => {
   let retObj = {};
   let data = req.body;
   let userCoordinates = data.userCoordinates;
-
-  console.log(data.userName);
-  console.log(userCoordinates);
-
+  
   let donatedItemsListRef = db.ref("Donated_Items_List");
   let newItemRef = db.ref("users/" + data.userName + "/DonatedItemList").push();
-  console.log(newItemRef.key); //Getting the auto generated id!
+  
   newItemRef.set({ data }, someParameter => {
     donatedItemsListRef
       .child(newItemRef.key)
       .set({ data }, someParameter1 => {
-        console.log("sp1: ", someParameter);
-        console.log("Works");
         retObj.status = "success";
         retObj.autoKey = newItemRef.key;
         res.send(retObj);
@@ -180,7 +169,6 @@ app.post("/request_fb_initialization", (req, res) => {
     status: "success",
     firebaseConfig: firebaseConfig
   };
-  console.log("called fb_config!");
   res.send(retObj);
 });
 
@@ -192,7 +180,6 @@ async function verify(token) {
 
   const payload = ticket.getPayload();
   const userid = payload["sub"];
-  //console.log(userid);
 }
 
 ///////////////////////////////////////////////////////////////////////
@@ -202,8 +189,6 @@ function findOutDistance(lat, long) {
   const NGOs = require("./NGOs.json");
 
   function sendMail(ngoName) {
-    console.log("ngo is: " + ngoName);
-    console.log("ngo email is: " + ngoName.email);
     const nodemailer = require("nodemailer");
     const transporter = nodemailer.createTransport({
       service: "gmail",
@@ -224,12 +209,11 @@ function findOutDistance(lat, long) {
       if (err) {
         console.error(err);
       }
-      console.log("E-Mail sent");
     });
   }
 
   function calcDistance(lat1, lon1, lat2, lon2) {
-    const R = 6731; //Earth's radius
+    const R = 6731;
     let dLat = deg2rad(lat2 - lat1);
     let dLon = deg2rad(lon2 - lon1);
     let a =
@@ -256,8 +240,6 @@ function findOutDistance(lat, long) {
       NGOs[ngo]["longitude"]
     );
 
-    console.log("distance between is: " + d);
-
     if (d < 5.5) {
       sendMail(NGOs[ngo]);
     }
@@ -266,7 +248,6 @@ function findOutDistance(lat, long) {
 
 // api route to login an ngo
 app.post("/NGOlogin", (req, res) => {
-  console.log("in ngo post");
   const password = req.body.password;
   let email = req.body.email;
   let name = req.body.NGOName;
@@ -277,7 +258,6 @@ app.post("/NGOlogin", (req, res) => {
 
   const ngo = db.ref("NGO_user_accounts/");
   ngo.once("value", async snapshot => {
-    console.log("in val");
     let records = await snapshot.val();
     let actualDetails = records[name];
 
@@ -285,14 +265,11 @@ app.post("/NGOlogin", (req, res) => {
       res.json({ status: "failure" });
     }
 
-    console.log("after awaiting");
-
     let actualEmail;
     let hashedPassword;
     let actualPosi;
 
     try {
-      console.log("in try");
       actualEmail = actualDetails["email"];
       hashedPassword = actualDetails["password"];
       actualPosi = actualDetails["posi"];
@@ -301,22 +278,12 @@ app.post("/NGOlogin", (req, res) => {
       return;
     }
 
-    console.log(actualEmail, hashedPassword, actualEmail);
-
     const str1 = password.slice(0, actualPosi);
     const str2 = password.slice(actualPosi);
 
     let finalPassword = str1 + salt + str2;
     const md5 = crypto.createHash("md5");
     const hash = md5.update(finalPassword).digest("hex");
-
-    console.log(finalPassword);
-    console.log(hash);
-
-    // actualEmail = actualEmail.toLowerCase();
-    // name = name.toLowerCase();
-
-    console.log(actualEmail, email);
 
     if (actualEmail === email && hash === hashedPassword) {
       const ngomd5 = crypto.createHash("md5");
@@ -356,23 +323,17 @@ app.post("/NGOPickingUp", (req, res) => {
       newItem.set(itemData);
       newItem.update({ status: "Accepted Item" });
 
-      console.log("inserted into firebase for ngo");
-      //console.log(itemData);
-
       res.json({ status: "success" });
 
       let itemStatus = db.ref("Donated_Items_List/" + itemKey + "/data/status");
       itemStatus.set("Accepted Item");
-      console.log("Status changed in donated items list");
 
       const _userName = itemData.userName;
-      console.log(_userName);
 
       let itemFromUser = db.ref("users/" + _userName + "/DonatedItemList"); // itemFromUser is the listing of the item in the user's database
       itemFromUser
         .child("/" + itemKey + "/data")
         .update({ status: "Accepted Item" });
-      console.log("updated in user's database");
     })
     .catch(err => {
       res.json({ status: "failure" });
@@ -383,20 +344,15 @@ app.post("/NGOPickingUp", (req, res) => {
       };
       logError(errorObj);
     });
-
-  console.log(_ngoName);
 });
 
 function logError(errorItems) {
   const errorRef = db.ref("Errors/");
   errorRef.set(errorItems);
-
-  console.log("logged error in database");
 }
 
 app.post("/displayItemsForNGO", (req, res) => {
   const _ngoName = req.body._ngoName;
-  console.log(_ngoName);
   const displayNGOref = db.ref(
     "NGO_user_accounts/" + _ngoName + "/items_to_be_picked_up"
   );
@@ -417,7 +373,6 @@ app.post("/updateStatusNGOSide", (req, res) => {
   );
 
   _ngoRef.child("/" + _itemKey).update({ status: _newStatus });
-  console.log("updated to status: " + _newStatus);
 
   res.json({ status: "success" });
 
@@ -432,7 +387,6 @@ app.post("/updateStatusNGOSide", (req, res) => {
     );
     _userRef.update({ status: _newStatus });
     const _donatedRef = db.ref("Donated_Items_List/" + _itemKey + "/data");
-    //const _donatedRef = db.ref("Donated_Items_List" + _itemKey + "/data");
     _donatedRef.update({ status: _newStatus });
   });
 });

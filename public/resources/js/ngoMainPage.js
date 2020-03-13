@@ -21,14 +21,13 @@ function getCookie(cname) {
 
 const _ngoHash = getCookie("ngoHash");
 const _ngoName = getCookie("ngoName");
-// console.log(_ngoHash);
 
 if (!_ngoHash) {
   document.querySelector("body").display = "none";
   alert(
     "You haven't loggin in as an NGO!\nPlease log in as an NGO and try again!"
   );
-  window.location = "http://localhost:8181";
+  window.location = "http://logon-ka-maseeha.glitch.me";
 }
 
 async function displayItems() {
@@ -110,14 +109,12 @@ async function displayItems() {
   const buttons = document.querySelectorAll(".changeStatus");
   buttons.forEach(ele => {
     ele.addEventListener("click", evt => {
-      console.log("clicked");
       assignStatus(evt.target.id, evt.target.className.split(" ")[1], _ngoName);
     });
   });
 
   const ngoButtons = document.querySelectorAll("button");
   ngoButtons.forEach(ele => {
-    console.log(ele.textContent);
     if (ele.textContent === "Everything Done") {
       ele.disabled = true;
     }
@@ -193,7 +190,7 @@ function createListItem(
 function signOutAsNGO() {
   document.cookie = "ngoHash= ; expires= Thu, 01 Jan 1970 00:00:00 GMT";
   document.cookie = "ngoName= ; expires= Thu, 01 Jan 1970 00:00:00 GMT";
-  window.location = "http://localhost:8181";
+  window.location = "http://logon-ka-maseeha.glitch.me";
 }
 
 document.querySelector("#goBack").addEventListener("click", signOutAsNGO);
@@ -229,7 +226,6 @@ async function assignStatus(itemKey, currentStatus, ngoName) {
   const response = await fetch("/updateStatusNGOSide", options);
   const json = await response.json();
 
-  console.log(json);
   if (json.status === "success") {
     location.reload();
   } else {

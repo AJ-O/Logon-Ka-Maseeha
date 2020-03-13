@@ -27,7 +27,6 @@ async function getTotalItemsCount() {
         numberEle[0].textContent = 0;
       } else {
         let items = Object.keys(snapshot.val()).length;
-        console.log(items);
         let numberEle = document.getElementsByClassName("number");
         numberEle[0].textContent = items;
       }
@@ -39,14 +38,11 @@ async function getTotalItemsCount() {
 
 async function onSignIn(googleUser) {
   let profile = googleUser.getBasicProfile();
-  console.log("Name: " + profile.getName());
-  console.log("Email: " + profile.getEmail());
 
   let id_token = googleUser.getAuthResponse().id_token;
   let name = profile.getName();
   let id = profile.getId();
   let email = profile.getEmail();
-  console.log(googleUser);
   let data = {
     token: id_token,
     username: name,
@@ -64,27 +60,23 @@ async function onSignIn(googleUser) {
   };
   let response = await fetch("/googleSignIn", options);
   let json = await response.json();
-
+  console.log(googleUser);
   if (json.status === "Success") {
-    console.log(json.userName);
-    //console.log(json.token);
     let username = json.userName;
     if (username.includes(" ")) {
       let data = await addingPercentage(username);
       let modifiedName = data.username;
       if (data.status == "success") {
-        console.log(modifiedName);
-        window.location = "http://localhost:8181/mainPage.html";
+        window.location = "http://logon-ka-maseeha.glitch.me/mainPage.html";
         document.cookie = "username=" + encodeURIComponent(username);
       }
     } else {
-      // window.location =
-      //   "../html/mainPage.html?username=" + username + "&token=" + json.token;
+      console.log("Some error");
     }
   } else {
-    console.log("Hell No!");
-    console.log(json);
-  }
+    console.log("Sign in Error!");
+    window.location = "http://logon-ka-maseeha.glitch.me/";
+  }  
 }
 
 function addingPercentage(username) {
@@ -134,7 +126,7 @@ document.querySelector("#ngoBut").addEventListener("click", async () => {
 
   if (json.status === "success") {
     // redirect to ngo's individual page
-    window.location = "http://localhost:8181/ngo.html";
+    window.location = "http://logon-ka-maseeha.glitch.me/ngo.html";
 
     document.cookie = "ngoHash=" + json.ngoHash;
     document.cookie = "ngoName=" + json.ngoName;
