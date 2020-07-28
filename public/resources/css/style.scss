@@ -56,7 +56,6 @@ a {
   background-color: #004d00;
   display: flex;
   justify-content: center;
-  align-items: center;
   position: fixed;
   top: 0;
   right: 0;
@@ -158,19 +157,11 @@ a {
 #cookie-consent {
   height: 35px;
   width: 100vw;
-  background-color: rgba(0, 180, 0, 0.459);
   display: flex;
   justify-content: center;
 }
 
 #cookieNotice {
   align-items: center;
-  font-size: 25px;
-}
-
-#cancelCookieDisplay {
-  display: flex;
-  justify-content: flex-end;
-  cursor: pointer;
 }
 /*# sourceMappingURL=style.css.map */
